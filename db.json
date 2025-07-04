@@ -1,0 +1,1827 @@
+{
+  "employees": [
+    {
+      "id": 10001,
+      "name": "Michelle",
+      "salary": 40000,
+      "department": "Human Resources",
+      "availability": true,
+      "email": "michelle.mcgee@example.com",
+      "location": "New York",
+      "telephone": "+1-212-555-0101",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Mouse"
+      ],
+      "surname": "Mcgee",
+      "hireDate": "2022-04-23"
+    },
+    {
+      "id": 10002,
+      "name": "Stephanie",
+      "salary": 70000,
+      "department": "Human Resources",
+      "availability": false,
+      "email": "stephanie.smith@example.com",
+      "location": "London",
+      "telephone": "+44-20-7946-0102",
+      "assets": [
+        "Phone",
+        "Printer",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Smith",
+      "hireDate": "2025-06-02"
+    },
+    {
+      "id": 10003,
+      "name": "Joseph",
+      "salary": 75000,
+      "department": "Human Resources",
+      "availability": true,
+      "email": "joseph.kim@example.com",
+      "location": "Tokyo",
+      "telephone": "+81-3-1234-5678",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse",
+        "Tablet"
+      ],
+      "surname": "Kim",
+      "hireDate": "2022-10-07"
+    },
+    {
+      "id": 10004,
+      "name": "Daniel",
+      "salary": 80000,
+      "department": "Engineering",
+      "availability": true,
+      "email": "daniel.lee@example.com",
+      "location": "Paris",
+      "telephone": "+33-1-42-68-53-01",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse"
+      ],
+      "surname": "Lee",
+      "hireDate": "2023-11-17"
+    },
+    {
+      "id": 10005,
+      "name": "Lucas",
+      "salary": 50000,
+      "department": "Finance",
+      "availability": true,
+      "email": "lucas.mcmahon@example.com",
+      "location": "Sydney",
+      "telephone": "+61-2-9283-0495",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Mcmahon",
+      "hireDate": "2024-12-21"
+    },
+    {
+      "id": 10006,
+      "name": "Robert",
+      "salary": 70000,
+      "department": "Marketing",
+      "availability": true,
+      "email": "robert.kirby@example.com",
+      "location": "Dubai",
+      "telephone": "+971-4-123-4567",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone"
+      ],
+      "surname": "Kirby",
+      "hireDate": "2025-04-06"
+    },
+    {
+      "id": 10007,
+      "name": "Anthony",
+      "salary": 40000,
+      "department": "Human Resources",
+      "availability": true,
+      "email": "anthony.king@example.com",
+      "location": "Singapore",
+      "telephone": "+65-6534-8888",
+      "assets": [
+        "Laptop",
+        "Mouse",
+        "Calculator"
+      ],
+      "surname": "King",
+      "hireDate": "2024-04-05"
+    },
+    {
+      "id": 10008,
+      "name": "Jessica",
+      "salary": 45000,
+      "department": "Sales",
+      "availability": false,
+      "email": "jessica.cunningham@example.com",
+      "location": "Hong Kong",
+      "telephone": "+852-2524-8888",
+      "assets": [
+        "Phone",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Cunningham",
+      "hireDate": "2022-09-08"
+    },
+    {
+      "id": 10009,
+      "name": "David",
+      "salary": 110000,
+      "department": "Marketing",
+      "availability": false,
+      "email": "david.hodges@example.com",
+      "location": "Berlin",
+      "telephone": "+49-30-1234567",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse"
+      ],
+      "surname": "Hodges",
+      "hireDate": "2024-05-21"
+    },
+    {
+      "id": 10010,
+      "name": "Melissa",
+      "salary": 115000,
+      "department": "Sales",
+      "availability": false,
+      "email": "melissa.miller@example.com",
+      "location": "Rome",
+      "telephone": "+39-06-699-1991",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse",
+        "Tablet"
+      ],
+      "surname": "Miller",
+      "hireDate": "2021-02-04"
+    },
+    {
+      "id": 10011,
+      "name": "Brett",
+      "salary": 70000,
+      "department": "Sales",
+      "availability": false,
+      "email": "brett.foster@example.com",
+      "location": "Cairo",
+      "telephone": "+20-2-2575-9892",
+      "assets": [
+        "Headset",
+        "Phone",
+        "Calculator"
+      ],
+      "surname": "Foster",
+      "hireDate": "2024-05-20"
+    },
+    {
+      "id": 10012,
+      "name": "Brandon",
+      "salary": 90000,
+      "department": "Human Resources",
+      "availability": true,
+      "email": "brandon.robinson@example.com",
+      "location": "Rio de Janeiro",
+      "telephone": "+55-21-2555-1234",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Robinson",
+      "hireDate": "2021-04-25"
+    },
+    {
+      "id": 10013,
+      "name": "Dakota",
+      "salary": 100000,
+      "department": "Finance",
+      "availability": true,
+      "email": "dakota.johnston@example.com",
+      "location": "Moscow",
+      "telephone": "+7-495-777-7777",
+      "assets": [
+        "Laptop",
+        "Phone",
+        "Printer"
+      ],
+      "surname": "Johnston",
+      "hireDate": "2023-06-04"
+    },
+    {
+      "id": 10014,
+      "name": "Steven",
+      "salary": 95000,
+      "department": "Engineering",
+      "availability": false,
+      "email": "steven.johnson@example.com",
+      "location": "Beijing",
+      "telephone": "+86-10-6532-1234",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Mouse"
+      ],
+      "surname": "Johnson",
+      "hireDate": "2023-08-17"
+    },
+    {
+      "id": 10015,
+      "name": "Samuel",
+      "salary": 55000,
+      "department": "Human Resources",
+      "availability": false,
+      "email": "samuel.ortiz@example.com",
+      "location": "New Delhi",
+      "telephone": "+91-11-2301-2345",
+      "assets": [
+        "Phone",
+        "Printer",
+        "Tablet"
+      ],
+      "surname": "Ortiz",
+      "hireDate": "2024-01-07"
+    },
+    {
+      "id": 10016,
+      "name": "Robert",
+      "salary": 50000,
+      "department": "Human Resources",
+      "availability": false,
+      "email": "robert.gallegos@example.com",
+      "location": "Istanbul",
+      "telephone": "+90-212-334-9900",
+      "assets": [
+        "Laptop",
+        "Mouse",
+        "Calculator",
+        "Tablet"
+      ],
+      "surname": "Gallegos",
+      "hireDate": "2022-01-05"
+    },
+    {
+      "id": 10017,
+      "name": "Lisa",
+      "salary": 65000,
+      "department": "Marketing",
+      "availability": false,
+      "email": "lisa.ray@example.com",
+      "location": "New York",
+      "telephone": "+1-212-555-0103",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse"
+      ],
+      "surname": "Ray",
+      "hireDate": "2023-02-25"
+    },
+    {
+      "id": 10018,
+      "name": "William",
+      "salary": 85000,
+      "department": "Marketing",
+      "availability": false,
+      "email": "william.short@example.com",
+      "location": "London",
+      "telephone": "+44-20-7946-0104",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Short",
+      "hireDate": "2023-01-25"
+    },
+    {
+      "id": 10019,
+      "name": "Meredith",
+      "salary": 35000,
+      "department": "Sales",
+      "availability": true,
+      "email": "meredith.serrano@example.com",
+      "location": "Tokyo",
+      "telephone": "+81-3-1234-5679",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Mouse"
+      ],
+      "surname": "Serrano",
+      "hireDate": "2023-05-19"
+    },
+    {
+      "id": 10020,
+      "name": "Megan",
+      "salary": 45000,
+      "department": "Engineering",
+      "availability": false,
+      "email": "megan.hernandez@example.com",
+      "location": "Paris",
+      "telephone": "+33-1-42-68-53-02",
+      "assets": [
+        "Phone",
+        "Printer",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Hernandez",
+      "hireDate": "2022-05-26"
+    },
+    {
+      "id": 10021,
+      "name": "Brent",
+      "salary": 105000,
+      "department": "Engineering",
+      "availability": true,
+      "email": "brent.hammond@example.com",
+      "location": "Sydney",
+      "telephone": "+61-2-9283-0496",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse",
+        "Tablet"
+      ],
+      "surname": "Hammond",
+      "hireDate": "2023-11-01"
+    },
+    {
+      "id": 10022,
+      "name": "Angela",
+      "salary": 100000,
+      "department": "Finance",
+      "availability": false,
+      "email": "angela.moore@example.com",
+      "location": "Dubai",
+      "telephone": "+971-4-123-4568",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse"
+      ],
+      "surname": "Moore",
+      "hireDate": "2021-01-06"
+    },
+    {
+      "id": 10023,
+      "name": "Taylor",
+      "salary": 30000,
+      "department": "Human Resources",
+      "availability": false,
+      "email": "taylor.perez@example.com",
+      "location": "Singapore",
+      "telephone": "+65-6534-8889",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Perez",
+      "hireDate": "2021-08-10"
+    },
+    {
+      "id": 10024,
+      "name": "Larry",
+      "salary": 65000,
+      "department": "Finance",
+      "availability": false,
+      "email": "larry.navarro@example.com",
+      "location": "Hong Kong",
+      "telephone": "+852-2524-8889",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone"
+      ],
+      "surname": "Navarro",
+      "hireDate": "2020-10-10"
+    },
+    {
+      "id": 10025,
+      "name": "Gerald",
+      "salary": 65000,
+      "department": "Human Resources",
+      "availability": true,
+      "email": "gerald.taylor@example.com",
+      "location": "Berlin",
+      "telephone": "+49-30-1234568",
+      "assets": [
+        "Laptop",
+        "Mouse",
+        "Calculator"
+      ],
+      "surname": "Taylor",
+      "hireDate": "2023-07-07"
+    },
+    {
+      "id": 10026,
+      "name": "Emily",
+      "salary": 85000,
+      "department": "Sales",
+      "availability": false,
+      "email": "emily.eaton@example.com",
+      "location": "Rome",
+      "telephone": "+39-06-699-1992",
+      "assets": [
+        "Phone",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Eaton",
+      "hireDate": "2025-02-12"
+    },
+    {
+      "id": 10027,
+      "name": "Allison",
+      "salary": 125000,
+      "department": "Sales",
+      "availability": false,
+      "email": "allison.carroll@example.com",
+      "location": "Cairo",
+      "telephone": "+20-2-2575-9893",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse"
+      ],
+      "surname": "Carroll",
+      "hireDate": "2022-12-18"
+    },
+    {
+      "id": 10028,
+      "name": "Robert",
+      "salary": 90000,
+      "department": "Finance",
+      "availability": false,
+      "email": "robert.harris@example.com",
+      "location": "Rio de Janeiro",
+      "telephone": "+55-21-2555-1235",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse",
+        "Tablet"
+      ],
+      "surname": "Harris",
+      "hireDate": "2023-06-29"
+    },
+    {
+      "id": 10029,
+      "name": "Olivia",
+      "salary": 95000,
+      "department": "Marketing",
+      "availability": true,
+      "email": "olivia.marquez@example.com",
+      "location": "Moscow",
+      "telephone": "+7-495-777-7778",
+      "assets": [
+        "Headset",
+        "Phone",
+        "Calculator"
+      ],
+      "surname": "Marquez",
+      "hireDate": "2023-05-04"
+    },
+    {
+      "id": 10030,
+      "name": "Christy",
+      "salary": 115000,
+      "department": "Finance",
+      "availability": false,
+      "email": "christy.howe@example.com",
+      "location": "Beijing",
+      "telephone": "+86-10-6532-1235",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Howe",
+      "hireDate": "2024-11-15"
+    },
+    {
+      "id": 10031,
+      "name": "Rhonda",
+      "salary": 65000,
+      "department": "Sales",
+      "availability": true,
+      "email": "rhonda.robinson@example.com",
+      "location": "New Delhi",
+      "telephone": "+91-11-2301-2346",
+      "assets": [
+        "Laptop",
+        "Phone",
+        "Printer"
+      ],
+      "surname": "Robinson",
+      "hireDate": "2024-05-07"
+    },
+    {
+      "id": 10032,
+      "name": "Bobby",
+      "salary": 40000,
+      "department": "Engineering",
+      "availability": true,
+      "email": "bobby.johnson@example.com",
+      "location": "Istanbul",
+      "telephone": "+90-212-334-9901",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Mouse"
+      ],
+      "surname": "Johnson",
+      "hireDate": "2023-10-08"
+    },
+    {
+      "id": 10033,
+      "name": "Richard",
+      "salary": 65000,
+      "department": "Sales",
+      "availability": true,
+      "email": "richard.williams@example.com",
+      "location": "New York",
+      "telephone": "+1-212-555-0104",
+      "assets": [
+        "Phone",
+        "Printer",
+        "Tablet"
+      ],
+      "surname": "Williams",
+      "hireDate": "2020-12-16"
+    },
+    {
+      "id": 10034,
+      "name": "Robin",
+      "salary": 65000,
+      "department": "Finance",
+      "availability": false,
+      "email": "robin.perry@example.com",
+      "location": "London",
+      "telephone": "+44-20-7946-0105",
+      "assets": [
+        "Laptop",
+        "Mouse",
+        "Calculator",
+        "Tablet"
+      ],
+      "surname": "Perry",
+      "hireDate": "2021-10-04"
+    },
+    {
+      "id": 10035,
+      "name": "Blake",
+      "salary": 90000,
+      "department": "Finance",
+      "availability": false,
+      "email": "blake.wright@example.com",
+      "location": "Tokyo",
+      "telephone": "+81-3-1234-5680",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse"
+      ],
+      "surname": "Wright",
+      "hireDate": "2021-07-19"
+    },
+    {
+      "id": 10036,
+      "name": "Erin",
+      "salary": 40000,
+      "department": "Marketing",
+      "availability": true,
+      "email": "erin.collins@example.com",
+      "location": "Paris",
+      "telephone": "+33-1-42-68-53-03",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Collins",
+      "hireDate": "2024-01-17"
+    },
+    {
+      "id": 10037,
+      "name": "Kyle",
+      "salary": 50000,
+      "department": "Human Resources",
+      "availability": true,
+      "email": "kyle.burch@example.com",
+      "location": "Sydney",
+      "telephone": "+61-2-9283-0497",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Mouse"
+      ],
+      "surname": "Burch",
+      "hireDate": "2024-11-23"
+    },
+    {
+      "id": 10038,
+      "name": "Jose",
+      "salary": 110000,
+      "department": "Sales",
+      "availability": true,
+      "email": "jose.smith@example.com",
+      "location": "Dubai",
+      "telephone": "+971-4-123-4569",
+      "assets": [
+        "Phone",
+        "Printer",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Smith",
+      "hireDate": "2021-05-17"
+    },
+    {
+      "id": 10039,
+      "name": "Scott",
+      "salary": 100000,
+      "department": "Engineering",
+      "availability": false,
+      "email": "scott.fitzgerald@example.com",
+      "location": "Singapore",
+      "telephone": "+65-6534-8890",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse",
+        "Tablet"
+      ],
+      "surname": "Fitzgerald",
+      "hireDate": "2020-08-09"
+    },
+    {
+      "id": 10040,
+      "name": "Allison",
+      "salary": 35000,
+      "department": "Sales",
+      "availability": true,
+      "email": "allison.harris@example.com",
+      "location": "Hong Kong",
+      "telephone": "+852-2524-8890",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse"
+      ],
+      "surname": "Harris",
+      "hireDate": "2024-04-24"
+    },
+    {
+      "id": 10041,
+      "name": "Pamela",
+      "salary": 80000,
+      "department": "Finance",
+      "availability": true,
+      "email": "pamela.mason@example.com",
+      "location": "Berlin",
+      "telephone": "+49-30-1234569",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Mason",
+      "hireDate": "2022-03-03"
+    },
+    {
+      "id": 10042,
+      "name": "Michael",
+      "salary": 70000,
+      "department": "Sales",
+      "availability": true,
+      "email": "michael.jackson@example.com",
+      "location": "Rome",
+      "telephone": "+39-06-699-1993",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone"
+      ],
+      "surname": "Jackson",
+      "hireDate": "2020-06-30"
+    },
+    {
+      "id": 10043,
+      "name": "Brianna",
+      "salary": 115000,
+      "department": "Marketing",
+      "availability": true,
+      "email": "brianna.evans@example.com",
+      "location": "Cairo",
+      "telephone": "+20-2-2575-9894",
+      "assets": [
+        "Laptop",
+        "Mouse",
+        "Calculator"
+      ],
+      "surname": "Evans",
+      "hireDate": "2024-02-05"
+    },
+    {
+      "id": 10044,
+      "name": "Steven",
+      "salary": 30000,
+      "department": "Finance",
+      "availability": false,
+      "email": "steven.skinner@example.com",
+      "location": "Rio de Janeiro",
+      "telephone": "+55-21-2555-1236",
+      "assets": [
+        "Phone",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Skinner",
+      "hireDate": "2020-11-21"
+    },
+    {
+      "id": 10045,
+      "name": "David",
+      "salary": 80000,
+      "department": "Engineering",
+      "availability": false,
+      "email": "david.johnson@example.com",
+      "location": "Moscow",
+      "telephone": "+7-495-777-7779",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse"
+      ],
+      "surname": "Johnson",
+      "hireDate": "2020-08-13"
+    },
+    {
+      "id": 10046,
+      "name": "Justin",
+      "salary": 50000,
+      "department": "Sales",
+      "availability": true,
+      "email": "justin.snyder@example.com",
+      "location": "Beijing",
+      "telephone": "+86-10-6532-1236",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse",
+        "Tablet"
+      ],
+      "surname": "Snyder",
+      "hireDate": "2024-02-04"
+    },
+    {
+      "id": 10047,
+      "name": "Justin",
+      "salary": 100000,
+      "department": "Human Resources",
+      "availability": false,
+      "email": "justin.norman@example.com",
+      "location": "New Delhi",
+      "telephone": "+91-11-2301-2347",
+      "assets": [
+        "Headset",
+        "Phone",
+        "Calculator"
+      ],
+      "surname": "Norman",
+      "hireDate": "2025-05-13"
+    },
+    {
+      "id": 10048,
+      "name": "Ms.",
+      "salary": 75000,
+      "department": "Finance",
+      "availability": false,
+      "email": "ms.denise.cummings@example.com",
+      "location": "Istanbul",
+      "telephone": "+90-212-334-9902",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Denise Cummings",
+      "hireDate": "2025-02-03"
+    },
+    {
+      "id": 10049,
+      "name": "Dana",
+      "salary": 65000,
+      "department": "Finance",
+      "availability": true,
+      "email": "dana.johnson@example.com",
+      "location": "New York",
+      "telephone": "+1-212-555-0105",
+      "assets": [
+        "Laptop",
+        "Phone",
+        "Printer"
+      ],
+      "surname": "Johnson",
+      "hireDate": "2022-02-04"
+    },
+    {
+      "id": 10050,
+      "name": "Veronica",
+      "salary": 65000,
+      "department": "Finance",
+      "availability": true,
+      "email": "veronica.hayden@example.com",
+      "location": "London",
+      "telephone": "+44-20-7946-0106",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Mouse"
+      ],
+      "surname": "Hayden",
+      "hireDate": "2025-01-18"
+    },
+    {
+      "id": 10051,
+      "name": "Elizabeth",
+      "salary": 110000,
+      "department": "Finance",
+      "availability": false,
+      "email": "elizabeth.booker@example.com",
+      "location": "Tokyo",
+      "telephone": "+81-3-1234-5681",
+      "assets": [
+        "Phone",
+        "Printer",
+        "Tablet"
+      ],
+      "surname": "Booker",
+      "hireDate": "2021-10-02"
+    },
+    {
+      "id": 10052,
+      "name": "Kathryn",
+      "salary": 35000,
+      "department": "Finance",
+      "availability": false,
+      "email": "kathryn.christensen@example.com",
+      "location": "Paris",
+      "telephone": "+33-1-42-68-53-04",
+      "assets": [
+        "Laptop",
+        "Mouse",
+        "Calculator",
+        "Tablet"
+      ],
+      "surname": "Christensen",
+      "hireDate": "2021-05-24"
+    },
+    {
+      "id": 10053,
+      "name": "Crystal",
+      "salary": 110000,
+      "department": "Engineering",
+      "availability": true,
+      "email": "crystal.butler@example.com",
+      "location": "Sydney",
+      "telephone": "+61-2-9283-0498",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse"
+      ],
+      "surname": "Butler",
+      "hireDate": "2021-09-18"
+    },
+    {
+      "id": 10054,
+      "name": "Betty",
+      "salary": 65000,
+      "department": "Finance",
+      "availability": true,
+      "email": "betty.ford@example.com",
+      "location": "Dubai",
+      "telephone": "+971-4-123-4570",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Ford",
+      "hireDate": "2021-03-06"
+    },
+    {
+      "id": 10055,
+      "name": "James",
+      "salary": 90000,
+      "department": "Engineering",
+      "availability": false,
+      "email": "james.sosa@example.com",
+      "location": "Singapore",
+      "telephone": "+65-6534-8891",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Mouse"
+      ],
+      "surname": "Sosa",
+      "hireDate": "2022-09-28"
+    },
+    {
+      "id": 10056,
+      "name": "Christopher",
+      "salary": 40000,
+      "department": "Marketing",
+      "availability": true,
+      "email": "christopher.patrick@example.com",
+      "location": "Hong Kong",
+      "telephone": "+852-2524-8891",
+      "assets": [
+        "Phone",
+        "Printer",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Patrick",
+      "hireDate": "2021-09-27"
+    },
+    {
+      "id": 10057,
+      "name": "Joseph",
+      "salary": 115000,
+      "department": "Finance",
+      "availability": true,
+      "email": "joseph.craig@example.com",
+      "location": "Berlin",
+      "telephone": "+49-30-1234570",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse",
+        "Tablet"
+      ],
+      "surname": "Craig",
+      "hireDate": "2022-08-23"
+    },
+    {
+      "id": 10058,
+      "name": "Kim",
+      "salary": 90000,
+      "department": "Human Resources",
+      "availability": true,
+      "email": "kim.robinson@example.com",
+      "location": "Rome",
+      "telephone": "+39-06-699-1994",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse"
+      ],
+      "surname": "Robinson",
+      "hireDate": "2023-02-25"
+    },
+    {
+      "id": 10059,
+      "name": "John",
+      "salary": 85000,
+      "department": "Engineering",
+      "availability": false,
+      "email": "john.henson@example.com",
+      "location": "Cairo",
+      "telephone": "+20-2-2575-9895",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Henson",
+      "hireDate": "2020-10-15"
+    },
+    {
+      "id": 10060,
+      "name": "Brandon",
+      "salary": 30000,
+      "department": "Marketing",
+      "availability": false,
+      "email": "brandon.tanner@example.com",
+      "location": "Rio de Janeiro",
+      "telephone": "+55-21-2555-1237",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone"
+      ],
+      "surname": "Tanner",
+      "hireDate": "2021-02-25"
+    },
+    {
+      "id": 10061,
+      "name": "Travis",
+      "salary": 110000,
+      "department": "Engineering",
+      "availability": false,
+      "email": "travis.arnold@example.com",
+      "location": "Moscow",
+      "telephone": "+7-495-777-7780",
+      "assets": [
+        "Laptop",
+        "Mouse",
+        "Calculator"
+      ],
+      "surname": "Arnold",
+      "hireDate": "2024-09-21"
+    },
+    {
+      "id": 10062,
+      "name": "Joshua",
+      "salary": 110000,
+      "department": "Sales",
+      "availability": true,
+      "email": "joshua.barnes@example.com",
+      "location": "Beijing",
+      "telephone": "+86-10-6532-1237",
+      "assets": [
+        "Phone",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Barnes",
+      "hireDate": "2023-11-28"
+    },
+    {
+      "id": 10063,
+      "name": "Lisa",
+      "salary": 85000,
+      "department": "Finance",
+      "availability": false,
+      "email": "lisa.miller@example.com",
+      "location": "New Delhi",
+      "telephone": "+91-11-2301-2348",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse"
+      ],
+      "surname": "Miller",
+      "hireDate": "2023-05-12"
+    },
+    {
+      "id": 10064,
+      "name": "Diane",
+      "salary": 30000,
+      "department": "Engineering",
+      "availability": true,
+      "email": "diane.collins.dds@example.com",
+      "location": "Istanbul",
+      "telephone": "+90-212-334-9903",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse",
+        "Tablet"
+      ],
+      "surname": "Collins DDS",
+      "hireDate": "2024-06-12"
+    },
+    {
+      "id": 10065,
+      "name": "Jonathan",
+      "salary": 35000,
+      "department": "Human Resources",
+      "availability": true,
+      "email": "jonathan.marshall@example.com",
+      "location": "New York",
+      "telephone": "+1-212-555-0106",
+      "assets": [
+        "Headset",
+        "Phone",
+        "Calculator"
+      ],
+      "surname": "Marshall",
+      "hireDate": "2022-11-21"
+    },
+    {
+      "id": 10066,
+      "name": "Kirk",
+      "salary": 85000,
+      "department": "Sales",
+      "availability": true,
+      "email": "kirk.mullins@example.com",
+      "location": "London",
+      "telephone": "+44-20-7946-0107",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Mullins",
+      "hireDate": "2022-04-18"
+    },
+    {
+      "id": 10067,
+      "name": "Kathleen",
+      "salary": 45000,
+      "department": "Marketing",
+      "availability": false,
+      "email": "kathleen.arnold@example.com",
+      "location": "Tokyo",
+      "telephone": "+81-3-1234-5682",
+      "assets": [
+        "Laptop",
+        "Phone",
+        "Printer"
+      ],
+      "surname": "Arnold",
+      "hireDate": "2022-03-18"
+    },
+    {
+      "id": 10068,
+      "name": "Andrew",
+      "salary": 35000,
+      "department": "Engineering",
+      "availability": true,
+      "email": "andrew.allen@example.com",
+      "location": "Paris",
+      "telephone": "+33-1-42-68-53-05",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Mouse"
+      ],
+      "surname": "Allen",
+      "hireDate": "2021-10-30"
+    },
+    {
+      "id": 10069,
+      "name": "Matthew",
+      "salary": 110000,
+      "department": "Sales",
+      "availability": true,
+      "email": "matthew.richardson@example.com",
+      "location": "Sydney",
+      "telephone": "+61-2-9283-0499",
+      "assets": [
+        "Phone",
+        "Printer",
+        "Tablet"
+      ],
+      "surname": "Richardson",
+      "hireDate": "2024-11-05"
+    },
+    {
+      "id": 10070,
+      "name": "John",
+      "salary": 65000,
+      "department": "Engineering",
+      "availability": true,
+      "email": "john.perry@example.com",
+      "location": "Dubai",
+      "telephone": "+971-4-123-4571",
+      "assets": [
+        "Laptop",
+        "Mouse",
+        "Calculator",
+        "Tablet"
+      ],
+      "surname": "Perry",
+      "hireDate": "2023-11-01"
+    },
+    {
+      "id": 10071,
+      "name": "Cindy",
+      "salary": 80000,
+      "department": "Finance",
+      "availability": false,
+      "email": "cindy.boyd@example.com",
+      "location": "Singapore",
+      "telephone": "+65-6534-8892",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse"
+      ],
+      "surname": "Boyd",
+      "hireDate": "2021-12-01"
+    },
+    {
+      "id": 10072,
+      "name": "Heidi",
+      "salary": 40000,
+      "department": "Marketing",
+      "availability": false,
+      "email": "heidi.smith@example.com",
+      "location": "Hong Kong",
+      "telephone": "+852-2524-8892",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Smith",
+      "hireDate": "2020-10-15"
+    },
+    {
+      "id": 10073,
+      "name": "Christopher",
+      "salary": 55000,
+      "department": "Engineering",
+      "availability": true,
+      "email": "christopher.green@example.com",
+      "location": "Berlin",
+      "telephone": "+49-30-1234571",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Mouse"
+      ],
+      "surname": "Green",
+      "hireDate": "2021-02-17"
+    },
+    {
+      "id": 10074,
+      "name": "Andrew",
+      "salary": 95000,
+      "department": "Human Resources",
+      "availability": true,
+      "email": "andrew.johnson@example.com",
+      "location": "Rome",
+      "telephone": "+39-06-699-1995",
+      "assets": [
+        "Phone",
+        "Printer",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Johnson",
+      "hireDate": "2023-05-04"
+    },
+    {
+      "id": 10075,
+      "name": "Bryan",
+      "salary": 30000,
+      "department": "Marketing",
+      "availability": false,
+      "email": "bryan.smith@example.com",
+      "location": "Cairo",
+      "telephone": "+20-2-2575-9896",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse",
+        "Tablet"
+      ],
+      "surname": "Smith",
+      "hireDate": "2022-02-02"
+    },
+    {
+      "id": 10076,
+      "name": "Alexandra",
+      "salary": 125000,
+      "department": "Sales",
+      "availability": true,
+      "email": "alexandra.chambers@example.com",
+      "location": "Rio de Janeiro",
+      "telephone": "+55-21-2555-1238",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse"
+      ],
+      "surname": "Chambers",
+      "hireDate": "2025-01-24"
+    },
+    {
+      "id": 10077,
+      "name": "Tracey",
+      "salary": 30000,
+      "department": "Engineering",
+      "availability": false,
+      "email": "tracey.kramer@example.com",
+      "location": "Moscow",
+      "telephone": "+7-495-777-7781",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Kramer",
+      "hireDate": "2021-02-22"
+    },
+    {
+      "id": 10078,
+      "name": "Roger",
+      "salary": 40000,
+      "department": "Sales",
+      "availability": false,
+      "email": "roger.krueger@example.com",
+      "location": "Beijing",
+      "telephone": "+86-10-6532-1238",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone"
+      ],
+      "surname": "Krueger",
+      "hireDate": "2022-06-24"
+    },
+    {
+      "id": 10079,
+      "name": "William",
+      "salary": 120000,
+      "department": "Marketing",
+      "availability": false,
+      "email": "william.lewis@example.com",
+      "location": "New Delhi",
+      "telephone": "+91-11-2301-2349",
+      "assets": [
+        "Laptop",
+        "Mouse",
+        "Calculator"
+      ],
+      "surname": "Lewis",
+      "hireDate": "2025-05-23"
+    },
+    {
+      "id": 10080,
+      "name": "Morgan",
+      "salary": 125000,
+      "department": "Sales",
+      "availability": false,
+      "email": "morgan.brown@example.com",
+      "location": "Istanbul",
+      "telephone": "+90-212-334-9904",
+      "assets": [
+        "Phone",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Brown",
+      "hireDate": "2025-02-04"
+    },
+    {
+      "id": 10081,
+      "name": "David",
+      "salary": 50000,
+      "department": "Marketing",
+      "availability": true,
+      "email": "david.bruce@example.com",
+      "location": "New York",
+      "telephone": "+1-212-555-0107",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse"
+      ],
+      "surname": "Bruce",
+      "hireDate": "2025-04-01"
+    },
+    {
+      "id": 10082,
+      "name": "Laura",
+      "salary": 115000,
+      "department": "Engineering",
+      "availability": true,
+      "email": "laura.rosario@example.com",
+      "location": "London",
+      "telephone": "+44-20-7946-0108",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse",
+        "Tablet"
+      ],
+      "surname": "Rosario",
+      "hireDate": "2022-11-22"
+    },
+    {
+      "id": 10083,
+      "name": "Brittany",
+      "salary": 95000,
+      "department": "Human Resources",
+      "availability": false,
+      "email": "brittany.davis@example.com",
+      "location": "Tokyo",
+      "telephone": "+81-3-1234-5683",
+      "assets": [
+        "Headset",
+        "Phone",
+        "Calculator"
+      ],
+      "surname": "Davis",
+      "hireDate": "2024-07-16"
+    },
+    {
+      "id": 10084,
+      "name": "Ana",
+      "salary": 80000,
+      "department": "Sales",
+      "availability": false,
+      "email": "ana.arnold@example.com",
+      "location": "Paris",
+      "telephone": "+33-1-42-68-53-06",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Arnold",
+      "hireDate": "2024-05-02"
+    },
+    {
+      "id": 10085,
+      "name": "Micheal",
+      "salary": 95000,
+      "department": "Finance",
+      "availability": false,
+      "email": "micheal.lucas@example.com",
+      "location": "Sydney",
+      "telephone": "+61-2-9283-0500",
+      "assets": [
+        "Laptop",
+        "Phone",
+        "Printer"
+      ],
+      "surname": "Lucas",
+      "hireDate": "2024-09-26"
+    },
+    {
+      "id": 10086,
+      "name": "Eric",
+      "salary": 105000,
+      "department": "Human Resources",
+      "availability": false,
+      "email": "eric.foster@example.com",
+      "location": "Dubai",
+      "telephone": "+971-4-123-4572",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Mouse"
+      ],
+      "surname": "Foster",
+      "hireDate": "2023-03-18"
+    },
+    {
+      "id": 10087,
+      "name": "Sean",
+      "salary": 55000,
+      "department": "Engineering",
+      "availability": true,
+      "email": "sean.moore@example.com",
+      "location": "Singapore",
+      "telephone": "+65-6534-8893",
+      "assets": [
+        "Phone",
+        "Printer",
+        "Tablet"
+      ],
+      "surname": "Moore",
+      "hireDate": "2021-05-29"
+    },
+    {
+      "id": 10088,
+      "name": "Michael",
+      "salary": 80000,
+      "department": "Finance",
+      "availability": true,
+      "email": "michael.rangel@example.com",
+      "location": "Hong Kong",
+      "telephone": "+852-2524-8893",
+      "assets": [
+        "Laptop",
+        "Mouse",
+        "Calculator",
+        "Tablet"
+      ],
+      "surname": "Rangel",
+      "hireDate": "2023-02-03"
+    },
+    {
+      "id": 10089,
+      "name": "Mary",
+      "salary": 30000,
+      "department": "Sales",
+      "availability": false,
+      "email": "mary.valenzuela@example.com",
+      "location": "Berlin",
+      "telephone": "+49-30-1234572",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse"
+      ],
+      "surname": "Valenzuela",
+      "hireDate": "2023-09-22"
+    },
+    {
+      "id": 10090,
+      "name": "Tanner",
+      "salary": 70000,
+      "department": "Finance",
+      "availability": true,
+      "email": "tanner.hall@example.com",
+      "location": "Rome",
+      "telephone": "+39-06-699-1996",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Hall",
+      "hireDate": "2022-04-07"
+    },
+    {
+      "id": 10091,
+      "name": "James",
+      "salary": 120000,
+      "department": "Engineering",
+      "availability": true,
+      "email": "james.perez@example.com",
+      "location": "Cairo",
+      "telephone": "+20-2-2575-9897",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Mouse"
+      ],
+      "surname": "Perez",
+      "hireDate": "2020-07-10"
+    },
+    {
+      "id": 10092,
+      "name": "Michelle",
+      "salary": 55000,
+      "department": "Finance",
+      "availability": true,
+      "email": "michelle.wright@example.com",
+      "location": "Rio de Janeiro",
+      "telephone": "+55-21-2555-1239",
+      "assets": [
+        "Phone",
+        "Printer",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Wright",
+      "hireDate": "2023-09-13"
+    },
+    {
+      "id": 10093,
+      "name": "Samuel",
+      "salary": 90000,
+      "department": "Finance",
+      "availability": false,
+      "email": "samuel.williams@example.com",
+      "location": "Moscow",
+      "telephone": "+7-495-777-7782",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse",
+        "Tablet"
+      ],
+      "surname": "Williams",
+      "hireDate": "2024-07-14"
+    },
+    {
+      "id": 10094,
+      "name": "Carrie",
+      "salary": 60000,
+      "department": "Marketing",
+      "availability": true,
+      "email": "carrie.mendoza@example.com",
+      "location": "Beijing",
+      "telephone": "+86-10-6532-1239",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse"
+      ],
+      "surname": "Mendoza",
+      "hireDate": "2025-04-04"
+    },
+    {
+      "id": 10095,
+      "name": "Jose",
+      "salary": 80000,
+      "department": "Finance",
+      "availability": true,
+      "email": "jose.grimes@example.com",
+      "location": "New Delhi",
+      "telephone": "+91-11-2301-2350",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Printer",
+        "Mouse",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Grimes",
+      "hireDate": "2022-03-03"
+    },
+    {
+      "id": 10096,
+      "name": "Jackie",
+      "salary": 65000,
+      "department": "Human Resources",
+      "availability": false,
+      "email": "jackie.newman@example.com",
+      "location": "Istanbul",
+      "telephone": "+90-212-334-9905",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone"
+      ],
+      "surname": "Newman",
+      "hireDate": "2024-01-16"
+    },
+    {
+      "id": 10097,
+      "name": "Daniel",
+      "salary": 80000,
+      "department": "Sales",
+      "availability": false,
+      "email": "daniel.shepherd@example.com",
+      "location": "New York",
+      "telephone": "+1-212-555-0108",
+      "assets": [
+        "Laptop",
+        "Mouse",
+        "Calculator"
+      ],
+      "surname": "Shepherd",
+      "hireDate": "2025-01-27"
+    },
+    {
+      "id": 10098,
+      "name": "David",
+      "salary": 45000,
+      "department": "Finance",
+      "availability": false,
+      "email": "david.wallace@example.com",
+      "location": "London",
+      "telephone": "+44-20-7946-0109",
+      "assets": [
+        "Phone",
+        "Tablet",
+        "Calculator"
+      ],
+      "surname": "Wallace",
+      "hireDate": "2024-12-02"
+    },
+    {
+      "id": 10099,
+      "name": "Jennifer",
+      "salary": 90000,
+      "department": "Sales",
+      "availability": false,
+      "email": "jennifer.craig@example.com",
+      "location": "Tokyo",
+      "telephone": "+81-3-1234-5684",
+      "assets": [
+        "Laptop",
+        "Headset",
+        "Phone",
+        "Mouse"
+      ],
+      "surname": "Craig",
+      "hireDate": "2023-04-27"
+    },
+    {
+      "id": 10100,
+      "name": "Beth",
+      "salary": 35000,
+      "department": "Engineering",
+      "availability": false,
+      "email": "beth.brooks@example.com",
+      "location": "Paris",
+      "telephone": "+33-1-42-68-53-07",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse",
+        "Tablet"
+      ],
+      "surname": "Brooks",
+      "hireDate": "2021-06-25"
+    }
+  ],
+  "emplyeees": [
+    {
+      "id": 1000,
+      "name": "Dick Wickens",
+      "recruitmentDate": "2015-07-25",
+      "salary": 56834,
+      "department": "Manager",
+      "availability": false,
+      "email": "dick.wickens@example.com",
+      "location": "Tokyo",
+      "telephone": "+33-1-42-68-53-07",
+      "assets": [
+        "Laptop",
+        "Printer",
+        "Mouse",
+        "Tablet"
+      ]
+    }
+  ]
+}
