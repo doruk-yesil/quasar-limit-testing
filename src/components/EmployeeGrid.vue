@@ -45,8 +45,8 @@ const columns = [
 ]
 
 const MAX_LIMIT = 100
-const filters = ref<Record<string, any>>({})
-const menuRefs = ref<Record<string, QMenu | null>>({});
+
+const filters = ref<Record<string, any>>({}) // her kolona özel filtre modeli
 
 watch(
   [() => filter.value, () => pagination.value.page, () => pagination.value.rowsPerPage],
@@ -56,7 +56,7 @@ watch(
       const rowsPerPage = Math.min(pagination.value.rowsPerPage, MAX_LIMIT)
 
       const data = await fetchEmployees({
-        q: filter.value,
+        q: filter.value, // ileride: filters.value objesini backend’e serialize et
         page: pagination.value.page,
         rowsPerPage,
         sortBy: pagination.value.sortBy,
@@ -81,6 +81,7 @@ watch(
 const updateColumnFilter = (colName: string, filterData: any) => {
   filters.value[colName] = filterData
   console.log(`Filter for ${colName}:`, filterData)
+  // burada ileride filtreye göre sorgu gönderirsin
 }
 </script>
 
@@ -125,27 +126,23 @@ const updateColumnFilter = (colName: string, filterData: any) => {
             :props="props"
             class="q-table--col-auto"
           >
-            <div class="row items-center no-wrap justify-between" style="min-height: 24px; position: relative;">
+            <div class="row items-center no-wrap justify-between" style="min-height: 24px">
               <span class="text-truncate">{{ col.label }}</span>
               <q-icon
                 name="filter_alt"
                 size="16px"
                 class="cursor-pointer q-ml-xs"
-                @click.stop="menuRefs.value[col.name]?.show()"
-              />
-              <q-menu
-                :ref="(el: QMenu | null) => { if (col.name && el) menuRefs.value[col.name as string] = el }"
-                anchor="bottom right"
-                self="top right"
               >
-                <ColumnFilterMenu
-                  :field="col.name"
-                  :dataType="col.type"
-                  v-model="filters[col.name]"
-                  @apply="updateColumnFilter(col.name, $event)"
-                  @reset="updateColumnFilter(col.name, null)"
-                />
-              </q-menu>
+                <q-menu anchor="bottom right" self="top right">
+                  <ColumnFilterMenu
+                    :field="col.name"
+                    :dataType="col.type"
+                    v-model="filters[col.name]"
+                    @apply="updateColumnFilter(col.name, $event)"
+                    @reset="updateColumnFilter(col.name, null)"
+                  />
+                </q-menu>
+              </q-icon>
             </div>
           </q-th>
         </q-tr>
