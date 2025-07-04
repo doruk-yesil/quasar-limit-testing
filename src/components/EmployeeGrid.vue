@@ -6,16 +6,16 @@ import {
   QTh,
   QTr,
   QMenu,
-  // QBtn,
+  QBtn,
+  exportFile
   // QDialog,
   // QCard,
   // QCardSection,
   // QCardActions,
   // QToggle,
-  // exportFile,
 } from 'quasar'
 
-import { ref, watch } from 'vue'
+import { ref, watchEffect } from 'vue'
 import type { Employee } from '../types/employee'
 import { fetchEmployees } from '../services/employeeService'
 import ColumnFilterMenu from './ColumnFilterMenu.vue'
@@ -23,6 +23,8 @@ import ColumnFilterMenu from './ColumnFilterMenu.vue'
 const rows = ref<Employee[]>([])
 const loading = ref(true)
 const filter = ref('')
+const filters = ref<Record<string, any>>({})
+
 const pagination = ref({
   page: 1,
   rowsPerPage: 20,
@@ -31,59 +33,78 @@ const pagination = ref({
 })
 
 const columns = [
-  { name: 'id', label: 'ID', field: 'id', sortable: true, type: 'number' },
-  { name: 'name', label: 'Name', field: 'name', sortable: true, type: 'string' },
-  { name: 'surname', label: 'Surname', field: 'surname', sortable: true, type: 'string' },
-  { name: 'department', label: 'Department', field: 'department', sortable: true, type: 'string' },
-  { name: 'hireDate', label: 'Hire Date', field: 'hireDate', sortable: true, type: 'date' },
-  { name: 'salary', label: 'Salary', field: 'salary', sortable: true, type: 'number' },
-  { name: 'availability', label: 'Available', field: 'availability', sortable: true, type: 'boolean' },
-  { name: 'telephone', label: 'Telephone', field: 'telephone', sortable: true, type: 'string' },
-  { name: 'location', label: 'Location', field: 'location', sortable: true, type: 'string' },
-  { name: 'email', label: 'Email', field: 'email', sortable: true, type: 'string' },
-  { name: 'assets', label: 'Assets', field: 'assets', sortable: true, type: 'string' }
+  { name: 'id', label: 'ID', field: 'id', type: 'number' },
+  { name: 'name', label: 'Name', field: 'name', type: 'string' },
+  { name: 'surname', label: 'Surname', field: 'surname', type: 'string' },
+  { name: 'department', label: 'Department', field: 'department', type: 'string' },
+  { name: 'hireDate', label: 'Hire Date', field: 'hireDate', type: 'date' },
+  { name: 'salary', label: 'Salary', field: 'salary', type: 'number' },
+  { name: 'availability', label: 'Available', field: 'availability', type: 'boolean' },
+  { name: 'telephone', label: 'Telephone', field: 'telephone', type: 'string' },
+  { name: 'location', label: 'Location', field: 'location', type: 'string' },
+  { name: 'email', label: 'Email', field: 'email', type: 'string' },
+  { name: 'assets', label: 'Assets', field: 'assets', type: 'string' }
 ]
 
 const MAX_LIMIT = 100
 
-const filters = ref<Record<string, any>>({}) // her kolona özel filtre modeli
+watchEffect(async () => {
+  loading.value = true
+  try {
+    const rowsPerPage = Math.min(pagination.value.rowsPerPage, MAX_LIMIT)
 
-watch(
-  [() => filter.value, () => pagination.value.page, () => pagination.value.rowsPerPage],
-  async () => {
-    loading.value = true
-    try {
-      const rowsPerPage = Math.min(pagination.value.rowsPerPage, MAX_LIMIT)
+    const data = await fetchEmployees({
+      q: filter.value,
+      page: pagination.value.page,
+      rowsPerPage,
+      sortBy: pagination.value.sortBy,
+      descending: pagination.value.descending
+    })
+    if (!Array.isArray(data)) throw new Error('Expected array from backend')
 
-      const data = await fetchEmployees({
-        q: filter.value, // ileride: filters.value objesini backend’e serialize et
-        page: pagination.value.page,
-        rowsPerPage,
-        sortBy: pagination.value.sortBy,
-        descending: pagination.value.descending
-      })
-
-      if (!Array.isArray(data)) {
-        console.error('Invalid data from API:', data)
-        throw new Error('Expected array from backend')
-      }
-
-      rows.value = data
-    } catch (err) {
-      console.error('fetchEmployees error:', err)
-    } finally {
-      loading.value = false
-    }
-  },
-  { immediate: true }
-)
+    rows.value = data
+    
+  } catch (err) {
+    console.error('fetchEmployees error:', err)
+  } finally {
+    loading.value = false
+  }
+})
 
 const updateColumnFilter = (colName: string, filterData: any) => {
   filters.value[colName] = filterData
   console.log(`Filter for ${colName}:`, filterData)
-  // burada ileride filtreye göre sorgu gönderirsin
+}
+
+const toggleSort = (colName: string) => {
+  if (pagination.value.sortBy === colName) {
+    pagination.value.descending = !pagination.value.descending
+  } else {
+    pagination.value.sortBy = colName
+    pagination.value.descending = false
+  }
+}
+
+const getSortIcon = (colName: string) => {
+  if (pagination.value.sortBy !== colName) return 'unfold_more'
+  return pagination.value.descending ? 'arrow_downward' : 'arrow_upward'
+}
+
+const exportCsv = () => {
+  if (!rows.value.length) return
+
+  const csvContent = [
+    columns.map(col => `"${col.label}"`).join(','),
+    ...rows.value.map(row =>
+      columns.map(col => `"${(row as any)[col.field] ?? ''}"`).join(',')
+    )
+  ].join('\r\n')
+
+  const csvWithBOM = '\uFEFF' + csvContent
+  exportFile('employees.csv', csvWithBOM, 'text/csv')
 }
 </script>
+
 
 <template>
   <div class="q-pa-md" style="max-width: 100%; margin: auto;">
@@ -100,10 +121,9 @@ const updateColumnFilter = (colName: string, filterData: any) => {
       :rows-per-page-options="[10, 20, 50]"
     >
       <template #top-left>
-        <div class="q-gutter-sm q-mr-auto flex justify-end">
+        <div class="row items-center q-gutter-sm">
           <q-input
             v-model="filter"
-            class="q-mx-auto"
             debounce="300"
             placeholder="Search..."
             dense
@@ -117,7 +137,17 @@ const updateColumnFilter = (colName: string, filterData: any) => {
           </q-input>
         </div>
       </template>
-
+      <template #top-right>
+        <div class="row items-center q-gutter-sm">
+          <q-btn
+            label="Export CSV"
+            icon="file_download"
+            unelevated
+            color="secondary"
+            @click="exportCsv"
+          />
+        </div>
+      </template>
       <template #header="props">
         <q-tr :props="props" class="sticky-header-row">
           <q-th
@@ -127,7 +157,18 @@ const updateColumnFilter = (colName: string, filterData: any) => {
             class="q-table--col-auto"
           >
             <div class="row items-center no-wrap justify-between" style="min-height: 24px">
-              <span class="text-truncate">{{ col.label }}</span>
+              <div
+                class="row items-center cursor-pointer"
+                style="min-width: 90px;"
+                @click="toggleSort(col.name)"
+              >
+                <span class="text-truncate">{{ col.label }}</span>
+                <q-icon
+                  :name="getSortIcon(col.name)"
+                  size="16px"
+                  class="q-ml-xs"
+                />
+              </div>
               <q-icon
                 name="filter_alt"
                 size="16px"
