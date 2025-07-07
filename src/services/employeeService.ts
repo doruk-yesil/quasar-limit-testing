@@ -24,7 +24,7 @@ export async function fetchEmployees(
   query.set('q', params.q || '')
 
   const filterQuery = generateFilterQuery(params.filters || {})
-
+  
   for (const [key, value] of Object.entries(filterQuery)) {
     query.set(key, value)
   }

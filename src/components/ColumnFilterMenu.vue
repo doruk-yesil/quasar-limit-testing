@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import { QInput, QSelect, QToggle, QDate, QBtn } from 'quasar'
+import { QInput, QSelect, QOptionGroup, QDate, QBtn } from 'quasar'
 
 const props=defineProps<{
   field: string
@@ -29,7 +29,7 @@ const operatorOptions = computed(() => {
     case 'date':
       return ['is', 'before', 'after', 'between']
     case 'boolean':
-      return ['is true', 'is false']
+      return ['is_true', 'is_false']
     default:
       return []
   }
@@ -61,15 +61,16 @@ const reset = () => {
 
 <template>
   <div class="q-pa-sm" style="min-width: 220px;">
-    <q-select
-      v-model="selectedOperator"
-      :options="operatorOptions"
-      label="Operator"
-      dense
-      filled
-      class="q-mb-sm"
-    />
-
+    <div >
+      <q-select
+        v-model="selectedOperator"
+        :options="operatorOptions"
+        label="Operator"
+        dense
+        filled
+        class="q-mb-sm"
+      />
+    </div>
     <div v-if="dataType === 'string' || dataType === 'number'">
       <q-input
         v-model="value1"
@@ -90,8 +91,14 @@ const reset = () => {
     </div>
 
     <div v-else-if="dataType === 'boolean'">
-      <q-toggle v-model="value1" label="Is true" />
+      <q-option-group
+        v-model="value1"
+        type="radio"
+        dense
+        inline
+      />
     </div>
+
 
     <div class="row justify-between q-mt-md">
       <q-btn label="Reset" flat color="primary" @click="reset" />
