@@ -7,6 +7,7 @@ import {
   QTr,
   QMenu,
   QBtn,
+  QPagination,
   exportFile
   // QDialog,
   // QCard,
@@ -14,7 +15,7 @@ import {
   // QCardActions,
   // QToggle,
 } from 'quasar'
-import { ref, watchEffect } from 'vue'
+import { ref, watch } from 'vue'
 import type { Employee } from '../types/employee'
 import { fetchEmployees } from '../services/employeeService'
 import ColumnFilterMenu from './ColumnFilterMenu.vue'
@@ -23,10 +24,9 @@ const rows = ref<Employee[]>([])
 const loading = ref(true)
 const filter = ref('')
 const filters = ref<Record<string, any>>({})
-
 const pagination = ref({
   page: 1,
-  rowsPerPage: 20,
+  rowsPerPage: 0,
   sortBy: 'id',
   descending: false,
   rowsNumber: 0
@@ -46,22 +46,17 @@ const columns = [
   { name: 'assets', label: 'Assets', field: 'assets', type: 'string' }
 ]
 
-const MAX_LIMIT = 100
-
-watchEffect(async () => {
+const fetchData = async () => {
   loading.value = true
   try {
-    const rowsPerPage = Math.min(pagination.value.rowsPerPage, MAX_LIMIT)
     const { data, total } = await fetchEmployees({
       q: filter.value,
       page: pagination.value.page,
-      rowsPerPage,
+      rowsPerPage: pagination.value.rowsPerPage,
       sortBy: pagination.value.sortBy,
       descending: pagination.value.descending,
       filters: filters.value
     })
-    if (!Array.isArray(data)) throw new Error('Expected array from backend')
-
     rows.value = data
     pagination.value.rowsNumber = total
   } catch (err) {
@@ -69,7 +64,23 @@ watchEffect(async () => {
   } finally {
     loading.value = false
   }
-})
+}
+
+watch(
+  () => [
+    pagination.value.page,
+    pagination.value.rowsPerPage,
+    pagination.value.sortBy,
+    pagination.value.descending,
+    filter.value,
+    JSON.stringify(filters.value)
+  ],
+  () => {
+    fetchData()
+  },
+  { immediate: true }
+)
+
 
 const updateColumnFilter = (colName: string, filterData: any) => {
   filters.value[colName] = filterData
@@ -113,12 +124,12 @@ const exportCsv = () => {
       :columns="columns"
       row-key="id"
       :loading="loading"
-      flat
-      bordered
+      flat bordered
       class="q-mt-md"
       style="height: 600px"
-      v-model:pagination="pagination"
-      :rows-per-page-options="[10, 20, 50]"
+      :pagination="pagination"
+      :rows-per-page-options="[10, 20, 50, 0]"
+      rows-per-page-label=""
     >
       <template #top-left>
         <div class="row items-center q-gutter-sm">
@@ -187,6 +198,19 @@ const exportCsv = () => {
             </div>
           </q-th>
         </q-tr>
+      </template>
+      <template #pagination>
+        <div class="row justify-between items-center q-pa-sm full-width">
+          <q-pagination
+            v-model="pagination.page"
+            :max="Math.ceil(pagination.rowsNumber / pagination.rowsPerPage)"
+            input
+            direction-links
+            boundary-numbers
+            color="primary"
+            dense
+          />
+        </div>
       </template>
     </q-table>
   </div>
