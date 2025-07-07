@@ -38,7 +38,7 @@ export async function fetchEmployees(
   }
 
   const result = await res.json()
-  const total = parseInt(res.headers.get('X-Total-Count') || '0', 10)
+  const total = result.items ?? result.data.length
 
   return { data: result.data ?? result, total }
 }
