@@ -8,6 +8,7 @@ import {
   QMenu,
   QBtn,
   QPagination,
+  QSelect,
   exportFile
   // QDialog,
   // QCard,
@@ -26,7 +27,7 @@ const filter = ref('')
 const filters = ref<Record<string, any>>({})
 const pagination = ref({
   page: 1,
-  rowsPerPage: 0,
+  rowsPerPage: 10,
   sortBy: 'id',
   descending: false,
   rowsNumber: 0
@@ -49,10 +50,11 @@ const columns = [
 const fetchData = async () => {
   loading.value = true
   try {
+    const rowsPerPage = pagination.value.rowsPerPage === 0 ? 10000 : pagination.value.rowsPerPage
     const { data, total } = await fetchEmployees({
       q: filter.value,
       page: pagination.value.page,
-      rowsPerPage: pagination.value.rowsPerPage,
+      rowsPerPage,
       sortBy: pagination.value.sortBy,
       descending: pagination.value.descending,
       filters: filters.value
@@ -199,17 +201,31 @@ const exportCsv = () => {
           </q-th>
         </q-tr>
       </template>
-      <template #pagination>
+      <template #bottom>
         <div class="row justify-between items-center q-pa-sm full-width">
-          <q-pagination
-            v-model="pagination.page"
-            :max="Math.ceil(pagination.rowsNumber / pagination.rowsPerPage)"
-            input
-            direction-links
-            boundary-numbers
-            color="primary"
-            dense
-          />
+          <div class="col-auto flex justify-center">
+            <q-pagination
+              v-model="pagination.page"
+              :max="pagination.rowsPerPage === 0 ? 1 : Math.ceil(pagination.rowsNumber / pagination.rowsPerPage)"
+              input
+              direction-links
+              boundary-numbers
+              color="primary"
+              dense
+            />
+          </div>
+          <div class="col-auto row items-center q-gutter-sm">
+            <span class="text-caption">Records per page:</span>
+            <q-select
+              v-model="pagination.rowsPerPage"
+              :options="[10, 20, 50, { label: 'All', value: 0 }]"
+              dense
+              outlined
+              emit-value
+              map-options
+              style="min-width: 80px;"
+            />
+          </div>
         </div>
       </template>
     </q-table>
