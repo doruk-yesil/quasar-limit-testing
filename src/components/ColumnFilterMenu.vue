@@ -41,13 +41,15 @@ const value1 = ref('')
 const value2 = ref('')
 
 const apply = () => {
-  emit('update:modelValue', {
+  const filterData = {
     operator: selectedOperator.value,
     value: value1.value,
     value2: value2.value || null
-  })
-  emit('apply')
+  }
+  emit('update:modelValue', filterData)
+  emit('apply', filterData)
 }
+
 
 const reset = () => {
   selectedOperator.value = operatorOptions.value[0]

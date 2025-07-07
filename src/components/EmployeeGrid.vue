@@ -14,7 +14,6 @@ import {
   // QCardActions,
   // QToggle,
 } from 'quasar'
-
 import { ref, watchEffect } from 'vue'
 import type { Employee } from '../types/employee'
 import { fetchEmployees } from '../services/employeeService'
@@ -29,7 +28,8 @@ const pagination = ref({
   page: 1,
   rowsPerPage: 20,
   sortBy: 'id',
-  descending: false
+  descending: false,
+  rowsNumber: 0
 })
 
 const columns = [
@@ -52,18 +52,18 @@ watchEffect(async () => {
   loading.value = true
   try {
     const rowsPerPage = Math.min(pagination.value.rowsPerPage, MAX_LIMIT)
-
-    const data = await fetchEmployees({
+    const { data, total } = await fetchEmployees({
       q: filter.value,
       page: pagination.value.page,
       rowsPerPage,
       sortBy: pagination.value.sortBy,
-      descending: pagination.value.descending
+      descending: pagination.value.descending,
+      filters: filters.value
     })
     if (!Array.isArray(data)) throw new Error('Expected array from backend')
 
     rows.value = data
-    
+    pagination.value.rowsNumber = total
   } catch (err) {
     console.error('fetchEmployees error:', err)
   } finally {
@@ -73,7 +73,7 @@ watchEffect(async () => {
 
 const updateColumnFilter = (colName: string, filterData: any) => {
   filters.value[colName] = filterData
-  console.log(`Filter for ${colName}:`, filterData)
+  pagination.value.page = 1
 }
 
 const toggleSort = (colName: string) => {
