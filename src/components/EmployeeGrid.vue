@@ -9,12 +9,9 @@ import {
   QBtn,
   QPagination,
   QSelect,
+  QChip,
+
   exportFile
-  // QDialog,
-  // QCard,
-  // QCardSection,
-  // QCardActions,
-  // QToggle,
 } from 'quasar'
 import { ref, watch } from 'vue'
 import type { Employee } from '../types/employee'
@@ -24,7 +21,14 @@ import ColumnFilterMenu from './ColumnFilterMenu.vue'
 const rows = ref<Employee[]>([])
 const loading = ref(true)
 const filter = ref('')
-const filters = ref<Record<string, any>>({})
+
+interface FilterItem {
+  operator: string
+  value: any
+  value2?: any
+}
+
+const filters = ref<Record<string, FilterItem[]>>({})
 const pagination = ref({
   page: 1,
   rowsPerPage: 10,
@@ -69,24 +73,49 @@ const fetchData = async () => {
 }
 
 watch(
-  () => [
-    pagination.value.page,
-    pagination.value.rowsPerPage,
-    pagination.value.sortBy,
-    pagination.value.descending,
-    filter.value,
-    JSON.stringify(filters.value)
+  [
+    () => pagination.value.page,
+    () => pagination.value.rowsPerPage,
+    () => pagination.value.sortBy,
+    () => pagination.value.descending,
+    () => filter.value,
+    () => filters.value
   ],
   () => {
     fetchData()
   },
-  { immediate: true }
+  { immediate: true, deep: true }
 )
 
-
-const updateColumnFilter = (colName: string, filterData: any) => {
+const updateColumnFilter = (colName: string, filterData: FilterItem[] | null) => {
+  if (!filterData || !Array.isArray(filterData)) {
+    filters.value[colName] = []
+    return
+  }
   filters.value[colName] = filterData
   pagination.value.page = 1
+}
+
+
+const removeFilter = (colName: string, filterIndex: number) => {
+  filters.value[colName].splice(filterIndex, 1)
+  if (filters.value[colName].length === 0) {
+    delete filters.value[colName]
+  }
+  pagination.value.page = 1
+}
+
+const clearAllFilters = () => {
+  filters.value = {}
+  pagination.value.page = 1
+}
+
+const getFilterLabel = (field: string, filter: FilterItem): string => {
+  if (!filter || !filter.operator) return ''
+  const op = filter.operator.replace(/_/g, ' ')
+  if (filter.operator === 'between' && filter.value2)
+    return `${field}: ${filter.value} - ${filter.value2}`
+  return `${field}: ${op} ${filter.value}`
 }
 
 const toggleSort = (colName: string) => {
@@ -118,7 +147,6 @@ const exportCsv = () => {
 }
 </script>
 
-
 <template>
   <div class="q-pa-md" style="max-width: 100%; margin: auto;">
     <q-table
@@ -130,26 +158,56 @@ const exportCsv = () => {
       class="q-mt-md"
       style="height: 600px"
       :pagination="pagination"
-      :rows-per-page-options="[10, 20, 50, 0]"
+      :rows-per-page-options="[10, 20, 50, { label: 'All', value: 0 }]"
       rows-per-page-label=""
     >
       <template #top-left>
-        <div class="row items-center q-gutter-sm">
-          <q-input
-            v-model="filter"
-            debounce="300"
-            placeholder="Search..."
-            dense
-            filled
-            clearable
-            style="max-width: 250px;"
-          >
-            <template #append>
-              <q-icon name="search" />
+        <div class="column q-gutter-sm">
+          <div class="row items-center q-gutter-sm">
+            <q-input
+              v-model="filter"
+              debounce="300"
+              placeholder="Search..."
+              dense
+              filled
+              clearable
+              style="max-width: 250px;"
+            >
+              <template #append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </div>
+          <div v-if="Object.keys(filters).length" class="row items-center q-gutter-sm">
+            <span class="text-bold text-caption">Applied Filters:</span>
+            <template v-for="(filterList, field) in filters" :key="field">
+              <q-chip
+                v-for="(filter, index) in filterList"
+                :key="index"
+                removable
+                @remove="removeFilter(field, index)"
+                color="grey-2"
+                text-color="black"
+                class="q-px-sm text-caption items-center"
+              >
+                <div class="row items-center no-wrap">
+                  <span>
+                    {{ getFilterLabel(field, filter) }}
+                  </span>
+                </div>
+              </q-chip>
             </template>
-          </q-input>
+            <q-btn
+              flat
+              label="Clear All"
+              color="primary"
+              size="sm"
+              @click="clearAllFilters"
+            />
+          </div>
         </div>
       </template>
+
       <template #top-right>
         <div class="row items-center q-gutter-sm">
           <q-btn
@@ -161,6 +219,7 @@ const exportCsv = () => {
           />
         </div>
       </template>
+
       <template #header="props">
         <q-tr :props="props" class="sticky-header-row">
           <q-th
@@ -191,7 +250,7 @@ const exportCsv = () => {
                   <ColumnFilterMenu
                     :field="col.name"
                     :dataType="col.type"
-                    v-model="filters[col.name]"
+                    :modelValue="filters[col.name] || []"
                     @apply="updateColumnFilter(col.name, $event)"
                     @reset="updateColumnFilter(col.name, null)"
                   />
@@ -201,6 +260,7 @@ const exportCsv = () => {
           </q-th>
         </q-tr>
       </template>
+
       <template #bottom>
         <div class="row justify-between items-center q-pa-sm full-width">
           <div class="col-auto flex justify-center">
