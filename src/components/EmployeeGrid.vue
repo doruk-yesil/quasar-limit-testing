@@ -15,6 +15,7 @@ import {
   QSeparator,
   QItem,
   QItemSection,
+  QItemLabel,
   exportFile
 } from 'quasar'
 import { ref, watch } from 'vue'

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import EmployeeGrid from '../components/EmployeeGrid.vue'
+import Header from '../components/Header.vue';
 </script>
 
 <template>
   <div class="q-pa-md">
+    <Header/>
     <div class="text-center q-mb-md">
       <h3>Financial People</h3>
     </div>

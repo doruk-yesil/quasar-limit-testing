@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import router from './router'
 import App from './App.vue'
 import { Quasar, ClosePopup } from 'quasar'
 import quasarLang from 'quasar/lang/en-US'
@@ -14,5 +15,5 @@ app.use(Quasar, {
   },
   lang: quasarLang
 })
-
+app.use(router)
 app.mount('#app')

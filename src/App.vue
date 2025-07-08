@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import EmployeePage from './pages/EmployeePage.vue'
 </script>
 
 <template>
-  <employee-page />
+  <router-view />
 </template>
-
-<style>
-</style>
