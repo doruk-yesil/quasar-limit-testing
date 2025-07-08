@@ -10,7 +10,11 @@ import {
   QPagination,
   QSelect,
   QChip,
-
+  QTd,
+  QList,
+  QSeparator,
+  QItem,
+  QItemSection,
   exportFile
 } from 'quasar'
 import { ref, watch } from 'vue'
@@ -21,6 +25,8 @@ import ColumnFilterMenu from './ColumnFilterMenu.vue'
 const rows = ref<Employee[]>([])
 const loading = ref(true)
 const filter = ref('')
+const hoveredRow = ref<number | null>(null)
+const showRowIndex = ref(true)
 
 interface FilterItem {
   operator: string
@@ -38,6 +44,7 @@ const pagination = ref({
 })
 
 const columns = [
+  { name: 'actions', label: '', field: 'id', align: 'left' as const, sortable: false, style: 'width: 1px', headerStyle: 'width: 1px' },
   { name: 'id', label: 'ID', field: 'id', type: 'number' },
   { name: 'name', label: 'Name', field: 'name', type: 'string' },
   { name: 'surname', label: 'Surname', field: 'surname', type: 'string' },
@@ -71,6 +78,11 @@ const fetchData = async () => {
     loading.value = false
   }
 }
+
+const getRowIndex = (rowIndex: number) => {
+  return (pagination.value.page - 1) * pagination.value.rowsPerPage + rowIndex + 1
+}
+
 
 watch(
   [
@@ -222,42 +234,97 @@ const exportCsv = () => {
 
       <template #header="props">
         <q-tr :props="props" class="sticky-header-row">
+          <q-th v-if="showRowIndex" class="text-left" style="width: 40px;">#</q-th>
           <q-th
             v-for="col in props.cols"
             :key="col.name"
             :props="props"
             class="q-table--col-auto"
+            :style="col.name === 'actions' ? 'position: sticky; left: 0; z-index: 3; width: 1px; background: white;' : ''"
           >
-            <div class="row items-center no-wrap justify-between" style="min-height: 24px">
-              <div
-                class="row items-center cursor-pointer"
-                style="min-width: 90px;"
-                @click="toggleSort(col.name)"
-              >
-                <span class="text-truncate">{{ col.label }}</span>
-                <q-icon
-                  :name="getSortIcon(col.name)"
-                  size="16px"
-                  class="q-ml-xs"
-                />
-              </div>
-              <q-icon
-                name="filter_alt"
-                size="16px"
-                class="cursor-pointer q-ml-xs"
-              >
-                <q-menu anchor="bottom right" self="top right">
-                  <ColumnFilterMenu
-                    :field="col.name"
-                    :dataType="col.type"
-                    :modelValue="filters[col.name] || []"
-                    @apply="updateColumnFilter(col.name, $event)"
-                    @reset="updateColumnFilter(col.name, null)"
+            <template v-if="col.name !== 'actions'">
+              <div class="row items-center no-wrap justify-between" style="min-height: 24px">
+                <div
+                  class="row items-center cursor-pointer"
+                  style="min-width: 90px;"
+                  @click="toggleSort(col.name)"
+                >
+                  <span class="text-truncate">{{ col.label }}</span>
+                  <q-icon
+                    :name="getSortIcon(col.name)"
+                    size="16px"
+                    class="q-ml-xs"
                   />
-                </q-menu>
-              </q-icon>
-            </div>
+                </div>
+                <q-icon
+                  name="filter_alt"
+                  size="16px"
+                  class="cursor-pointer q-ml-xs"
+                >
+                  <q-menu anchor="bottom right" self="top right">
+                    <ColumnFilterMenu
+                      :field="col.name"
+                      :dataType="col.type"
+                      :modelValue="filters[col.name] || []"
+                      @apply="updateColumnFilter(col.name, $event)"
+                      @reset="updateColumnFilter(col.name, null)"
+                    />
+                  </q-menu>
+                </q-icon>
+              </div>
+            </template>
           </q-th>
+        </q-tr>
+      </template>
+
+      <template #body="props">
+        <q-tr
+          :props="props"
+          @mouseenter="hoveredRow = props.row.id"
+          @mouseleave="hoveredRow = null"
+        >
+          <q-td v-if="showRowIndex" class="text-left">{{ getRowIndex(props.rowIndex) }}</q-td>
+          <q-td
+            class="sticky-left-col"
+          >
+            <q-btn
+              icon="more_vert"
+              size="sm"
+              flat
+              round
+              dense
+              class="transition-all"
+              :class="{ 'visible': hoveredRow === props.row.id, 'invisible': hoveredRow !== props.row.id }"
+            >
+              <q-menu>
+                <q-list dense style="min-width: 150px;">
+                  <q-item clickable v-close-popup>
+                    <q-item-section>Edit row</q-item-section>
+                  </q-item>
+                  <q-item clickable v-close-popup>
+                    <q-item-section>Delete row</q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item clickable v-close-popup>
+                    <q-item-section>Fix row to top</q-item-section>
+                  </q-item>
+                  <q-separator />
+                    <q-item clickable v-close-popup @click="showRowIndex = !showRowIndex">
+                      <q-item-section>
+                        <q-item-label>{{ showRowIndex ? 'Hide Index' : 'Show Index' }}</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </q-td>
+          <q-td
+            v-for="col in props.cols.slice(1)"
+            :key="col.name"
+            :props="props"
+          >
+            {{ props.row[col.name] }}
+          </q-td>
         </q-tr>
       </template>
 
@@ -296,10 +363,49 @@ const exportCsv = () => {
 .q-table th {
   vertical-align: middle;
 }
+
 .sticky-header-row {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 3;
   background: white;
 }
+
+.sticky-left-col {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: white;
+  width: 1px;
+  /*border-right: 1px solid #e0e0e0;*/
+}
+
+.invisible {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.2s;
+}
+.q-table__middle::-webkit-scrollbar {
+  height: 8px;
+}
+
+.q-table__middle::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.q-table__middle::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.q-table__middle::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
 </style>
