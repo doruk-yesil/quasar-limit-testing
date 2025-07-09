@@ -55,8 +55,8 @@ function startDrag(event: MouseEvent, widget: WidgetItem) {
   isDragging.value = true
 }
 
-function isCollision(x: number, y: number, w: number, h: number, currentId: string): boolean {
-  return widgets.value.some(widget => {
+function getCollidingWidget(x: number, y: number, w: number, h: number, currentId: string): WidgetItem | null {
+  return widgets.value.find(widget => {
     if (widget.id === currentId) return false
     return !(
       x + w <= widget.x || 
@@ -64,7 +64,18 @@ function isCollision(x: number, y: number, w: number, h: number, currentId: stri
       y + h <= widget.y ||
       y >= widget.y + widget.h
     )
-  })
+  }) || null
+}
+
+function findFreeSpotFor(w: number, h: number): { x: number, y: number } | null {
+  for (let y = 0; y <= GRID_ROWS - h; y++) {
+    for (let x = 0; x <= BASE_COLS - w; x++) {
+      if (!getCollidingWidget(x, y, w, h, '')) {
+        return { x, y }
+      }
+    }
+  }
+  return null
 }
 
 function onMouseMove(event: MouseEvent) {
@@ -78,14 +89,27 @@ function onMouseMove(event: MouseEvent) {
     const maxY = GRID_ROWS - draggingWidget.h
     const newX = Math.min(maxX, snappedX)
     const newY = Math.min(maxY, snappedY)
-    if (!isCollision(newX, newY, draggingWidget.w, draggingWidget.h, draggingWidget.id)) {
+    const collided = getCollidingWidget(newX, newY, draggingWidget.w, draggingWidget.h, draggingWidget.id)
+    if (collided) {
+      const foundSpot = findFreeSpotFor(collided.w, collided.h)
+      if (foundSpot) {
+        collided.x = foundSpot.x
+        collided.y = foundSpot.y
+        dragPreview.value = {
+          x: newX,
+          y: newY,
+          w: draggingWidget.w,
+          h: draggingWidget.h
+        }
+      }
+    } else {
       dragPreview.value = {
         x: newX,
         y: newY,
         w: draggingWidget.w,
         h: draggingWidget.h
       }
-    } else dragPreview.value=null
+    }
   }
 }
 
@@ -93,13 +117,26 @@ function stopDrag() {
   if (draggingWidget && dragPreview.value) {
     draggingWidget.x = dragPreview.value.x
     draggingWidget.y = dragPreview.value.y
+    const collided = getCollidingWidget(
+      dragPreview.value.x,
+      dragPreview.value.y,
+      draggingWidget.w,
+      draggingWidget.h,
+      draggingWidget.id
+    )
+    if (collided) {
+      const newSpot = findFreeSpotFor(collided.w, collided.h)
+      if (newSpot) {
+        collided.x = newSpot.x
+        collided.y = newSpot.y
+      }
+    }
   }
   draggingWidget = null
   draggingStyle.value = null
   dragPreview.value = null
   isDragging.value = false
 }
-
 
 function openSettings() {
   showSettingsDialog.value = true
@@ -128,6 +165,7 @@ onBeforeUnmount(() => {
         v-for="widget in widgets"
         :key="widget.id"
         class="widget"
+        :class="['widget', { 'with-transition': draggingWidget?.id !== widget.id }]"
         :style="draggingWidget?.id === widget.id && draggingStyle
           ? {
               left: `${draggingStyle.left}px`,
@@ -205,7 +243,7 @@ onBeforeUnmount(() => {
   min-width: 1200px;
   height: 100vh;
   overflow-x: auto;
-  background: #f5f5f5;
+  /* background: #f5f5f5; */
   overflow: hidden;
 }
 
@@ -222,6 +260,10 @@ onBeforeUnmount(() => {
   border-radius: 8px;
   pointer-events: none;
   z-index: 1;
+}
+
+.widget.with-transition {
+  transition: left 0.25s ease, top 0.25s ease;
 }
 
 .widget {
