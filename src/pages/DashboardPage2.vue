@@ -26,6 +26,7 @@ const showWidgetDialog = ref(false)
 const editMode = ref(false)
 const cellWidth = ref(100)
 const draggingStyle = ref<{ left: number; top: number } | null>(null)
+const resizingStyle = ref<{ left: number; top: number; width: number; height: number } | null>(null)
 const widgetPreview = ref<{ x: number; y: number; w: number; h: number } | null>(null)
 const isResizing = ref(false)
 let resizingWidget: WidgetItem | null = null
@@ -119,6 +120,12 @@ function onMouseMove(event: MouseEvent) {
   }
   resizingWidget.w = finalW
   resizingWidget.h = finalH
+  resizingStyle.value = {
+    left: resizingWidget.x * (cellWidth.value + CELL_GUTTER) + 5,
+    top: resizingWidget.y * (CELL_HEIGHT + CELL_GUTTER) + 5,
+    width: finalW * cellWidth.value + (finalW - 1) * CELL_GUTTER,
+    height: finalH * CELL_HEIGHT + (finalH - 1) * CELL_GUTTER
+  }
   return
   }
   if (isDragging.value && draggingWidget) {
@@ -203,6 +210,7 @@ function stopResize() {
   isResizing.value = false
   resizingWidget = null
   widgetPreview.value = null
+  resizingStyle.value = null
 }
 
 onMounted(() => {
@@ -233,18 +241,27 @@ onBeforeUnmount(() => {
         :key="widget.id"
         class="widget"
         :class="['widget', { 'with-transition': draggingWidget?.id !== widget.id, 'editable': editMode }]"
-        :style="draggingWidget?.id === widget.id && draggingStyle
+        :style="resizingWidget?.id === widget.id && resizingStyle
           ? {
-              left: `${draggingStyle.left+5}px`,
-              top: `${draggingStyle.top+5}px`,
+              left: `${resizingStyle.left}px`,
+              top: `${resizingStyle.top}px`,
+              width: `${resizingStyle.width}px`,
+              height: `${resizingStyle.height}px`,
+              zIndex: 9999,
+              opacity: 0.8
+            }
+          : draggingWidget?.id === widget.id && draggingStyle
+          ? {
+              left: `${draggingStyle.left + 5}px`,
+              top: `${draggingStyle.top + 5}px`,
               width: `${widget.w * cellWidth + (widget.w - 1) * CELL_GUTTER}px`,
               height: `${widget.h * CELL_HEIGHT + (widget.h - 1) * CELL_GUTTER}px`,
               zIndex: 9999,
               opacity: 0.8
             }
           : {
-              left: `${widget.x * (cellWidth + CELL_GUTTER)+5}px`,
-              top: `${widget.y * (CELL_HEIGHT + CELL_GUTTER)+5}px`,
+              left: `${widget.x * (cellWidth + CELL_GUTTER) + 5}px`,
+              top: `${widget.y * (CELL_HEIGHT + CELL_GUTTER) + 5}px`,
               width: `${widget.w * cellWidth + (widget.w - 1) * CELL_GUTTER}px`,
               height: `${widget.h * CELL_HEIGHT + (widget.h - 1) * CELL_GUTTER}px`
             }"
