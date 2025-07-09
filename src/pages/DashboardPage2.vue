@@ -11,7 +11,8 @@ import {
   QList,
   QCardSection,
   QCheckbox,
-  QCardActions
+  QCardActions,
+  QBanner
 } from 'quasar'
 import WidgetRenderer from '../components/WidgetRenderer.vue'
 import type { WidgetItem } from '../types/widget'
@@ -19,6 +20,7 @@ import type { WidgetItem } from '../types/widget'
 const BASE_COLS = 12
 const GRID_ROWS = 6
 const CELL_HEIGHT = 100
+const CELL_GUTTER = 16
 const showSettingsDialog = ref(false)
 const showWidgetDialog = ref(false)
 const editMode = ref(false)
@@ -44,7 +46,7 @@ function updateGridCols() {
   const container = document.querySelector('.dashboard-container') as HTMLElement
   if (container) {
     const width = container.clientWidth
-    cellWidth.value = Math.floor(width / BASE_COLS)
+    cellWidth.value = Math.floor((width - (BASE_COLS - 1) * CELL_GUTTER) / BASE_COLS)
   }
 }
 
@@ -101,6 +103,10 @@ function onMouseMove(event: MouseEvent) {
           w: draggingWidget.w,
           h: draggingWidget.h
         }
+        draggingWidget.x = newX
+        draggingWidget.y = newY
+      } else {
+        dragPreview.value = null
       }
     } else {
       dragPreview.value = {
@@ -109,6 +115,8 @@ function onMouseMove(event: MouseEvent) {
         w: draggingWidget.w,
         h: draggingWidget.h
       }
+      draggingWidget.x = newX
+      draggingWidget.y = newY
     }
   }
 }
@@ -160,6 +168,10 @@ onBeforeUnmount(() => {
 <template>
   <div class="q-pa-md">
     <Header />
+    <h4 class="text-center">Manuel Grid Layout</h4>
+    <q-banner class="bg-primary text-white q-my-md">
+      💼 Welcome to your Finance Dashboard — <span class="text-italic text-bold">You have 2 new notifications</span>
+    </q-banner>
     <div class="dashboard-container">
       <div
         v-for="widget in widgets"
@@ -170,16 +182,16 @@ onBeforeUnmount(() => {
           ? {
               left: `${draggingStyle.left}px`,
               top: `${draggingStyle.top}px`,
-              width: `${widget.w * cellWidth}px`,
-              height: `${widget.h * CELL_HEIGHT}px`,
+              width: `${widget.w * cellWidth + (widget.w - 1) * CELL_GUTTER}px`,
+              height: `${widget.h * CELL_HEIGHT + (widget.h - 1) * CELL_GUTTER}px`,
               zIndex: 9999,
               opacity: 0.8
             }
           : {
-              left: `${widget.x * cellWidth}px`,
-              top: `${widget.y * CELL_HEIGHT}px`,
-              width: `${widget.w * cellWidth}px`,
-              height: `${widget.h * CELL_HEIGHT}px`
+              left: `${widget.x * (cellWidth + CELL_GUTTER)}px`,
+              top: `${widget.y * (CELL_HEIGHT + CELL_GUTTER)}px`,
+              width: `${widget.w * cellWidth + (widget.w - 1) * CELL_GUTTER}px`,
+              height: `${widget.h * CELL_HEIGHT + (widget.h - 1) * CELL_GUTTER}px`
             }"
         @mousedown.prevent="startDrag($event, widget)"
       >
@@ -189,10 +201,10 @@ onBeforeUnmount(() => {
         v-if="dragPreview"
         class="widget-preview"
         :style="{
-          left: `${dragPreview.x * cellWidth}px`,
-          top: `${dragPreview.y * CELL_HEIGHT}px`,
-          width: `${dragPreview.w * cellWidth}px`,
-          height: `${dragPreview.h * CELL_HEIGHT}px`
+          left: `${dragPreview.x * (cellWidth + CELL_GUTTER)}px`,
+          top: `${dragPreview.y * (CELL_HEIGHT + CELL_GUTTER)}px`,
+          width: `${dragPreview.w * cellWidth + (dragPreview.w - 1) * CELL_GUTTER}px`,
+          height: `${dragPreview.h * CELL_HEIGHT + (dragPreview.h - 1) * CELL_GUTTER}px`
         }"
       />
     </div>
