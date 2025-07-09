@@ -1,34 +1,56 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import Header from '../components/Header.vue'
+import {
+  QBtn,
+  QCard,
+  QToggle,
+  QDialog,
+  QItem,
+  QItemSection,
+  QList,
+  QCardSection,
+  QCheckbox,
+  QCardActions
+} from 'quasar'
+import WidgetRenderer from '../components/WidgetRenderer.vue'
+import type { WidgetItem } from '../types/widget'
 
-const GRID_COLS = 12
+const BASE_COLS = 12
 const GRID_ROWS = 6
-const CELL_WIDTH = 100
 const CELL_HEIGHT = 100
+const showSettingsDialog = ref(false)
+const showWidgetDialog = ref(false)
+const editMode = ref(false)
+const cellWidth = ref(100)
+const draggingStyle = ref<{ left: number; top: number } | null>(null)
+const dragPreview = ref<{ x: number; y: number; w: number; h: number } | null>(null)
 
-type WidgetItem = {
-  id: string
-  x: number
-  y: number
-  w: number
-  h: number
-}
-
-const widgets = ref<WidgetItem[]>([
-  { id: '1', x: 0, y: 0, w: 3, h: 2 },
-  { id: '2', x: 3, y: 0, w: 3, h: 2 },
-  { id: '3', x: 6, y: 0, w: 3, h: 2 }
+const allWidgets = ref<WidgetItem[]>([
+  { id: '1', name: 'Gelir Kartı', x: 0, y: 0, w: 3, h: 2, visible: true, type: 'summary' },
+  { id: '2', name: 'Bar Grafik', x: 3, y: 0, w: 3, h: 2, visible: true, type: 'bar-chart' }
 ])
+
+const widgets = computed(() =>
+  allWidgets.value.filter(widget => widget.visible)
+)
 
 const isDragging = ref(false)
 let draggingWidget: WidgetItem | null = null
 let dragOffsetX = 0
 let dragOffsetY = 0
 
+function updateGridCols() {
+  const container = document.querySelector('.dashboard-container') as HTMLElement
+  if (container) {
+    const width = container.clientWidth
+    cellWidth.value = Math.floor(width / BASE_COLS)
+  }
+}
+
 function startDrag(event: MouseEvent, widget: WidgetItem) {
   draggingWidget = widget
-  dragOffsetX = event.clientX - widget.x * CELL_WIDTH
+  dragOffsetX = event.clientX - widget.x * cellWidth.value
   dragOffsetY = event.clientY - widget.y * CELL_HEIGHT
   isDragging.value = true
 }
@@ -49,30 +71,50 @@ function onMouseMove(event: MouseEvent) {
   if (isDragging.value && draggingWidget) {
     const newLeft = event.clientX - dragOffsetX
     const newTop = event.clientY - dragOffsetY
-    const snappedX = Math.max(0, Math.round(newLeft / CELL_WIDTH))
+    draggingStyle.value = { left: newLeft, top: newTop }
+    const snappedX = Math.max(0, Math.round(newLeft / cellWidth.value))
     const snappedY = Math.max(0, Math.round(newTop / CELL_HEIGHT))
-    const maxX = GRID_COLS - draggingWidget.w
+    const maxX = BASE_COLS - draggingWidget.w
     const maxY = GRID_ROWS - draggingWidget.h
     const newX = Math.min(maxX, snappedX)
     const newY = Math.min(maxY, snappedY)
     if (!isCollision(newX, newY, draggingWidget.w, draggingWidget.h, draggingWidget.id)) {
-      draggingWidget.x = newX
-      draggingWidget.y = newY
-    }
+      dragPreview.value = {
+        x: newX,
+        y: newY,
+        w: draggingWidget.w,
+        h: draggingWidget.h
+      }
+    } else dragPreview.value=null
   }
 }
 
-
 function stopDrag() {
+  if (draggingWidget && dragPreview.value) {
+    draggingWidget.x = dragPreview.value.x
+    draggingWidget.y = dragPreview.value.y
+  }
+  draggingWidget = null
+  draggingStyle.value = null
+  dragPreview.value = null
   isDragging.value = false
 }
 
+
+function openSettings() {
+  showSettingsDialog.value = true
+}
+
+
 onMounted(() => {
+  updateGridCols()
+  window.addEventListener('resize', updateGridCols)
   window.addEventListener('mousemove', onMouseMove)
   window.addEventListener('mouseup', stopDrag)
 })
 
 onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateGridCols)
   window.removeEventListener('mousemove', onMouseMove)
   window.removeEventListener('mouseup', stopDrag)
 })
@@ -86,30 +128,101 @@ onBeforeUnmount(() => {
         v-for="widget in widgets"
         :key="widget.id"
         class="widget"
-        :style="{
-          left: `${widget.x * CELL_WIDTH}px`,
-          top: `${widget.y * CELL_HEIGHT}px`,
-          width: `${widget.w * CELL_WIDTH}px`,
-          height: `${widget.h * CELL_HEIGHT}px`
-        }"
-        @mousedown="startDrag($event, widget)"
+        :style="draggingWidget?.id === widget.id && draggingStyle
+          ? {
+              left: `${draggingStyle.left}px`,
+              top: `${draggingStyle.top}px`,
+              width: `${widget.w * cellWidth}px`,
+              height: `${widget.h * CELL_HEIGHT}px`,
+              zIndex: 9999,
+              opacity: 0.8
+            }
+          : {
+              left: `${widget.x * cellWidth}px`,
+              top: `${widget.y * CELL_HEIGHT}px`,
+              width: `${widget.w * cellWidth}px`,
+              height: `${widget.h * CELL_HEIGHT}px`
+            }"
+        @mousedown.prevent="startDrag($event, widget)"
       >
-        <div class="widget-header">Widget {{ widget.id }}</div>
-        <div class="widget-body">$123,456</div>
+        <WidgetRenderer :widget="widget" />
       </div>
+      <div
+        v-if="dragPreview"
+        class="widget-preview"
+        :style="{
+          left: `${dragPreview.x * cellWidth}px`,
+          top: `${dragPreview.y * CELL_HEIGHT}px`,
+          width: `${dragPreview.w * cellWidth}px`,
+          height: `${dragPreview.h * CELL_HEIGHT}px`
+        }"
+      />
     </div>
+    <q-btn
+      fab
+      color="primary"
+      icon="settings"
+      @click="openSettings"
+      class="settings-btn"
+    />
+    <q-dialog v-model="showSettingsDialog">
+    <q-card style="min-width: 300px">
+      <q-card-section class="row items-center justify-between">
+        <div class="text-h6">Ayarlar</div>
+        <q-btn flat round icon="close" v-close-popup />
+      </q-card-section>
+      <q-card-section>
+        <q-toggle v-model="editMode" label="Edit Mode" />
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn flat label="Widget Listesi" @click="showWidgetDialog = true" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+  <q-dialog v-model="showWidgetDialog">
+    <q-card style="min-width: 300px">
+      <q-card-section class="row items-center justify-between">
+        <div class="text-h6">Widget Listesi</div>
+        <q-btn flat round icon="close" v-close-popup />
+      </q-card-section>
+      <q-card-section>
+        <q-list>
+          <q-item v-for="widget in allWidgets" :key="widget.id">
+            <q-item-section>
+              <q-checkbox v-model="widget.visible" :label="widget.name" />
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
   </div>
 </template>
 
 <style scoped>
 .dashboard-container {
   position: relative;
-  width: 100%;
+  min-width: 1200px;
   height: 100vh;
+  overflow-x: auto;
   background: #f5f5f5;
   overflow: hidden;
 }
 
+.settings-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.widget-preview {
+  position: absolute;
+  background-color: rgba(255, 0, 0, 0.25);
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 1;
+}
 
 .widget {
   position: absolute;
@@ -119,6 +232,8 @@ onBeforeUnmount(() => {
   cursor: grab;
   user-select: none;
   transition: box-shadow 0.2s ease;
+  min-width: 300px;
+  min-height: 200px;
 }
 
 .widget:active {
