@@ -26,7 +26,13 @@ const showWidgetDialog = ref(false)
 const editMode = ref(false)
 const cellWidth = ref(100)
 const draggingStyle = ref<{ left: number; top: number } | null>(null)
-const dragPreview = ref<{ x: number; y: number; w: number; h: number } | null>(null)
+const widgetPreview = ref<{ x: number; y: number; w: number; h: number } | null>(null)
+const isResizing = ref(false)
+let resizingWidget: WidgetItem | null = null
+let startX = 0
+let startY = 0
+let startW = 0
+let startH = 0
 
 const allWidgets = ref<WidgetItem[]>([
   { id: '1', name: 'Gelir Kartı', x: 0, y: 0, w: 3, h: 2, visible: true, type: 'summary' },
@@ -81,6 +87,40 @@ function findFreeSpotFor(w: number, h: number): { x: number, y: number } | null 
 }
 
 function onMouseMove(event: MouseEvent) {
+  if (!editMode.value) return
+  if (isResizing.value && resizingWidget) {
+    const dx = event.clientX - startX
+    const dy = event.clientY - startY
+    const newW = Math.max(1, Math.round(startW + dx / cellWidth.value))
+    const newH = Math.max(1, Math.round(startH + dy / CELL_HEIGHT))
+    const maxW = BASE_COLS - resizingWidget.x
+    const maxH = GRID_ROWS - resizingWidget.y
+    const finalW = Math.min(newW, maxW)
+    const finalH = Math.min(newH, maxH)
+    const collision = getCollidingWidget(
+    resizingWidget.x,
+    resizingWidget.y,
+    finalW,
+    finalH,
+    resizingWidget.id,
+  )
+  if (collision) {
+    const newSpot = findFreeSpotFor(collision.w, collision.h)
+    if (newSpot) {
+      collision.x = newSpot.x
+      collision.y = newSpot.y
+    }
+  }
+  widgetPreview.value = {
+    x: resizingWidget.x,
+    y: resizingWidget.y,
+    w: finalW,
+    h: finalH
+  }
+  resizingWidget.w = finalW
+  resizingWidget.h = finalH
+  return
+  }
   if (isDragging.value && draggingWidget) {
     const newLeft = event.clientX - dragOffsetX
     const newTop = event.clientY - dragOffsetY
@@ -97,7 +137,7 @@ function onMouseMove(event: MouseEvent) {
       if (foundSpot) {
         collided.x = foundSpot.x
         collided.y = foundSpot.y
-        dragPreview.value = {
+        widgetPreview.value = {
           x: newX,
           y: newY,
           w: draggingWidget.w,
@@ -106,10 +146,10 @@ function onMouseMove(event: MouseEvent) {
         draggingWidget.x = newX
         draggingWidget.y = newY
       } else {
-        dragPreview.value = null
+        widgetPreview.value = null
       }
     } else {
-      dragPreview.value = {
+      widgetPreview.value = {
         x: newX,
         y: newY,
         w: draggingWidget.w,
@@ -122,12 +162,12 @@ function onMouseMove(event: MouseEvent) {
 }
 
 function stopDrag() {
-  if (draggingWidget && dragPreview.value) {
-    draggingWidget.x = dragPreview.value.x
-    draggingWidget.y = dragPreview.value.y
+  if (draggingWidget && widgetPreview.value) {
+    draggingWidget.x = widgetPreview.value.x
+    draggingWidget.y = widgetPreview.value.y
     const collided = getCollidingWidget(
-      dragPreview.value.x,
-      dragPreview.value.y,
+      widgetPreview.value.x,
+      widgetPreview.value.y,
       draggingWidget.w,
       draggingWidget.h,
       draggingWidget.id
@@ -142,7 +182,7 @@ function stopDrag() {
   }
   draggingWidget = null
   draggingStyle.value = null
-  dragPreview.value = null
+  widgetPreview.value = null
   isDragging.value = false
 }
 
@@ -150,12 +190,27 @@ function openSettings() {
   showSettingsDialog.value = true
 }
 
+function startResize(event: MouseEvent, widget: WidgetItem) {
+  isResizing.value = true
+  resizingWidget = widget
+  startX = event.clientX
+  startY = event.clientY
+  startW = widget.w
+  startH = widget.h
+}
+
+function stopResize() {
+  isResizing.value = false
+  resizingWidget = null
+  widgetPreview.value = null
+}
 
 onMounted(() => {
   updateGridCols()
   window.addEventListener('resize', updateGridCols)
   window.addEventListener('mousemove', onMouseMove)
   window.addEventListener('mouseup', stopDrag)
+  window.addEventListener('mouseup', stopResize)
 })
 
 onBeforeUnmount(() => {
@@ -177,34 +232,41 @@ onBeforeUnmount(() => {
         v-for="widget in widgets"
         :key="widget.id"
         class="widget"
-        :class="['widget', { 'with-transition': draggingWidget?.id !== widget.id }]"
+        :class="['widget', { 'with-transition': draggingWidget?.id !== widget.id, 'editable': editMode }]"
         :style="draggingWidget?.id === widget.id && draggingStyle
           ? {
-              left: `${draggingStyle.left}px`,
-              top: `${draggingStyle.top}px`,
+              left: `${draggingStyle.left+5}px`,
+              top: `${draggingStyle.top+5}px`,
               width: `${widget.w * cellWidth + (widget.w - 1) * CELL_GUTTER}px`,
               height: `${widget.h * CELL_HEIGHT + (widget.h - 1) * CELL_GUTTER}px`,
               zIndex: 9999,
               opacity: 0.8
             }
           : {
-              left: `${widget.x * (cellWidth + CELL_GUTTER)}px`,
-              top: `${widget.y * (CELL_HEIGHT + CELL_GUTTER)}px`,
+              left: `${widget.x * (cellWidth + CELL_GUTTER)+5}px`,
+              top: `${widget.y * (CELL_HEIGHT + CELL_GUTTER)+5}px`,
               width: `${widget.w * cellWidth + (widget.w - 1) * CELL_GUTTER}px`,
               height: `${widget.h * CELL_HEIGHT + (widget.h - 1) * CELL_GUTTER}px`
             }"
-        @mousedown.prevent="startDrag($event, widget)"
+        @mousedown.prevent="editMode && startDrag($event, widget)"
       >
         <WidgetRenderer :widget="widget" />
+        <div
+          v-if="editMode"
+          class="resize-handle"
+          @mousedown.stop.prevent="startResize($event, widget)"
+        >
+          <img src="../assets/resize-handle-svgrepo-com.svg" />
+        </div>
       </div>
       <div
-        v-if="dragPreview"
+        v-if="widgetPreview"
         class="widget-preview"
         :style="{
-          left: `${dragPreview.x * (cellWidth + CELL_GUTTER)}px`,
-          top: `${dragPreview.y * (CELL_HEIGHT + CELL_GUTTER)}px`,
-          width: `${dragPreview.w * cellWidth + (dragPreview.w - 1) * CELL_GUTTER}px`,
-          height: `${dragPreview.h * CELL_HEIGHT + (dragPreview.h - 1) * CELL_GUTTER}px`
+          left: `${widgetPreview.x * (cellWidth + CELL_GUTTER)+5}px`,
+          top: `${widgetPreview.y * (CELL_HEIGHT + CELL_GUTTER)+5}px`,
+          width: `${widgetPreview.w * cellWidth + (widgetPreview.w - 1) * CELL_GUTTER}px`,
+          height: `${widgetPreview.h * CELL_HEIGHT + (widgetPreview.h - 1) * CELL_GUTTER}px`
         }"
       />
     </div>
@@ -257,6 +319,7 @@ onBeforeUnmount(() => {
   overflow-x: auto;
   /* background: #f5f5f5; */
   overflow: hidden;
+  padding: 15px;
 }
 
 .settings-btn {
@@ -283,14 +346,14 @@ onBeforeUnmount(() => {
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  cursor: grab;
+  cursor: default;
   user-select: none;
   transition: box-shadow 0.2s ease;
   min-width: 300px;
   min-height: 200px;
 }
 
-.widget:active {
+.widget.editable {
   cursor: grabbing;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
@@ -308,5 +371,21 @@ onBeforeUnmount(() => {
   padding: 10px;
   font-size: 18px;
   text-align: center;
+}
+
+.widget.editable .resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  cursor: se-resize;
+  border-bottom-right-radius: 4px;
+  z-index: 10;
+}
+
+img{
+  max-width: 100%;
+  max-height: auto;
 }
 </style>
