@@ -79,8 +79,8 @@ function updateContainerHeight() {
 
 function startDrag(event: MouseEvent, widget: WidgetItem) {
   draggingWidget = widget
-  dragOffsetX = event.clientX - widget.x * cellWidth.value
-  dragOffsetY = event.clientY - widget.y * CELL_HEIGHT
+  dragOffsetX = event.clientX - (widget.x * (cellWidth.value + CELL_GUTTER) + 5)
+  dragOffsetY = event.clientY - (widget.y * (CELL_HEIGHT + CELL_GUTTER) + 5)
   isDragging.value = true
 }
 
@@ -153,8 +153,8 @@ function onMouseMove(event: MouseEvent) {
     pushDownCollisions(resizingWidget)
   }
   if (isDragging.value && draggingWidget) {
-    const newLeft = event.clientX - dragOffsetX
-    const newTop = event.clientY - dragOffsetY
+    const newLeft = event.clientX - dragOffsetX + 5
+    const newTop = event.clientY - dragOffsetY + 5
     draggingStyle.value = { left: newLeft, top: newTop }
     const snappedX = Math.max(0, Math.round(newLeft / cellWidth.value))
     const snappedY = Math.max(0, Math.round(newTop / CELL_HEIGHT))
@@ -281,11 +281,11 @@ onBeforeUnmount(() => {
       💼 Welcome to your Finance Dashboard — <span class="text-italic text-bold">You have 2 new notifications</span>
     </q-banner>
     <div class="dashboard-container">
-      <div
+      <q-card
         v-for="widget in widgets"
         :key="widget.id"
         class="widget"
-        :class="['widget', { 'with-transition': draggingWidget?.id !== widget.id, 'editable': editMode }]"
+        :class="{ 'with-transition': draggingWidget?.id !== widget.id, 'editable': editMode }"
         :style="resizingWidget?.id === widget.id && resizingStyle
           ? {
               left: `${resizingStyle.left}px`,
@@ -320,7 +320,7 @@ onBeforeUnmount(() => {
         >
           <img src="../assets/resize-handle-svgrepo-com.svg" />
         </div>
-      </div>
+      </q-card>
       <div
         v-if="widgetPreview"
         class="widget-preview"
@@ -405,9 +405,6 @@ onBeforeUnmount(() => {
 
 .widget {
   position: absolute;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   cursor: default;
   user-select: none;
   transition: box-shadow 0.2s ease;
