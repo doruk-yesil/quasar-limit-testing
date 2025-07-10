@@ -6,7 +6,7 @@ defineProps<{ widget: WidgetItem }>()
 
 <template>
   <div class="widget-box">
-    <div class="title">{{ widget.title }}</div>
+    <div class="title">{{ widget.name }}</div>
     <div class="value">$123,456</div>
   </div>
 </template>

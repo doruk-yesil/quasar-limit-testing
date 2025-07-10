@@ -1,41 +1,44 @@
 <template>
-  <div class="widget-box">
-    <div class="title">{{ widget.title }}</div>
-    <div class="chart-placeholder">[Bar Chart Placeholder]</div>
+  <div class="bar-chart-widget">
+    <div class="text-h6 q-mb-sm">{{ widget.name }}</div>
+    <div class="bar-chart-placeholder">
+      <div
+        v-for="(value, index) in dummyData"
+        :key="index"
+        class="bar"
+        :style="{ height: `${value}px` }"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { WidgetItem } from '../../types/widget'
+defineProps<{ widget: any }>()
 
-defineProps<{ widget: WidgetItem }>()
+const dummyData = [60, 120, 90, 180, 75, 140, 100]
 </script>
 
 <style scoped>
-.widget-box {
-  background: white;
+.bar-chart-widget {
+  padding: 10px;
+  text-align: center;
+  max-height: 100%;
+}
+
+.bar-chart-placeholder {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  max-height: 100%;
+  background-color: #f5f5f5;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  padding: 12px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  padding-top: 75px;
 }
 
-.title {
-  font-weight: bold;
-  color: #09898d;
-  margin-bottom: 8px;
-}
-
-.chart-placeholder {
-  flex-grow: 1;
-  background-color: #eef3f6;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #999;
+.bar {
+  width: 25px;
+  background-color: #09898d;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s ease;
 }
 </style>

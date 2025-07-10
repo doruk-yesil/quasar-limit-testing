@@ -1,4 +1,4 @@
-export type WidgetType = 'summary' | 'bar-chart' | 'line-chart' |'pie-chart' |'table' |'kpi' |'activity' | 'custom'
+export type WidgetType = 'summary' | 'bar-chart' | 'line-chart' |'pie-chart' |'table' |'kpi' |'activity' |'total-revenue' | 'custom'
 
 export type WidgetItem = {
   id: string
