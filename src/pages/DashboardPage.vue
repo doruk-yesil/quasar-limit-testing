@@ -16,8 +16,8 @@ import {
 import { GridLayout, GridItem } from 'vue3-grid-layout'
 import Header from '../components/Header.vue'
 import DashboardWidget from '../components/DashboardWidget.vue'
-import RevenueChart from '../components/RevenueChart.vue'
-import ProfitChart from '../components/ProfitChart.vue'
+import RevenueChart from '../components/widget-1/RevenueChart.vue'
+import ProfitChart from '../components/widget-1/ProfitChart.vue'
 
 const showSettings = ref(false)
 const dummyToggle = ref(false)
@@ -96,11 +96,11 @@ const widgetContent: Record<string, string> = {
           <ProfitChart v-else-if="item.i === '6'" />
           <div v-else-if="item.i==='1'">
             <div class="text-bold text-negative">71%</div>
-            <q-linear-progress value="0.71" color="negative" size="10px" class="q-mb-sm" />
+            <q-linear-progress :value="0.71" color="negative" size="10px" class="q-mb-sm" />
             <div class="text-caption text-grey">Income Target</div>
 
             <div class="text-bold text-positive q-mt-md">54%</div>
-            <q-linear-progress value="0.54" color="positive" size="10px" class="q-mb-sm" />
+            <q-linear-progress :value="0.54" color="positive" size="10px" class="q-mb-sm" />
             <div class="text-caption text-grey">Expense Target</div>
           </div>
           <div v-else-if="item.i==='2'">
@@ -126,11 +126,11 @@ const widgetContent: Record<string, string> = {
           <div v-else-if="item.i==='4'">
             <div class="text-caption text-grey-7">Total Spend Target</div>
             <div class="text-bold text-warning">32%</div>
-            <q-linear-progress value="0.32" color="warning" size="10px" class="q-mb-sm" />
+            <q-linear-progress :value="0.32" color="warning" size="10px" class="q-mb-sm" />
 
             <div class="text-caption text-grey-7 q-mt-md">Total Income Target</div>
             <div class="text-bold text-info">89%</div>
-            <q-linear-progress value="0.89" color="info" size="10px" />
+            <q-linear-progress :value="0.89" color="info" size="10px" />
           </div>
           <div v-else style="height: 100%; display: flex; align-items: center; justify-content: center;">
             {{ widgetContent[item.i] }}

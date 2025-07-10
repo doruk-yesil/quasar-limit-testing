@@ -18,7 +18,6 @@ import WidgetRenderer from '../components/WidgetRenderer.vue'
 import type { WidgetItem } from '../types/widget'
 
 const BASE_COLS = 12
-const GRID_ROWS = 6
 const CELL_HEIGHT = 100
 const CELL_GUTTER = 16
 const showSettingsDialog = ref(false)
@@ -37,7 +36,14 @@ let startH = 0
 
 const allWidgets = ref<WidgetItem[]>([
   { id: '1', name: 'Gelir Kartı', x: 0, y: 0, w: 3, h: 2, visible: true, type: 'summary' },
-  { id: '2', name: 'Bar Grafik', x: 3, y: 0, w: 3, h: 2, visible: true, type: 'bar-chart' }
+  { id: '2', name: 'Bar Grafik', x: 3, y: 0, w: 3, h: 2, visible: true, type: 'bar-chart' },
+  { id: '3', name: 'Zaman Serisi', x: 6, y: 0, w: 3, h: 2, visible: true, type: 'line-chart' },
+  { id: '4', name: 'Dağılım Pasta', x: 9, y: 0, w: 3, h: 2, visible: true, type: 'pie-chart' },
+  { id: '5', name: 'Veri Tablosu', x: 0, y: 2, w: 6, h: 2, visible: true, type: 'table' },
+  { id: '6', name: 'Aktif Kullanıcı', x: 6, y: 2, w: 2, h: 1, visible: true, type: 'kpi' },
+  { id: '7', name: 'Yeni Kayıtlar', x: 8, y: 2, w: 2, h: 1, visible: true, type: 'kpi' },
+  { id: '8', name: 'Ziyaret Süresi', x: 10, y: 2, w: 2, h: 1, visible: true, type: 'kpi' },
+  { id: '9', name: 'Son İşlemler', x: 0, y: 4, w: 4, h: 2, visible: true, type: 'activity' }
 ])
 
 const widgets = computed(() =>
@@ -49,6 +55,11 @@ let draggingWidget: WidgetItem | null = null
 let dragOffsetX = 0
 let dragOffsetY = 0
 
+function getMaxGridRows() {
+  return Math.max(...widgets.value.map(w => w.y + w.h), 6) + 1
+}
+
+
 function updateGridCols() {
   const container = document.querySelector('.dashboard-container') as HTMLElement
   if (container) {
@@ -56,6 +67,15 @@ function updateGridCols() {
     cellWidth.value = Math.floor((width - (BASE_COLS - 1) * CELL_GUTTER) / BASE_COLS)
   }
 }
+
+function updateContainerHeight() {
+  const maxY = Math.max(...widgets.value.map(w => w.y + w.h), 0)
+  const container = document.querySelector('.dashboard-container') as HTMLElement
+  if (container) {
+    container.style.height = `${maxY * (CELL_HEIGHT + CELL_GUTTER)}px`
+  }
+}
+
 
 function startDrag(event: MouseEvent, widget: WidgetItem) {
   draggingWidget = widget
@@ -77,7 +97,9 @@ function getCollidingWidget(x: number, y: number, w: number, h: number, currentI
 }
 
 function findFreeSpotFor(w: number, h: number): { x: number, y: number } | null {
-  for (let y = 0; y <= GRID_ROWS - h; y++) {
+  const maxRows = getMaxGridRows()
+  const MAX_SEARCH_ROWS = maxRows + 10
+  for (let y = 0; y <= MAX_SEARCH_ROWS - h; y++) {
     for (let x = 0; x <= BASE_COLS - w; x++) {
       if (!getCollidingWidget(x, y, w, h, '')) {
         return { x, y }
@@ -92,41 +114,43 @@ function onMouseMove(event: MouseEvent) {
   if (isResizing.value && resizingWidget) {
     const dx = event.clientX - startX
     const dy = event.clientY - startY
-    const newW = Math.max(1, Math.round(startW + dx / cellWidth.value))
-    const newH = Math.max(1, Math.round(startH + dy / CELL_HEIGHT))
-    const maxW = BASE_COLS - resizingWidget.x
-    const maxH = GRID_ROWS - resizingWidget.y
-    const finalW = Math.min(newW, maxW)
-    const finalH = Math.min(newH, maxH)
-    const collision = getCollidingWidget(
-    resizingWidget.x,
-    resizingWidget.y,
-    finalW,
-    finalH,
-    resizingWidget.id,
-  )
-  if (collision) {
-    const newSpot = findFreeSpotFor(collision.w, collision.h)
-    if (newSpot) {
-      collision.x = newSpot.x
-      collision.y = newSpot.y
+    const pixelW = startW * cellWidth.value + (startW - 1) * CELL_GUTTER
+    const pixelH = startH * CELL_HEIGHT + (startH - 1) * CELL_GUTTER
+    resizingStyle.value = {
+      left: resizingWidget.x * (cellWidth.value + CELL_GUTTER) + 5,
+      top: resizingWidget.y * (CELL_HEIGHT + CELL_GUTTER) + 5,
+      width: pixelW + dx,
+      height: pixelH + dy
     }
-  }
-  widgetPreview.value = {
-    x: resizingWidget.x,
-    y: resizingWidget.y,
-    w: finalW,
-    h: finalH
-  }
-  resizingWidget.w = finalW
-  resizingWidget.h = finalH
-  resizingStyle.value = {
-    left: resizingWidget.x * (cellWidth.value + CELL_GUTTER) + 5,
-    top: resizingWidget.y * (CELL_HEIGHT + CELL_GUTTER) + 5,
-    width: finalW * cellWidth.value + (finalW - 1) * CELL_GUTTER,
-    height: finalH * CELL_HEIGHT + (finalH - 1) * CELL_GUTTER
-  }
-  return
+    const approxW = Math.max(1, Math.round((pixelW + dx) / cellWidth.value))
+    const approxH = Math.max(1, Math.round((pixelH + dy) / CELL_HEIGHT))
+    const maxW = BASE_COLS - resizingWidget.x
+    const maxH = getMaxGridRows() - resizingWidget.y
+    const finalW = Math.min(approxW, maxW)
+    const finalH = Math.min(approxH, maxH)
+    const collision = getCollidingWidget(
+      resizingWidget.x,
+      resizingWidget.y,
+      finalW,
+      finalH,
+      resizingWidget.id
+    )
+    if (collision) {
+      const newSpot = findFreeSpotFor(collision.w, collision.h)
+      if (newSpot) {
+        collision.x = newSpot.x
+        collision.y = newSpot.y
+      }
+    }
+    widgetPreview.value = {
+      x: resizingWidget.x,
+      y: resizingWidget.y,
+      w: finalW,
+      h: finalH
+    }
+    resizingWidget.w = finalW
+    resizingWidget.h = finalH
+    pushDownCollisions(resizingWidget)
   }
   if (isDragging.value && draggingWidget) {
     const newLeft = event.clientX - dragOffsetX
@@ -135,7 +159,7 @@ function onMouseMove(event: MouseEvent) {
     const snappedX = Math.max(0, Math.round(newLeft / cellWidth.value))
     const snappedY = Math.max(0, Math.round(newTop / CELL_HEIGHT))
     const maxX = BASE_COLS - draggingWidget.w
-    const maxY = GRID_ROWS - draggingWidget.h
+    const maxY = getMaxGridRows() - draggingWidget.h
     const newX = Math.min(maxX, snappedX)
     const newY = Math.min(maxY, snappedY)
     const collided = getCollidingWidget(newX, newY, draggingWidget.w, draggingWidget.h, draggingWidget.id)
@@ -164,6 +188,32 @@ function onMouseMove(event: MouseEvent) {
       }
       draggingWidget.x = newX
       draggingWidget.y = newY
+      pushDownCollisions(draggingWidget)
+    }
+  }
+}
+
+function pushDownCollisions(widget: WidgetItem) {
+  const moved = new Set<string>()
+  const queue: WidgetItem[] = [widget]
+  while (queue.length > 0) {
+    const current = queue.shift()
+    if (!current) continue
+    for (const other of widgets.value) {
+      if (other.id === current.id || moved.has(other.id)) continue
+      const isCollision =
+        !(current.x + current.w <= other.x ||
+          current.x >= other.x + other.w ||
+          current.y + current.h <= other.y ||
+          current.y >= other.y + other.h)
+      if (isCollision) {
+        const newY = current.y + current.h
+        if (newY !== other.y) {
+          other.y = newY
+          moved.add(other.id)
+          queue.push(other)
+        }
+      }
     }
   }
 }
@@ -172,25 +222,15 @@ function stopDrag() {
   if (draggingWidget && widgetPreview.value) {
     draggingWidget.x = widgetPreview.value.x
     draggingWidget.y = widgetPreview.value.y
-    const collided = getCollidingWidget(
-      widgetPreview.value.x,
-      widgetPreview.value.y,
-      draggingWidget.w,
-      draggingWidget.h,
-      draggingWidget.id
-    )
-    if (collided) {
-      const newSpot = findFreeSpotFor(collided.w, collided.h)
-      if (newSpot) {
-        collided.x = newSpot.x
-        collided.y = newSpot.y
-      }
-    }
+
+    pushDownCollisions(draggingWidget)
+
+    widgetPreview.value = null
   }
   draggingWidget = null
   draggingStyle.value = null
-  widgetPreview.value = null
   isDragging.value = false
+  updateContainerHeight()
 }
 
 function openSettings() {
@@ -207,14 +247,19 @@ function startResize(event: MouseEvent, widget: WidgetItem) {
 }
 
 function stopResize() {
+  if (resizingWidget) {
+    pushDownCollisions(resizingWidget)
+  }
   isResizing.value = false
   resizingWidget = null
   widgetPreview.value = null
   resizingStyle.value = null
+  updateContainerHeight()
 }
 
 onMounted(() => {
   updateGridCols()
+  updateContainerHeight()
   window.addEventListener('resize', updateGridCols)
   window.addEventListener('mousemove', onMouseMove)
   window.addEventListener('mouseup', stopDrag)
@@ -366,8 +411,8 @@ onBeforeUnmount(() => {
   cursor: default;
   user-select: none;
   transition: box-shadow 0.2s ease;
-  min-width: 300px;
-  min-height: 200px;
+  min-width: 100px;
+  min-height: 100px;
 }
 
 .widget.editable {
