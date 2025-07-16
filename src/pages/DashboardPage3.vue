@@ -3,6 +3,7 @@ import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import Header from '../components/Header.vue'
 import WidgetRenderer from '../components/WidgetRenderer.vue'
 import DraggableCard from '../components/DraggableCard.vue'
+import CardPreview from '../components/CardPreview.vue'
 import type { WidgetItem } from '../types/widget'
 import {
   QBtn,
@@ -285,15 +286,12 @@ onBeforeUnmount(() => {
       >
         <WidgetRenderer :widget="widget" />
       </DraggableCard>
-      <div
+      <CardPreview
         v-if="widgetPreview"
-        class="widget-preview"
-        :style="{
-          left: `${widgetPreview.x * (cellWidth + CELL_GUTTER) + 5}px`,
-          top: `${widgetPreview.y * (CELL_HEIGHT + CELL_GUTTER) + 5}px`,
-          width: `${widgetPreview.w * cellWidth + (widgetPreview.w - 1) * CELL_GUTTER}px`,
-          height: `${widgetPreview.h * CELL_HEIGHT + (widgetPreview.h - 1) * CELL_GUTTER}px`
-        }"
+        :preview="widgetPreview"
+        :cellWidth="cellWidth"
+        :CELL_HEIGHT="CELL_HEIGHT"
+        :CELL_GUTTER="CELL_GUTTER"
       />
     </div>
     <q-btn
