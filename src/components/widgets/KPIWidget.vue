@@ -1,3 +1,7 @@
+<script setup lang="ts">
+defineProps<{ widget: any }>()
+</script>
+
 <template>
   <div class="widget-card">
     <div class="text-h6">{{ widget.name }}</div>
@@ -7,10 +11,6 @@
     <div class="text-caption text-grey-6">Bu ay</div>
   </div>
 </template>
-
-<script setup lang="ts">
-defineProps<{ widget: any }>()
-</script>
 
 <style scoped>
 .widget-card {

@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import { QAvatar, QItemSection, QItemLabel, QItem, QList } from 'quasar';
+
+defineProps<{ widget: any }>()
+
+const activities = [
+  { message: '₺4.500 fatura ödendi', user: 'Ahmet Y.', date: '10 Temmuz 14:32' },
+  { message: 'Yeni kullanıcı kaydoldu', user: 'Mehmet A.', date: '10 Temmuz 13:10' },
+  { message: 'Stok güncellendi', user: 'Admin', date: '09 Temmuz 18:20' },
+  { message: '₺12.000 ödeme alındı', user: 'Zeynep K.', date: '09 Temmuz 11:02' }
+]
+</script>
+
 <template>
   <div class="activity-widget">
     <div class="text-h6 q-mb-sm">{{ widget.name }}</div>
@@ -16,17 +29,6 @@
     </q-list>
   </div>
 </template>
-
-<script setup lang="ts">
-defineProps<{ widget: any }>()
-
-const activities = [
-  { message: '₺4.500 fatura ödendi', user: 'Ahmet Y.', date: '10 Temmuz 14:32' },
-  { message: 'Yeni kullanıcı kaydoldu', user: 'Mehmet A.', date: '10 Temmuz 13:10' },
-  { message: 'Stok güncellendi', user: 'Admin', date: '09 Temmuz 18:20' },
-  { message: '₺12.000 ödeme alındı', user: 'Zeynep K.', date: '09 Temmuz 11:02' }
-]
-</script>
 
 <style scoped>
 .activity-widget {

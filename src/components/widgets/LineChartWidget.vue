@@ -1,27 +1,3 @@
-<template>
-  <q-card class="q-pa-md">
-    <div class="text-h6 text-center q-mb-md">Zaman Serisi (Line Chart)</div>
-    <div class="line-chart">
-      <svg viewBox="0 0 300 100" preserveAspectRatio="none">
-        <polyline
-          :points="points"
-          fill="none"
-          stroke="#09898d"
-          stroke-width="3"
-        />
-        <circle
-          v-for="(p, i) in pointList"
-          :key="i"
-          :cx="p[0]"
-          :cy="p[1]"
-          r="4"
-          fill="#09898d"
-        />
-      </svg>
-    </div>
-  </q-card>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 
@@ -34,6 +10,28 @@ const pointList = computed(() => {
 
 const points = computed(() => pointList.value.map(p => p.join(',')).join(' '))
 </script>
+
+<template>
+  <div class="text-h6 text-center q-mb-md">Zaman Serisi (Line Chart)</div>
+  <div class="line-chart">
+    <svg viewBox="0 0 300 100" preserveAspectRatio="none">
+      <polyline
+        :points="points"
+        fill="none"
+        stroke="#09898d"
+        stroke-width="3"
+      />
+      <circle
+        v-for="(p, i) in pointList"
+        :key="i"
+        :cx="p[0]"
+        :cy="p[1]"
+        r="4"
+        fill="#09898d"
+      />
+    </svg>
+  </div>
+</template>
 
 <style scoped>
 .line-chart {

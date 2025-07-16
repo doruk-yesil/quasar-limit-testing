@@ -12,6 +12,7 @@ const router = useRouter()
     <div class="q-gutter-sm q-mb-md">
       <q-btn label="Dashboard" color="primary" @click="router.push('/dashboard')" />
       <q-btn label="Dashboard wo/ lib" color="info" @click="router.push('/dashboard2')" />
+      <q-btn label="Dashboard w/ comp" color="warning" @click="router.push('/dashboard3')" />
       <q-btn label="Grid" color="secondary" @click="router.push('/grid')" />
     </div>
   </div>

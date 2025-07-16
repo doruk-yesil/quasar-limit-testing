@@ -1,3 +1,9 @@
+<script setup lang="ts">
+defineProps<{ widget: any }>()
+
+const dummyData = [60, 120, 90, 180, 75, 140, 100]
+</script>
+
 <template>
   <div class="bar-chart-widget">
     <div class="text-h6 q-mb-sm">{{ widget.name }}</div>
@@ -11,12 +17,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-defineProps<{ widget: any }>()
-
-const dummyData = [60, 120, 90, 180, 75, 140, 100]
-</script>
 
 <style scoped>
 .bar-chart-widget {
