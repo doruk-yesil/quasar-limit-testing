@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { QAvatar, QItemSection, QItemLabel, QItem, QList } from 'quasar';
+import Widget from '../widget-comps/Widget.vue'
+import type { WidgetItem } from '../../types/widget'
+import { QAvatar, QItemSection, QItemLabel, QItem, QList } from 'quasar'
 
-defineProps<{ widget: any }>()
+defineProps<{
+  widget: WidgetItem
+}>()
 
 const activities = [
   { message: '₺4.500 fatura ödendi', user: 'Ahmet Y.', date: '10 Temmuz 14:32' },
@@ -12,27 +16,25 @@ const activities = [
 </script>
 
 <template>
-  <div class="activity-widget">
-    <div class="text-h6 q-mb-sm">{{ widget.name }}</div>
+  <Widget :widget="widget" title="Son Aktiviteler">
     <q-list bordered separator>
       <q-item v-for="(activity, index) in activities" :key="index">
         <q-item-section avatar>
           <q-avatar icon="event_note" color="primary" text-color="white" />
         </q-item-section>
-        <q-item-section> | 
+        <q-item-section>
           <q-item-label>{{ activity.message }}</q-item-label>
-          <q-item-label caption class="text-grey"> / 
-            {{ activity.user }} — {{ activity.date }}
+          <q-item-label caption class="text-grey">
+            {{ activity.user }} • {{ activity.date }}
           </q-item-label>
         </q-item-section>
       </q-item>
     </q-list>
-  </div>
+  </Widget>
 </template>
 
 <style scoped>
-.activity-widget {
-  padding: 10px;
-  font-size: 14px;
+.q-list {
+  width: 100%;
 }
 </style>

@@ -25,6 +25,6 @@ defineProps<{
   background-color: rgba(255, 0, 0, 0.25);
   border-radius: 8px;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
 }
 </style>

@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import Widget from '../widget-comps/Widget.vue'
 import { QMarkupTable } from 'quasar';
+const { widget } = defineProps<{ widget: any }>()
 
 const rows = [
   { category: 'Satış Geliri', amount: 12500, date: '10 Temmuz 2025' },
@@ -10,23 +12,24 @@ const rows = [
 </script>
 
 <template>
-  <div class="text-h6 text-center q-mb-md">📊 Özet Tablosu</div>
-  <q-markup-table flat bordered class="table-widget">
-    <thead>
-      <tr>
-        <th>Kategori</th>
-        <th>Tutar</th>
-        <th>Tarih</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(row, index) in rows" :key="index">
-        <td>{{ row.category }}</td>
-        <td>₺{{ row.amount.toLocaleString('tr-TR') }}</td>
-        <td>{{ row.date }}</td>
-      </tr>
-    </tbody>
-  </q-markup-table>
+  <Widget :widget="widget" :title="'📊 ' + widget.name">
+    <q-markup-table flat bordered class="table-widget">
+      <thead>
+        <tr>
+          <th>Kategori</th>
+          <th>Tutar</th>
+          <th>Tarih</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(row, index) in rows" :key="index">
+          <td>{{ row.category }}</td>
+          <td>₺{{ row.amount.toLocaleString('tr-TR') }}</td>
+          <td>{{ row.date }}</td>
+        </tr>
+      </tbody>
+    </q-markup-table>
+  </Widget>
 </template>
 
 <style scoped>
