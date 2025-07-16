@@ -63,7 +63,7 @@ const cardStyle = computed(() => {
       class="resize-handle"
       @mousedown.stop.prevent="emit('startResize', $event, widget)"
     >
-      <img src="../assets/resize-handle-svgrepo-com.svg" />
+      <img src="../../assets/resize-handle-svgrepo-com.svg" />
     </div>
   </q-card>
 </template>

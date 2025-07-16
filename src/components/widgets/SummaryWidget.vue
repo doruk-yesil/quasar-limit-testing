@@ -15,7 +15,6 @@ defineProps<{ widget: WidgetItem }>()
 .widget-box {
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   padding: 12px;
   height: 100%;
   display: flex;

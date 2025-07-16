@@ -40,7 +40,10 @@ let startH = 0
 function updateGridCols() {
   const container = document.querySelector('.dashboard-container') as HTMLElement
   if (container) {
-    const width = container.clientWidth
+    const style = window.getComputedStyle(container)
+    const paddingLeft = parseInt(style.paddingLeft)
+    const paddingRight = parseInt(style.paddingRight)
+    const width = container.clientWidth - paddingLeft - paddingRight
     cellWidth.value = Math.floor((width - (BASE_COLS - 1) * CELL_GUTTER) / BASE_COLS)
   }
 }
@@ -266,8 +269,11 @@ onBeforeUnmount(() => {
 .dashboard-container {
   position: relative;
   min-width: 1200px;
+  max-width: 100%;
   height: 100vh;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
   padding: 15px;
 }
 </style>
