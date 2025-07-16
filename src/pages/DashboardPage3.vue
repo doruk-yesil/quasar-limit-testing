@@ -2,8 +2,8 @@
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import Header from '../components/Header.vue'
 import WidgetRenderer from '../components/WidgetRenderer.vue'
-import DraggableCard from '../components/DraggableCard.vue'
-import CardPreview from '../components/CardPreview.vue'
+import DraggableCard from '../components/widget-comps/DraggableCard.vue'
+import CardPreview from '../components/widget-comps/CardPreview.vue'
 import type { WidgetItem } from '../types/widget'
 import {
   QBtn,

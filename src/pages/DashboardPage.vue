@@ -15,7 +15,7 @@ import {
 // @ts-ignore
 import { GridLayout, GridItem } from 'vue3-grid-layout'
 import Header from '../components/Header.vue'
-import DashboardWidget from '../components/DashboardWidget.vue'
+import DashboardWidget from '../components/widget-1/DashboardWidget.vue'
 import RevenueChart from '../components/widget-1/RevenueChart.vue'
 import ProfitChart from '../components/widget-1/ProfitChart.vue'
 
