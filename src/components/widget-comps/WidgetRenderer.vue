@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import SummaryWidget from './widgets/SummaryWidget.vue'
-import BarChartWidget from './widgets/BarChartWidget.vue'
-import LineChartWidget from './widgets/LineChartWidget.vue'
-import PieChartWidget from './widgets/PieChartWidget.vue'
-import TableWidget from './widgets/TableWidget.vue'
-import KPIWidget from './widgets/KPIWidget.vue'
-import ActivityWidget from './widgets/ActivityWidget.vue'
-import type { WidgetItem, WidgetType } from '../types/widget'
+import SummaryWidget from '../widgets/SummaryWidget.vue'
+import BarChartWidget from '../widgets/BarChartWidget.vue'
+import LineChartWidget from '../widgets/LineChartWidget.vue'
+import PieChartWidget from '../widgets/PieChartWidget.vue'
+import TableWidget from '../widgets/TableWidget.vue'
+import KPIWidget from '../widgets/KPIWidget.vue'
+import ActivityWidget from '../widgets/ActivityWidget.vue'
+import type { WidgetItem, WidgetType } from '../../types/widget'
 
 defineProps<{ widget: WidgetItem }>()
 

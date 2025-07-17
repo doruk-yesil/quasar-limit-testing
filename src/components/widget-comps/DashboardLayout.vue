@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import DraggableCard from './DraggableCard.vue'
 import CardPreview from './CardPreview.vue'
-import WidgetRenderer from '../WidgetRenderer.vue'
+import WidgetRenderer from './WidgetRenderer.vue'
 import type { WidgetItem } from '../../types/widget'
 
 const props = defineProps<{
