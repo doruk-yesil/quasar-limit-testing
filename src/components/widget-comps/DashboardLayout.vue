@@ -105,8 +105,10 @@ function pushDownCollisions(widget: WidgetItem) {
 
 function startDrag(event: MouseEvent, widget: WidgetItem) {
   draggingWidget = widget
-  dragOffsetX = event.clientX - (widget.x * (cellWidth.value + CELL_GUTTER))
-  dragOffsetY = event.clientY - (widget.y * (CELL_HEIGHT + CELL_GUTTER))
+  const element = event.currentTarget as HTMLElement
+  const rect = element.getBoundingClientRect()
+  dragOffsetX = event.clientX - rect.left
+  dragOffsetY = event.clientY - rect.top
   isDragging.value = true
 }
 
