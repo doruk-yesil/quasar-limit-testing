@@ -31,6 +31,7 @@ const points = computed(() => pointList.value.map(p => p.join(',')).join(' '))
           fill="#09898d"
         />
       </svg>
+      <p class="q-my-lg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis pariatur atque fugit dolor tenetur repellat necessitatibus itaque. Eius at delectus dicta ea magni aliquam commodi animi, nobis, architecto, placeat eos?</p>
     </div>
   </Widget>
 </template>

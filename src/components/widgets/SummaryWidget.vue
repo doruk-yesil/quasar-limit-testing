@@ -4,25 +4,15 @@ import Widget from '../widget-comps/Widget.vue'
 
 <template>
   <Widget title="Gelir Özeti">
-    <div class="widget-box">
-      <div class="value">$123,456</div>
-    </div>
+    <div class="value">$123,456</div>
   </Widget>
 </template>
 
 <style scoped>
-.widget-box {
-  background: white;
-  border-radius: 8px;
-  padding: 12px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .value {
+  text-align: center;
   font-size: 20px;
+  padding: 15px;
+  margin: 75px 0 0 0;
 }
 </style>

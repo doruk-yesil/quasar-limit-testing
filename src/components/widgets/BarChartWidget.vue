@@ -6,26 +6,18 @@ const dummyData = [60, 120, 90, 180, 75, 140, 100]
 
 <template>
   <Widget title="Bar Grafiği">
-    <div class="bar-chart-widget">
-      <div class="bar-chart-placeholder">
-        <div
-          v-for="(value, index) in dummyData"
-          :key="index"
-          class="bar"
-          :style="{ height: `${value}px` }"
-        />
-      </div>
+    <div class="bar-chart-placeholder">
+      <div
+        v-for="(value, index) in dummyData"
+        :key="index"
+        class="bar"
+        :style="{ height: `${value}px` }"
+      />
     </div>
   </Widget>
 </template>
 
 <style scoped>
-.bar-chart-widget {
-  padding: 10px;
-  text-align: center;
-  max-height: 100%;
-}
-
 .bar-chart-placeholder {
   display: flex;
   align-items: flex-end;
@@ -35,7 +27,6 @@ const dummyData = [60, 120, 90, 180, 75, 140, 100]
   border-radius: 8px;
   padding-top: 75px;
 }
-
 .bar {
   width: 25px;
   background-color: #09898d;
