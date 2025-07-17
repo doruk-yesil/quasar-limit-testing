@@ -55,9 +55,7 @@ const cardStyle = computed(() => {
     :style="cardStyle"
     @mousedown.prevent="editMode && emit('startDrag', $event, widget)"
   >
-    <div class="widget-inner">
-      <slot />
-    </div>
+    <slot />
     <div
       v-if="editMode"
       class="resize-handle"
@@ -78,11 +76,6 @@ const cardStyle = computed(() => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-}
-.widget-inner {
-  flex: 1;
-  overflow: auto;
-  padding: 8px;
 }
 .widget.with-transition {
   transition: left 0.25s ease, top 0.25s ease;

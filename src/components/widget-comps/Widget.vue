@@ -12,5 +12,6 @@ defineProps<{ title?: string }>()
 <style scoped>
 .widget-wrapper {
   height: 100%;
+  overflow: auto;
 }
 </style>
