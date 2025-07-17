@@ -10,6 +10,7 @@ const props = defineProps<{
   editMode: boolean
 }>()
 
+const STORAGE_KEY = 'dashboard-layout'
 const BASE_COLS = 12
 const CELL_HEIGHT = 100
 const CELL_GUTTER = 16
@@ -123,6 +124,7 @@ function stopDrag() {
   draggingStyle.value = null
   isDragging.value = false
   updateContainerHeight()
+  saveLayout()
 }
 
 function startResize(event: MouseEvent, widget: WidgetItem) {
@@ -141,6 +143,7 @@ function stopResize() {
   widgetPreview.value = null
   resizingStyle.value = null
   updateContainerHeight()
+  saveLayout()
 }
 
 function onMouseMove(event: MouseEvent) {
@@ -192,7 +195,7 @@ function onMouseMove(event: MouseEvent) {
     draggingStyle.value = { left: newLeft, top: newTop }
 
     const snappedX = Math.max(0, Math.floor(newLeft / cellWidth.value))
-    const snappedY = Math.max(0, Math.round(newTop / CELL_HEIGHT))
+    const snappedY = Math.max(0, Math.round(newTop / (CELL_HEIGHT + CELL_GUTTER)))
     const maxX = BASE_COLS - draggingWidget.w
     const maxY = 100 - draggingWidget.h
 
@@ -220,7 +223,28 @@ function onMouseMove(event: MouseEvent) {
   }
 }
 
+function saveLayout() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(allWidgets.value))
+  } catch (e) {
+    console.error('Layout kaydedilemedi:', e)
+  }
+}
+
+function loadLayout() {
+  const raw = localStorage.getItem(STORAGE_KEY)
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw) as WidgetItem[]
+      allWidgets.value = parsed
+    } catch {
+      console.warn('Kaydedilmiş layout okunamadı, varsayılan kullanılacak.')
+    }
+  }
+}
+
 onMounted(() => {
+  loadLayout()
   updateGridCols()
   updateContainerHeight()
   window.addEventListener('resize', updateGridCols)
