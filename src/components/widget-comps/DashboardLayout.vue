@@ -192,7 +192,7 @@ function onMouseMove(event: MouseEvent) {
     draggingStyle.value = { left: newLeft, top: newTop }
 
     const snappedX = Math.max(0, Math.floor(newLeft / cellWidth.value))
-    const snappedY = Math.max(0, Math.floor(newTop / CELL_HEIGHT))
+    const snappedY = Math.max(0, Math.round(newTop / CELL_HEIGHT))
     const maxX = BASE_COLS - draggingWidget.w
     const maxY = 100 - draggingWidget.h
 
