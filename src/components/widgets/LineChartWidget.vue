@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import Widget from '../widget-comps/Widget.vue'
-
+import type { WidgetItem } from '../widget-comps/widgetRegistry'
+defineProps<{ widget: WidgetItem }>()
 const data = [50, 20, 60, 30, 80, 40, 70]
 
 const pointList = computed(() => {
@@ -13,7 +14,7 @@ const points = computed(() => pointList.value.map(p => p.join(',')).join(' '))
 </script>
 
 <template>
-  <Widget title="Zaman Serisi">
+  <Widget :title="widget.name">
     <div class="line-chart">
       <svg viewBox="0 0 300 100" preserveAspectRatio="none">
         <polyline

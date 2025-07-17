@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Widget from '../widget-comps/Widget.vue'
-
+import type { WidgetItem } from '../widget-comps/widgetRegistry'
+defineProps<{ widget: WidgetItem }>()
 const rawData = [
   { label: 'Gelir', value: 40, color: '#09898d' },
   { label: 'Gider', value: 30, color: '#f2a900' },
@@ -17,7 +18,7 @@ const segments = rawData.map((data, index) => {
 </script>
 
 <template>
-  <Widget title="Dağılım">
+  <Widget :title="widget.name">
     <div class="pie-chart">
       <svg viewBox="0 0 32 32" class="donut">
         <circle

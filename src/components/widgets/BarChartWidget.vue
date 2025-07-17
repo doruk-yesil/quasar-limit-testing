@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import Widget from '../widget-comps/Widget.vue'
-
+import type { WidgetItem } from '../widget-comps/widgetRegistry'
+defineProps<{ widget: WidgetItem }>()
 const dummyData = [60, 120, 90, 180, 75, 140, 100]
 </script>
 
 <template>
-  <Widget title="Bar Grafiği">
+  <Widget :title="widget.name">
     <div class="bar-chart-placeholder">
       <div
         v-for="(value, index) in dummyData"

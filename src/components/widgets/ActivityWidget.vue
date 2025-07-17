@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { QAvatar, QItemSection, QItemLabel, QItem, QList } from 'quasar'
 import Widget from '../widget-comps/Widget.vue'
-
+import type { WidgetItem } from '../widget-comps/widgetRegistry'
+defineProps<{ widget: WidgetItem }>()
 const activities = [
   { message: '₺4.500 fatura ödendi', user: 'Ahmet Y.', date: '10 Temmuz 14:32' },
   { message: 'Yeni kullanıcı kaydoldu', user: 'Mehmet A.', date: '10 Temmuz 13:10' },
@@ -11,7 +12,7 @@ const activities = [
 </script>
 
 <template>
-  <Widget title="Aktiviteler">
+  <Widget :title="widget.name">
     <q-list bordered separator>
       <q-item v-for="(activity, index) in activities" :key="index">
         <q-item-section avatar>

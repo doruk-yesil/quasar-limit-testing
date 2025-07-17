@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import Widget from '../widget-comps/Widget.vue'
+import type { WidgetItem } from '../widget-comps/widgetRegistry'
+defineProps<{ widget: WidgetItem }>()
 </script>
 
 <template>
-  <Widget title="Gelir Özeti">
+  <Widget :title="widget.name">
     <div class="value">$123,456</div>
   </Widget>
 </template>

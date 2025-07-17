@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { QMarkupTable } from 'quasar'
 import Widget from '../widget-comps/Widget.vue'
-
+import type { WidgetItem } from '../widget-comps/widgetRegistry'
+defineProps<{ widget: WidgetItem }>()
 const rows = [
   { category: 'Satış Geliri', amount: 12500, date: '10 Temmuz 2025' },
   { category: 'Abonelik', amount: 3400, date: '09 Temmuz 2025' },
@@ -11,7 +12,7 @@ const rows = [
 </script>
 
 <template>
-  <Widget title="📊 Özet Tablosu">
+  <Widget :title="widget.name">
     <q-markup-table flat bordered class="table-widget">
       <thead>
         <tr>
