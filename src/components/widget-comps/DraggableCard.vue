@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { QCard } from 'quasar'
-import type { WidgetItem } from '../../types/widget'
+import type { WidgetItem } from './widgetRegistry'
 
 const props=defineProps<{
   widget: WidgetItem

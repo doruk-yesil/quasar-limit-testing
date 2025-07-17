@@ -15,7 +15,7 @@ import {
   QBanner
 } from 'quasar'
 import WidgetRenderer from '../components/widget-comps/WidgetRenderer.vue'
-import type { WidgetItem } from '../types/widget'
+import type { WidgetItem } from '../components/widget-comps/widgetRegistry'
 
 const BASE_COLS = 12
 const CELL_HEIGHT = 100
