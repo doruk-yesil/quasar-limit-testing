@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import Header from '../components/Header.vue'
 import DashboardLayout from '../components/widget-comps/DashboardLayout.vue'
-import type { WidgetItem } from '../types/widget'
+import type { WidgetItem } from '../components/widget-comps/widgetRegistry'
 import {
   QBtn,
   QCard,
