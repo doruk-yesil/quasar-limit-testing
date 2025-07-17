@@ -105,8 +105,8 @@ function pushDownCollisions(widget: WidgetItem) {
 
 function startDrag(event: MouseEvent, widget: WidgetItem) {
   draggingWidget = widget
-  dragOffsetX = event.clientX - (widget.x * (cellWidth.value + CELL_GUTTER) + 5)
-  dragOffsetY = event.clientY - (widget.y * (CELL_HEIGHT + CELL_GUTTER) + 5)
+  dragOffsetX = event.clientX - (widget.x * (cellWidth.value + CELL_GUTTER))
+  dragOffsetY = event.clientY - (widget.y * (CELL_HEIGHT + CELL_GUTTER))
   isDragging.value = true
 }
 
@@ -150,8 +150,8 @@ function onMouseMove(event: MouseEvent) {
     const pixelW = startW * cellWidth.value + (startW - 1) * CELL_GUTTER
     const pixelH = startH * CELL_HEIGHT + (startH - 1) * CELL_GUTTER
     resizingStyle.value = {
-      left: resizingWidget.x * (cellWidth.value + CELL_GUTTER) + 5,
-      top: resizingWidget.y * (CELL_HEIGHT + CELL_GUTTER) + 5,
+      left: resizingWidget.x * (cellWidth.value + CELL_GUTTER),
+      top: resizingWidget.y * (CELL_HEIGHT + CELL_GUTTER),
       width: pixelW + dx,
       height: pixelH + dy
     }
@@ -185,12 +185,12 @@ function onMouseMove(event: MouseEvent) {
   }
 
   if (isDragging.value && draggingWidget) {
-    const newLeft = event.clientX - dragOffsetX + 5
-    const newTop = event.clientY - dragOffsetY + 5
+    const newLeft = event.clientX - dragOffsetX
+    const newTop = event.clientY - dragOffsetY
     draggingStyle.value = { left: newLeft, top: newTop }
 
-    const snappedX = Math.max(0, Math.round(newLeft / cellWidth.value))
-    const snappedY = Math.max(0, Math.round(newTop / CELL_HEIGHT))
+    const snappedX = Math.max(0, Math.floor(newLeft / cellWidth.value))
+    const snappedY = Math.max(0, Math.floor(newTop / CELL_HEIGHT))
     const maxX = BASE_COLS - draggingWidget.w
     const maxY = 100 - draggingWidget.h
 
