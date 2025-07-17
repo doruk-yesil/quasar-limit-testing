@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import type { WidgetItem } from '../../types/widget'
-
-defineProps<{ widget: WidgetItem }>()
+import Widget from '../widget-comps/Widget.vue'
 </script>
 
 <template>
-  <div class="widget-box">
-    <div class="title">{{ widget.name }}</div>
-    <div class="value">$123,456</div>
-  </div>
+  <Widget title="Gelir Özeti">
+    <div class="widget-box">
+      <div class="value">$123,456</div>
+    </div>
+  </Widget>
 </template>
 
 <style scoped>
@@ -21,12 +20,6 @@ defineProps<{ widget: WidgetItem }>()
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.title {
-  font-weight: bold;
-  color: #09898d;
-  margin-bottom: 8px;
 }
 
 .value {

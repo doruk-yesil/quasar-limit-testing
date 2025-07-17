@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Widget from '../widget-comps/Widget.vue'
 
 const rawData = [
   { label: 'Gelir', value: 40, color: '#09898d' },
@@ -16,27 +17,28 @@ const segments = rawData.map((data, index) => {
 </script>
 
 <template>
-  <div class="text-h6 text-center q-mb-md">Dağılım (Pie Chart)</div>
-  <div class="pie-chart">
-    <svg viewBox="0 0 32 32" class="donut">
-      <circle
-        v-for="(segment, index) in segments"
-        :key="index"
-        class="donut-segment"
-        :stroke="segment.color"
-        stroke-width="8"
-        fill="transparent"
-        r="16"
-        cx="16"
-        cy="16"
-        :stroke-dasharray="`${segment.value} ${100 - segment.value}`"
-        :stroke-dashoffset="segment.offset"
-      />
-    </svg>
-  </div>
-  <div class="q-mt-sm text-caption text-center text-grey">
-    Gelir: %40 • Gider: %30 • Kâr: %30
-  </div>
+  <Widget title="Dağılım">
+    <div class="pie-chart">
+      <svg viewBox="0 0 32 32" class="donut">
+        <circle
+          v-for="(segment, index) in segments"
+          :key="index"
+          class="donut-segment"
+          :stroke="segment.color"
+          stroke-width="8"
+          fill="transparent"
+          r="16"
+          cx="16"
+          cy="16"
+          :stroke-dasharray="`${segment.value} ${100 - segment.value}`"
+          :stroke-dashoffset="segment.offset"
+        />
+      </svg>
+    </div>
+    <div class="q-mt-sm text-caption text-center text-grey">
+      Gelir: %40 • Gider: %30 • Kâr: %30
+    </div>
+  </Widget>
 </template>
 
 <style scoped>

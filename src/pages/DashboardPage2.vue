@@ -14,7 +14,7 @@ import {
   QCardActions,
   QBanner
 } from 'quasar'
-import WidgetRenderer from '../components/WidgetRenderer.vue'
+import WidgetRenderer from '../components/widget-comps/WidgetRenderer.vue'
 import type { WidgetItem } from '../types/widget'
 
 const BASE_COLS = 12

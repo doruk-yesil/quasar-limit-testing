@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import Widget from '../widget-comps/Widget.vue'
 </script>
 
 <template>
-  <div class="widget-box">
-    <div class="text-h6">Toplam Gelir</div>
-    <div class="text-h5 q-mt-sm text-weight-bold">₺184,000</div>
-    <div class="text-caption text-grey-7 q-mt-xs">Bu ayın toplamı</div>
-  </div>
+  <Widget title="Toplam Gelir">
+    <div class="widget-box">
+      <div class="text-h5 q-mt-sm text-weight-bold">₺184,000</div>
+      <div class="text-caption text-grey-7 q-mt-xs">Bu ayın toplamı</div>
+    </div>
+  </Widget>
 </template>
 
 <style scoped>

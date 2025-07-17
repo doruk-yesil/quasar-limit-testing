@@ -1,21 +1,22 @@
 <script setup lang="ts">
-defineProps<{ widget: any }>()
+import Widget from '../widget-comps/Widget.vue'
 
 const dummyData = [60, 120, 90, 180, 75, 140, 100]
 </script>
 
 <template>
-  <div class="bar-chart-widget">
-    <div class="text-h6 q-mb-sm">{{ widget.name }}</div>
-    <div class="bar-chart-placeholder">
-      <div
-        v-for="(value, index) in dummyData"
-        :key="index"
-        class="bar"
-        :style="{ height: `${value}px` }"
-      />
+  <Widget title="Bar Grafiği">
+    <div class="bar-chart-widget">
+      <div class="bar-chart-placeholder">
+        <div
+          v-for="(value, index) in dummyData"
+          :key="index"
+          class="bar"
+          :style="{ height: `${value}px` }"
+        />
+      </div>
     </div>
-  </div>
+  </Widget>
 </template>
 
 <style scoped>
