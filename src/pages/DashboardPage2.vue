@@ -35,16 +35,16 @@ let startW = 0
 let startH = 0
 
 const allWidgets = ref<WidgetItem[]>([
-  { id: '1', name: 'Gelir Kartı', x: 0, y: 0, w: 3, h: 3, visible: true, type: 'summary' },
-  { id: '2', name: 'Bar Grafik', x: 3, y: 0, w: 3, h: 3, visible: true, type: 'bar-chart' },
-  { id: '3', name: 'Zaman Serisi', x: 6, y: 0, w: 4, h: 3, visible: true, type: 'line-chart' },
-  { id: '4', name: 'Dağılım Pasta', x: 10, y: 0, w: 2, h: 3, visible: true, type: 'pie-chart' },
-  { id: '5', name: 'Veri Tablosu', x: 0, y: 3, w: 6, h: 2, visible: true, type: 'table' },
-  { id: '6', name: 'Aktif Kullanıcı', x: 6, y: 3, w: 2, h: 1, visible: true, type: 'kpi' },
-  { id: '7', name: 'Yeni Kayıtlar', x: 8, y: 3, w: 2, h: 1, visible: true, type: 'kpi' },
-  { id: '8', name: 'Ziyaret Süresi', x: 10, y: 3, w: 2, h: 1, visible: true, type: 'kpi' },
-  { id: '9', name: 'Son İşlemler', x: 0, y: 5, w: 4, h: 2, visible: true, type: 'activity' },
-  { id: '10', name: 'Toplam Gelir', x: 4, y: 6, w: 3, h: 1, visible: true, type: 'total-revenue' }
+  { id: '1', name: 'Gelir Kartı', x: 0, y: 0, w: 3, h: 3, visible: true, size: 'sm', type: 'summary' },
+  { id: '2', name: 'Bar Grafik', x: 3, y: 0, w: 3, h: 3, visible: true, size: 'sm', type: 'bar-chart' },
+  { id: '3', name: 'Zaman Serisi', x: 6, y: 0, w: 4, h: 3, visible: true, size: 'sm', type: 'line-chart' },
+  { id: '4', name: 'Dağılım Pasta', x: 10, y: 0, w: 2, h: 3, visible: true, size: 'sm', type: 'pie-chart' },
+  { id: '5', name: 'Veri Tablosu', x: 0, y: 3, w: 6, h: 2, visible: true, size: 'sm', type: 'table' },
+  { id: '6', name: 'Aktif Kullanıcı', x: 6, y: 3, w: 2, h: 1, visible: true, size: 'sm', type: 'kpi' },
+  { id: '7', name: 'Yeni Kayıtlar', x: 8, y: 3, w: 2, h: 1, visible: true, size: 'sm', type: 'kpi' },
+  { id: '8', name: 'Ziyaret Süresi', x: 10, y: 3, w: 2, h: 1, visible: true, size: 'sm', type: 'kpi' },
+  { id: '9', name: 'Son İşlemler', x: 0, y: 5, w: 4, h: 2, visible: true, size: 'sm', type: 'activity' },
+  { id: '10', name: 'Toplam Gelir', x: 4, y: 6, w: 3, h: 1, visible: true, size: 'sm', type: 'total-revenue' }
 ])
 
 const widgets = computed(() =>
