@@ -6,6 +6,7 @@ import TableWidget from '../widgets/TableWidget.vue'
 import KPIWidget from '../widgets/KPIWidget.vue'
 import ActivityWidget from '../widgets/ActivityWidget.vue'
 import TotalRevenueWidget from '../widgets/TotalRevenueWidget.vue'
+import BirthdayWidget from '../widgets/BirthdayWidget.vue'
 
 export const widgetMap = {
   summary: SummaryWidget,
@@ -15,7 +16,8 @@ export const widgetMap = {
   table: TableWidget,
   kpi: KPIWidget,
   activity: ActivityWidget,
-  'total-revenue': TotalRevenueWidget
+  'total-revenue': TotalRevenueWidget,
+  birthday: BirthdayWidget
 } as const
 
 export type WidgetType = keyof typeof widgetMap
@@ -29,5 +31,9 @@ export interface WidgetItem {
   h: number
   visible:boolean
   type: WidgetType
+  size: 'sm' | 'md' | 'lg' | 'custom'
+  minW?: number
+  minH?: number
+  locked?: boolean
   props?: Record<string, any>
 }

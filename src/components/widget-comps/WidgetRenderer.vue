@@ -7,5 +7,9 @@ const DefaultWidget = widgetMap['summary']
 </script>
 
 <template>
-  <component :is="widgetMap[widget.type] || DefaultWidget" :widget="widget" />
+  <component 
+    :is="widgetMap[widget.type] || DefaultWidget"
+    :widget="widget"
+    @settings="$emit('openSettings', widget)"
+  />
 </template>

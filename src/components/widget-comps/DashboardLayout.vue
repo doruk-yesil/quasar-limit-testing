@@ -1,26 +1,23 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, toRaw, watch } from 'vue'
 import DraggableCard from './DraggableCard.vue'
 import CardPreview from './CardPreview.vue'
 import WidgetRenderer from './WidgetRenderer.vue'
 import type { WidgetItem } from './widgetRegistry'
+import { QBtn, QDialog, QCardActions, QCard, QSelect, QCardSection, QToggle, Notify } from 'quasar'
 
 const props = defineProps<{
-  initialWidgets: WidgetItem[]
   editMode: boolean
+  containerMode: 'fixed' | 'auto'
 }>()
+const allWidgets = defineModel<WidgetItem[]>('all-widgets')
 
 const STORAGE_KEY = 'dashboard-layout'
 const BASE_COLS = 12
 const CELL_HEIGHT = 100
 const CELL_GUTTER = 16
+const MAX_ROWS = 8
 const cellWidth = ref(100)
-
-const allWidgets = ref<WidgetItem[]>([...props.initialWidgets])
-
-const widgets = computed(() =>
-  allWidgets.value.filter(widget => widget.visible)
-)
 
 const draggingStyle = ref<{ left: number; top: number } | null>(null)
 const resizingStyle = ref<{ left: number; top: number; width: number; height: number } | null>(null)
@@ -50,27 +47,37 @@ function updateGridCols() {
 }
 
 function updateContainerHeight() {
-  const maxY = Math.max(...widgets.value.map(w => w.y + w.h), 0)
   const container = document.querySelector('.dashboard-container') as HTMLElement
-  if (container) {
+  if (!container) return
+  if (props.containerMode === 'fixed') {
+    container.style.height = '100vh'
+  } else {
+    const maxY = Math.max(...allWidgets.value!.filter(w => w.visible).map(w => w.y + w.h), 0)
     container.style.height = `${maxY * (CELL_HEIGHT + CELL_GUTTER)}px`
   }
 }
 
 function getCollidingWidget(x: number, y: number, w: number, h: number, currentId: string): WidgetItem | null {
-  return widgets.value.find(widget => {
-    if (widget.id === currentId) return false
-    return !(
+  if (x < 0 || x + w > BASE_COLS || y < 0 || y + h > MAX_ROWS) {
+    return {} as WidgetItem
+  }
+  return allWidgets.value!.find(widget => {
+    if (!widget.visible || widget.id === currentId) return false
+    const isOverlapping = !(
       x + w <= widget.x ||
       x >= widget.x + widget.w ||
       y + h <= widget.y ||
       y >= widget.y + widget.h
     )
+    if (isOverlapping && widget.locked) {
+      return widget
+    }
+    return isOverlapping ? widget : null
   }) || null
 }
 
 function findFreeSpotFor(w: number, h: number): { x: number; y: number } | null {
-  const maxRows = Math.max(...widgets.value.map(w => w.y + w.h), 8) + 10
+  const maxRows = Math.max(...allWidgets.value!.filter(w => w.visible).map(w => w.y + w.h), 8)
   for (let y = 0; y <= maxRows - h; y++) {
     for (let x = 0; x <= BASE_COLS - w; x++) {
       if (!getCollidingWidget(x, y, w, h, '')) return { x, y }
@@ -82,27 +89,67 @@ function findFreeSpotFor(w: number, h: number): { x: number; y: number } | null 
 function pushDownCollisions(widget: WidgetItem) {
   const moved = new Set<string>()
   const queue: WidgetItem[] = [widget]
+
   while (queue.length > 0) {
     const current = queue.shift()
     if (!current) continue
-    for (const other of widgets.value) {
-      if (other.id === current.id || moved.has(other.id)) continue
+
+    for (const other of allWidgets.value!) {
+      if (!other.visible || other.id === current.id || other.locked) continue
+
       const isCollision =
         !(current.x + current.w <= other.x ||
           current.x >= other.x + other.w ||
           current.y + current.h <= other.y ||
           current.y >= other.y + other.h)
+
       if (isCollision) {
+        const key = `${other.id}-${other.x}-${other.y}` // 🆕 konuma göre key üret
+        if (moved.has(key)) continue                     // 🛑 daha önce aynı yerde kaydırılmışsa atla
+
         const newY = current.y + current.h
         if (newY !== other.y) {
           other.y = newY
-          moved.add(other.id)
+          moved.add(key)
           queue.push(other)
         }
       }
     }
   }
+
+  for (const w of allWidgets.value!) {
+    if (!w.visible) continue
+    const collision = getCollidingWidget(w.x, w.y, w.w, w.h, w.id)
+    if (collision) {
+      if (collision.locked) {
+        Notify.create({
+          message: `${w.name} kilitli bir widget ile çakıştığı için gizlendi.`,
+          color: 'warning',
+          icon: 'lock',
+          position: 'top-right',
+          timeout: 3000
+        })
+        w.visible = false
+        continue
+      }
+      const newSpot = findFreeSpotFor(w.w, w.h)
+      if (newSpot) {
+        w.x = newSpot.x
+        w.y = newSpot.y
+      } else {
+        Notify.create({
+          message: `${w.name} yer bulunamadığı için gizlendi.`,
+          color: 'warning',
+          icon: 'warning',
+          position: 'top-right',
+          timeout: 3000
+        })
+        w.visible = false
+      }
+    }
+  }
 }
+
 
 function startDrag(event: MouseEvent, widget: WidgetItem) {
   draggingWidget = widget
@@ -134,6 +181,7 @@ function startResize(event: MouseEvent, widget: WidgetItem) {
   startY = event.clientY
   startW = widget.w
   startH = widget.h
+  widget.size = 'custom'
 }
 
 function stopResize() {
@@ -164,9 +212,13 @@ function onMouseMove(event: MouseEvent) {
     const approxW = Math.max(1, Math.round((pixelW + dx) / cellWidth.value))
     const approxH = Math.max(1, Math.round((pixelH + dy) / CELL_HEIGHT))
     const maxW = BASE_COLS - resizingWidget.x
-    const maxH = 100 - resizingWidget.y
-    const finalW = Math.min(approxW, maxW)
-    const finalH = Math.min(approxH, maxH)
+    const maxH = props.containerMode === 'fixed'
+      ? Math.floor((window.innerHeight - CELL_GUTTER) / (CELL_HEIGHT + CELL_GUTTER)) - resizingWidget.y
+      : 100 - resizingWidget.y
+    const minW = resizingWidget.minW ?? 1
+    const minH = resizingWidget.minH ?? 1
+    const finalW = Math.max(minW, Math.min(approxW, maxW))
+    const finalH = Math.max(minH, Math.min(approxH, maxH))
 
     const collision = getCollidingWidget(resizingWidget.x, resizingWidget.y, finalW, finalH, resizingWidget.id)
     if (collision) {
@@ -187,6 +239,7 @@ function onMouseMove(event: MouseEvent) {
     resizingWidget.w = finalW
     resizingWidget.h = finalH
     pushDownCollisions(resizingWidget)
+    updateContainerHeight()
   }
 
   if (isDragging.value && draggingWidget) {
@@ -197,13 +250,19 @@ function onMouseMove(event: MouseEvent) {
     const snappedX = Math.max(0, Math.floor(newLeft / cellWidth.value))
     const snappedY = Math.max(0, Math.round(newTop / (CELL_HEIGHT + CELL_GUTTER)))
     const maxX = BASE_COLS - draggingWidget.w
-    const maxY = 100 - draggingWidget.h
+    const maxY = props.containerMode === 'fixed'
+      ? Math.floor((window.innerHeight - CELL_GUTTER) / (CELL_HEIGHT + CELL_GUTTER)) - draggingWidget.h
+      : 100 - draggingWidget.h
 
     const newX = Math.min(maxX, snappedX)
     const newY = Math.min(maxY, snappedY)
 
     const collided = getCollidingWidget(newX, newY, draggingWidget.w, draggingWidget.h, draggingWidget.id)
     if (collided) {
+      if (collided.locked) {
+        widgetPreview.value = null
+        return
+      }
       const foundSpot = findFreeSpotFor(collided.w, collided.h)
       if (foundSpot) {
         collided.x = foundSpot.x
@@ -211,6 +270,7 @@ function onMouseMove(event: MouseEvent) {
         draggingWidget.x = newX
         draggingWidget.y = newY
         widgetPreview.value = { x: newX, y: newY, w: draggingWidget.w, h: draggingWidget.h }
+        pushDownCollisions(draggingWidget)
       } else {
         widgetPreview.value = null
       }
@@ -220,12 +280,13 @@ function onMouseMove(event: MouseEvent) {
       widgetPreview.value = { x: newX, y: newY, w: draggingWidget.w, h: draggingWidget.h }
       pushDownCollisions(draggingWidget)
     }
+    updateContainerHeight()
   }
 }
 
 function saveLayout() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(allWidgets.value))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toRaw(allWidgets.value)))
   } catch (e) {
     console.error('Layout kaydedilemedi:', e)
   }
@@ -242,6 +303,98 @@ function loadLayout() {
     }
   }
 }
+const modalWidget = ref<WidgetItem | null>(null)
+const selectedSize = ref<'sm' | 'md' | 'lg' | 'custom'>('md')
+const showSettingsModal = ref(false)
+
+function openSettings(widget: WidgetItem) {
+  modalWidget.value = widget
+  selectedSize.value = widget.size ?? 'md'
+  if (modalWidget.value.locked === undefined) {
+    modalWidget.value.locked = false
+  }
+  showSettingsModal.value = true
+}
+
+function onSizeChange(size: 'sm' | 'md' | 'lg' | 'custom') {
+  if (!modalWidget.value) return
+  modalWidget.value.size = size
+  switch (size) {
+    case 'custom':
+      break
+    case 'sm':
+      modalWidget.value.w = 2
+      modalWidget.value.h = 2
+      break
+    case 'md':
+      modalWidget.value.w = 4
+      modalWidget.value.h = 3
+      break
+    case 'lg':
+      modalWidget.value.w = 6
+      modalWidget.value.h = 4
+      break
+  }
+  pushDownCollisions(modalWidget.value)
+  saveLayout()
+}
+
+function onVisibilityToggle(newVal: boolean) {
+  if (!modalWidget.value) return
+
+  if (newVal) {
+    const spot = findFreeSpotFor(modalWidget.value.w, modalWidget.value.h)
+    if (spot) {
+      modalWidget.value.x = spot.x
+      modalWidget.value.y = spot.y
+      modalWidget.value.visible = true
+      pushDownCollisions(modalWidget.value)
+    } else {
+      modalWidget.value.visible = false
+    }
+  } else {
+    modalWidget.value.visible = false
+  }
+  saveLayout()
+}
+
+
+watch(
+  () => allWidgets.value!.map(w => w.visible),
+  (visibilityList, oldVisibilityList) => {
+    allWidgets.value!.forEach((w, i) => {
+      if (visibilityList[i] && !oldVisibilityList?.[i]) {
+        const spot = findFreeSpotFor(w.w, w.h)
+        if (spot) {
+          w.x = spot.x
+          w.y = spot.y
+          w.visible = true
+          pushDownCollisions(w)
+        } else {
+          w.visible = false
+        }
+      }
+    })
+    updateContainerHeight()
+    saveLayout()
+  },
+  { deep: false }
+)
+
+watch(
+  () => props.containerMode,
+  (mode) => {
+    const container = document.querySelector('.dashboard-container') as HTMLElement
+    if (!container) return
+
+    if (mode === 'auto') {
+      container.style.height = 'auto'
+    } else {
+      updateContainerHeight()
+    }
+  },
+  { immediate: true }
+)
 
 onMounted(() => {
   loadLayout()
@@ -264,7 +417,8 @@ onBeforeUnmount(() => {
 <template>
   <div class="dashboard-container">
     <DraggableCard
-      v-for="widget in widgets"
+      v-for="widget in allWidgets"
+      v-show="widget.visible"
       :key="widget.id"
       :widget="widget"
       :draggingWidget="draggingWidget"
@@ -278,7 +432,10 @@ onBeforeUnmount(() => {
       @startDrag="startDrag"
       @startResize="startResize"
     >
-      <WidgetRenderer :widget="widget" />
+      <WidgetRenderer 
+        :widget="widget"
+        @openSettings="openSettings"
+      />
     </DraggableCard>
 
     <CardPreview
@@ -288,6 +445,51 @@ onBeforeUnmount(() => {
       :CELL_HEIGHT="CELL_HEIGHT"
       :CELL_GUTTER="CELL_GUTTER"
     />
+
+    <q-dialog v-model="showSettingsModal">
+      <q-card style="min-width: 300px">
+        <q-card-section>
+          <div class="text-h6">{{ modalWidget?.name }} Ayarları</div>
+        </q-card-section>
+
+        <q-card-section>
+          <q-select
+            v-model="selectedSize"
+            :options="[
+                { label: 'Seçiniz', value: 'custom' },
+                { label: 'Küçük (sm)', value: 'sm' },
+                { label: 'Orta (md)', value: 'md' },
+                { label: 'Büyük (lg)', value: 'lg' }
+            ]"
+            label="Boyut"
+            filled
+            dense
+            emit-value
+            map-options
+            @update:model-value="onSizeChange"
+          />
+        </q-card-section>
+        <q-card-section>
+          <q-toggle
+            v-model="modalWidget!.visible"
+            label="Göster"
+            left-label
+            color="primary"
+            @update:model-value="onVisibilityToggle"
+          />
+          <q-toggle
+            v-model="modalWidget!.locked"
+            label="Kilitli"
+            left-label
+            color="deep-orange"
+          />
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Kapat" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 

@@ -29,8 +29,8 @@ const cardStyle = computed(() => {
     }
   } else if (props.draggingWidget?.id === props.widget.id && props.draggingStyle) {
     return {
-      left: `${props.draggingStyle.left + 5}px`,
-      top: `${props.draggingStyle.top + 5}px`,
+      left: `${props.draggingStyle.left}px`,
+      top: `${props.draggingStyle.top}px`,
       width: `${props.widget.w * props.cellWidth + (props.widget.w - 1) * props.CELL_GUTTER}px`,
       height: `${props.widget.h * props.CELL_HEIGHT + (props.widget.h - 1) * props.CELL_GUTTER}px`,
       zIndex: 9999,
@@ -51,13 +51,17 @@ const cardStyle = computed(() => {
 <template>
   <q-card
     class="widget"
-    :class="{ 'with-transition': draggingWidget?.id !== widget.id, 'editable': editMode }"
+    :class="{
+      'with-transition': draggingWidget?.id !== widget.id,
+      'editable': editMode && !widget.locked,
+      'locked': editMode && widget.locked
+    }"
     :style="cardStyle"
-    @mousedown.prevent="editMode && emit('startDrag', $event, widget)"
+    @mousedown.prevent="editMode && !widget.locked && emit('startDrag', $event, widget)"
   >
     <slot />
     <div
-      v-if="editMode"
+      v-if="editMode && !widget.locked"
       class="resize-handle"
       @mousedown.stop.prevent="emit('startResize', $event, widget)"
     >
@@ -83,6 +87,12 @@ const cardStyle = computed(() => {
 .widget.editable {
   cursor: grabbing;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+.widget.locked {
+  cursor: not-allowed;
+  opacity: 0.95;
+  border: 2px dashed #aaa;
+  background-color: #f4f4f4;
 }
 .resize-handle {
   position: absolute;

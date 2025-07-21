@@ -14,29 +14,41 @@ import {
   QCardSection,
   QCheckbox,
   QCardActions,
-  QBanner
+  QBanner,
+  QSelect
 } from 'quasar'
 
 const showSettingsDialog = ref(false)
 const showWidgetDialog = ref(false)
-const editMode = ref(false)
+const editMode = ref(true)
+const containerMode = ref<'fixed' | 'auto'>('fixed')
 
-const allWidgets = ref<WidgetItem[]>([
-  { id: '1', name: 'Gelir Kartı', x: 0, y: 0, w: 3, h: 3, visible: true, type: 'summary' },
-  { id: '2', name: 'Bar Grafik', x: 3, y: 0, w: 3, h: 3, visible: true, type: 'bar-chart' },
-  { id: '3', name: 'Zaman Serisi', x: 6, y: 0, w: 4, h: 3, visible: true, type: 'line-chart' },
-  { id: '4', name: 'Dağılım Pasta', x: 10, y: 0, w: 2, h: 3, visible: true, type: 'pie-chart' },
-  { id: '5', name: 'Veri Tablosu', x: 0, y: 3, w: 6, h: 2, visible: true, type: 'table' },
-  { id: '6', name: 'Aktif Kullanıcı', x: 6, y: 3, w: 2, h: 1, visible: true, type: 'kpi' },
-  { id: '7', name: 'Yeni Kayıtlar', x: 8, y: 3, w: 2, h: 1, visible: true, type: 'kpi' },
-  { id: '8', name: 'Ziyaret Süresi', x: 10, y: 3, w: 2, h: 1, visible: true, type: 'kpi' },
-  { id: '9', name: 'Son İşlemler', x: 0, y: 5, w: 4, h: 2, visible: true, type: 'activity' },
-  { id: '10', name: 'Toplam Gelir', x: 4, y: 6, w: 3, h: 1, visible: true, type: 'total-revenue' }
-])
+const initialWidgetState: WidgetItem[] = [
+  { id: '1', name: 'Gelir Kartı', x: 0, y: 0, w: 3, h: 3, visible: true, size: 'custom', type: 'summary' },
+  { id: '2', name: 'Bar Grafik', x: 3, y: 0, w: 3, h: 3, visible: true, size: 'custom', type: 'bar-chart' },
+  { id: '3', name: 'Zaman Serisi', x: 6, y: 0, w: 4, h: 3, visible: true, size: 'custom', type: 'line-chart' },
+  { id: '4', name: 'Dağılım Pasta', x: 10, y: 0, w: 2, h: 3, visible: true, size: 'custom', type: 'pie-chart' },
+  { id: '5', name: 'Veri Tablosu', x: 0, y: 3, w: 6, h: 2, visible: true, size: 'custom', type: 'table' },
+  { id: '6', name: 'Aktif Kullanıcı', x: 6, y: 3, w: 2, h: 1, visible: true, size: 'custom', type: 'kpi' },
+  { id: '7', name: 'Yeni Kayıtlar', x: 8, y: 3, w: 2, h: 1, visible: true, size: 'custom', type: 'kpi' },
+  { id: '8', name: 'Ziyaret Süresi', x: 10, y: 3, w: 2, h: 1, visible: true, size: 'custom', type: 'kpi' },
+  { id: '9', name: 'Son İşlemler', x: 0, y: 5, w: 4, h: 2, visible: true, size: 'custom', type: 'activity' },
+  { id: '10', name: 'Toplam Gelir', x: 4, y: 6, w: 3, h: 1, visible: true, size: 'custom', type: 'total-revenue' },
+  { id: '11', name: 'Doğum Günleri', x: 7, y: 4, w: 2, h: 2, visible: true, size: 'custom', type: 'birthday', minW:2, minH:2 }
+]
+
+const allWidgets = ref<WidgetItem[]>(JSON.parse(JSON.stringify(initialWidgetState)))
 
 function openSettings() {
   showSettingsDialog.value = true
 }
+
+function resetAllLayouts() {
+  allWidgets.value = JSON.parse(JSON.stringify(initialWidgetState))
+  localStorage.removeItem('dashboard-layout')
+  containerMode.value = 'fixed'
+}
+
 </script>
 
 <template>
@@ -48,8 +60,9 @@ function openSettings() {
       <span class="text-italic text-bold">You have 2 new notifications</span>
     </q-banner>
     <DashboardLayout
-      :initial-widgets="allWidgets"
+      v-model:all-widgets="allWidgets"
       :edit-mode="editMode"
+      :container-mode="containerMode"
     />
     <q-btn
       fab
@@ -66,8 +79,17 @@ function openSettings() {
         </q-card-section>
         <q-card-section>
           <q-toggle v-model="editMode" label="Edit Mode" />
+          <q-select
+            v-model="containerMode"
+            :options="['fixed', 'auto']"
+            label="Dashboard Alanı"
+            filled
+            dense
+            class="q-mt-sm"
+          />
         </q-card-section>
         <q-card-actions align="right">
+          <q-btn flat label="Layout’u Sıfırla" color="negative" @click="resetAllLayouts"/>
           <q-btn flat label="Widget Listesi" @click="showWidgetDialog = true" />
         </q-card-actions>
       </q-card>
