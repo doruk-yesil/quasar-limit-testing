@@ -117,6 +117,12 @@ function pushDownCollisions(widget: WidgetItem) {
     const collision = getCollidingWidget(w.x, w.y, w.w, w.h, w.id)
     if (collision) {
       if (collision.locked) {
+        const newSpot = findFreeSpotFor(w.w, w.h)
+        if (newSpot) {
+          w.x = newSpot.x
+          w.y = newSpot.y
+          continue
+        }
         if (props.containerMode === 'fixed') {
           Notify.create({
             message: `${w.name} kilitli bir widget ile çakıştığı için gizlendi.`,
@@ -144,6 +150,7 @@ function pushDownCollisions(widget: WidgetItem) {
         w.visible = false
       }
     }
+
   }
 }
 
