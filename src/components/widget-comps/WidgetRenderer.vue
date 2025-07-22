@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { widgetMap, type WidgetItem } from './widgetRegistry'
 
-defineProps<{ widget: WidgetItem }>()
-
+defineProps<{ 
+  widget: WidgetItem 
+  editMode: boolean
+}>() 
 const DefaultWidget = widgetMap['summary']
 </script>
 
@@ -10,6 +12,8 @@ const DefaultWidget = widgetMap['summary']
   <component 
     :is="widgetMap[widget.type] || DefaultWidget"
     :widget="widget"
+    :showLockIcon="editMode && widget.locked"
     @settings="$emit('openSettings', widget)"
+    @toggleLock="$emit('toggleLock', widget)"
   />
 </template>

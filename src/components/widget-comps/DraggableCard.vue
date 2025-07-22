@@ -91,7 +91,6 @@ const cardStyle = computed(() => {
 .widget.locked {
   cursor: not-allowed;
   opacity: 0.95;
-  border: 2px dashed #aaa;
   background-color: #f4f4f4;
 }
 .resize-handle {

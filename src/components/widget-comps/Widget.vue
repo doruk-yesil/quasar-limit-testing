@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { defineEmits, defineProps } from 'vue'
-import { QBtn } from 'quasar'
+import { QBtn, QIcon } from 'quasar'
 
 const props = defineProps<{
   title?: string
   size?: 'sm' | 'md' | 'lg' | 'custom'
+  showLockIcon?: boolean
 }>()
 
 const emit = defineEmits<{
   (e: 'settings'): void
+  (e: 'toggleLock'): void
 }>()
 </script>
 
@@ -17,14 +19,23 @@ const emit = defineEmits<{
     <div class="widget-header flex justify-between items-center q-pb-sm">
       <div v-if="props.title" class="widget-title text-h6">{{ props.title }}</div>
     </div>
+    <div class="settings-icon">
+    <q-icon
+      v-if="props.showLockIcon"
+      name="lock"
+      color="grey-7"
+      size="18px"
+      class="q-mr-xs"
+      @click="emit('toggleLock')"
+    />
     <q-btn
-        class="settings-icon"
         dense
         flat
         round
         icon="more_vert"
         @click="emit('settings')"
       />
+    </div>
     <div class="widget-content">
       <div class="content-inner">
         <slot />

@@ -87,8 +87,9 @@ function findFreeSpotFor(w: number, h: number): { x: number; y: number } | null 
 }
 
 function pushDownCollisions(widget: WidgetItem) {
+  if (widget.locked) return
   const moved = new Set<string>()
-  const queue: WidgetItem[] = [widget]
+  const queue: WidgetItem[] = widget.locked ? [] : [widget]
 
   while (queue.length > 0) {
     const current = queue.shift()
@@ -104,8 +105,8 @@ function pushDownCollisions(widget: WidgetItem) {
           current.y >= other.y + other.h)
 
       if (isCollision) {
-        const key = `${other.id}-${other.x}-${other.y}` // 🆕 konuma göre key üret
-        if (moved.has(key)) continue                     // 🛑 daha önce aynı yerde kaydırılmışsa atla
+        const key = `${other.id}-${other.x}-${other.y}`
+        if (moved.has(key)) continue
 
         const newY = current.y + current.h
         if (newY !== other.y) {
@@ -122,21 +123,23 @@ function pushDownCollisions(widget: WidgetItem) {
     const collision = getCollidingWidget(w.x, w.y, w.w, w.h, w.id)
     if (collision) {
       if (collision.locked) {
-        Notify.create({
-          message: `${w.name} kilitli bir widget ile çakıştığı için gizlendi.`,
-          color: 'warning',
-          icon: 'lock',
-          position: 'top-right',
-          timeout: 3000
-        })
-        w.visible = false
+        if (props.containerMode === 'fixed') {
+          Notify.create({
+            message: `${w.name} kilitli bir widget ile çakıştığı için gizlendi.`,
+            color: 'warning',
+            icon: 'lock',
+            position: 'top-right',
+            timeout: 3000
+          })
+          w.visible = false
+        }
         continue
       }
       const newSpot = findFreeSpotFor(w.w, w.h)
       if (newSpot) {
         w.x = newSpot.x
         w.y = newSpot.y
-      } else {
+      } else if (props.containerMode === 'fixed') {
         Notify.create({
           message: `${w.name} yer bulunamadığı için gizlendi.`,
           color: 'warning',
@@ -149,7 +152,6 @@ function pushDownCollisions(widget: WidgetItem) {
     }
   }
 }
-
 
 function startDrag(event: MouseEvent, widget: WidgetItem) {
   draggingWidget = widget
@@ -282,6 +284,17 @@ function onMouseMove(event: MouseEvent) {
     }
     updateContainerHeight()
   }
+  if (isDragging.value) {
+    const SCROLL_THRESHOLD = 100
+    const SCROLL_SPEED = 20
+    const viewportHeight = window.innerHeight
+    const mouseY = event.clientY
+    if (mouseY > viewportHeight - SCROLL_THRESHOLD) {
+      window.scrollBy({ top: SCROLL_SPEED, behavior: 'auto' })
+    } else if (mouseY < SCROLL_THRESHOLD) {
+      window.scrollBy({ top: -SCROLL_SPEED, behavior: 'auto' })
+    }
+  }
 }
 
 function saveLayout() {
@@ -358,6 +371,10 @@ function onVisibilityToggle(newVal: boolean) {
   saveLayout()
 }
 
+function toggleWidgetLock(widget: WidgetItem) {
+  widget.locked = !widget.locked
+  saveLayout()
+}
 
 watch(
   () => allWidgets.value!.map(w => w.visible),
@@ -370,7 +387,7 @@ watch(
           w.y = spot.y
           w.visible = true
           pushDownCollisions(w)
-        } else {
+        } else if (props.containerMode === 'fixed') {
           w.visible = false
         }
       }
@@ -434,7 +451,9 @@ onBeforeUnmount(() => {
     >
       <WidgetRenderer 
         :widget="widget"
+        :edit-mode="editMode"
         @openSettings="openSettings"
+        @toggleLock="toggleWidgetLock"
       />
     </DraggableCard>
 
