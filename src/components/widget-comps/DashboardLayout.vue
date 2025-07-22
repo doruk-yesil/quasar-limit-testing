@@ -158,7 +158,7 @@ function startDrag(event: MouseEvent, widget: WidgetItem) {
   const element = event.currentTarget as HTMLElement
   const rect = element.getBoundingClientRect()
   dragOffsetX = event.clientX - rect.left
-  dragOffsetY = event.clientY - rect.top
+  dragOffsetY = event.clientY - rect.top 
   isDragging.value = true
 }
 
@@ -246,7 +246,8 @@ function onMouseMove(event: MouseEvent) {
 
   if (isDragging.value && draggingWidget) {
     const newLeft = event.clientX - dragOffsetX
-    const newTop = event.clientY - dragOffsetY
+    const containerOffsetTop = document.querySelector('.dashboard-container')?.getBoundingClientRect().top ?? 0
+    const newTop = event.clientY - dragOffsetY - containerOffsetTop
     draggingStyle.value = { left: newLeft, top: newTop }
 
     const snappedX = Math.max(0, Math.floor(newLeft / cellWidth.value))
