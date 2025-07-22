@@ -245,7 +245,8 @@ function onMouseMove(event: MouseEvent) {
   }
 
   if (isDragging.value && draggingWidget) {
-    const newLeft = event.clientX - dragOffsetX
+    const containerOffsetLeft = document.querySelector('.dashboard-container')?.getBoundingClientRect().left ?? 0
+    const newLeft = event.clientX - dragOffsetX - containerOffsetLeft
     const containerOffsetTop = document.querySelector('.dashboard-container')?.getBoundingClientRect().top ?? 0
     const newTop = event.clientY - dragOffsetY - containerOffsetTop
     draggingStyle.value = { left: newLeft, top: newTop }

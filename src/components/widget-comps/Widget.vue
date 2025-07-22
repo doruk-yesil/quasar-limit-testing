@@ -26,6 +26,7 @@ const emit = defineEmits<{
       color="grey-7"
       size="18px"
       class="q-mr-xs"
+      @mousedown.stop.prevent
       @click="emit('toggleLock')"
     />
     <q-btn
@@ -33,6 +34,7 @@ const emit = defineEmits<{
         flat
         round
         icon="more_vert"
+        @mousedown.stop.prevent
         @click="emit('settings')"
       />
     </div>
