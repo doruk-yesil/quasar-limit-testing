@@ -44,7 +44,10 @@ function openSettings() {
 }
 
 function resetAllLayouts() {
-  allWidgets.value = JSON.parse(JSON.stringify(initialWidgetState))
+  allWidgets.value = initialWidgetState.map(w => ({
+    ...w,
+    locked: w.locked ?? false
+  }))
   localStorage.removeItem('dashboard-layout')
   containerMode.value = 'fixed'
 }

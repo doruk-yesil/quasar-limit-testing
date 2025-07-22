@@ -90,24 +90,19 @@ function pushDownCollisions(widget: WidgetItem) {
   if (widget.locked) return
   const moved = new Set<string>()
   const queue: WidgetItem[] = widget.locked ? [] : [widget]
-
   while (queue.length > 0) {
     const current = queue.shift()
     if (!current) continue
-
     for (const other of allWidgets.value!) {
       if (!other.visible || other.id === current.id || other.locked) continue
-
       const isCollision =
         !(current.x + current.w <= other.x ||
           current.x >= other.x + other.w ||
           current.y + current.h <= other.y ||
           current.y >= other.y + other.h)
-
       if (isCollision) {
         const key = `${other.id}-${other.x}-${other.y}`
         if (moved.has(key)) continue
-
         const newY = current.y + current.h
         if (newY !== other.y) {
           other.y = newY
@@ -117,9 +112,8 @@ function pushDownCollisions(widget: WidgetItem) {
       }
     }
   }
-
   for (const w of allWidgets.value!) {
-    if (!w.visible) continue
+    if (!w.visible || w.locked) continue
     const collision = getCollidingWidget(w.x, w.y, w.w, w.h, w.id)
     if (collision) {
       if (collision.locked) {
@@ -312,12 +306,18 @@ function loadLayout() {
   if (raw) {
     try {
       const parsed = JSON.parse(raw) as WidgetItem[]
+            parsed.forEach(widget => {
+        if (widget.locked === undefined) {
+          widget.locked = false
+        }
+      })
       allWidgets.value = parsed
     } catch {
       console.warn('Kaydedilmiş layout okunamadı, varsayılan kullanılacak.')
     }
   }
 }
+
 const modalWidget = ref<WidgetItem | null>(null)
 const selectedSize = ref<'sm' | 'md' | 'lg' | 'custom'>('md')
 const showSettingsModal = ref(false)
@@ -325,9 +325,6 @@ const showSettingsModal = ref(false)
 function openSettings(widget: WidgetItem) {
   modalWidget.value = widget
   selectedSize.value = widget.size ?? 'md'
-  if (modalWidget.value.locked === undefined) {
-    modalWidget.value.locked = false
-  }
   showSettingsModal.value = true
 }
 
