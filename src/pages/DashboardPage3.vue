@@ -2,7 +2,7 @@
 import { ref, nextTick } from 'vue'
 import Header from '../components/Header.vue'
 import DashboardLayout from '../components/widget-comps/DashboardLayout.vue'
-import type { WidgetItem } from '../components/widget-comps/widgetRegistry'
+import { initialWidgetState, type WidgetItem } from '../components/widget-comps/widgetRegistry'
 import {
   QBtn,
   QCard,
@@ -20,23 +20,8 @@ import {
 
 const showSettingsDialog = ref(false)
 const showWidgetDialog = ref(false)
-const editMode = ref(true)
+const editMode = ref(false)
 const containerMode = ref<'fixed' | 'auto'>('fixed')
-
-const initialWidgetState: WidgetItem[] = [
-  { id: '1', name: 'Gelir Kartı', x: 0, y: 0, w: 3, h: 3, visible: true, size: 'custom', type: 'summary' },
-  { id: '2', name: 'Bar Grafik', x: 3, y: 0, w: 3, h: 3, visible: true, size: 'custom', type: 'bar-chart' },
-  { id: '3', name: 'Zaman Serisi', x: 6, y: 0, w: 4, h: 3, visible: true, size: 'custom', type: 'line-chart' },
-  { id: '4', name: 'Dağılım Pasta', x: 10, y: 0, w: 2, h: 3, visible: true, size: 'custom', type: 'pie-chart' },
-  { id: '5', name: 'Veri Tablosu', x: 0, y: 3, w: 6, h: 2, visible: true, size: 'custom', type: 'table' },
-  { id: '6', name: 'Aktif Kullanıcı', x: 6, y: 3, w: 1, h: 2, visible: true, size: 'custom', type: 'kpi' },
-  { id: '7', name: 'Yeni Kayıtlar', x: 7, y: 3, w: 1, h: 2, visible: true, size: 'custom', type: 'kpi' },
-  { id: '8', name: 'Ziyaret Süresi', x: 8, y: 3, w: 1, h: 2, visible: true, size: 'custom', type: 'kpi' },
-  { id: '9', name: 'Son İşlemler', x: 2, y: 5, w: 4, h: 2, visible: true, size: 'custom', type: 'activity' },
-  { id: '10', name: 'Toplam Gelir', x: 9, y: 3, w: 2, h: 2, visible: true, size: 'custom', type: 'total-revenue' },
-  { id: '11', name: 'Doğum Günleri', x: 0, y: 5, w: 2, h: 2, visible: true, size: 'custom', type: 'birthday', minW:2, minH:2 }
-]
-
 const allWidgets = ref<WidgetItem[]>(JSON.parse(JSON.stringify(initialWidgetState)))
 
 function openSettings() {
