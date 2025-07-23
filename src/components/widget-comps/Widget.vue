@@ -25,7 +25,7 @@ const emit = defineEmits<{
       name="lock"
       color="grey-7"
       size="18px"
-      class="q-mr-xs"
+      class="q-mr-xs cursor-pointer"
       @mousedown.stop.prevent
       @click="emit('toggleLock')"
     />

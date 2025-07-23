@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import Header from '../components/Header.vue'
 import DashboardLayout from '../components/widget-comps/DashboardLayout.vue'
 import type { WidgetItem } from '../components/widget-comps/widgetRegistry'
@@ -44,12 +44,18 @@ function openSettings() {
 }
 
 function resetAllLayouts() {
-  allWidgets.value = initialWidgetState.map(w => ({
-    ...w,
-    locked: w.locked ?? false
-  }))
   localStorage.removeItem('dashboard-layout')
   containerMode.value = 'fixed'
+  for (let i = 0; i < 3; i++) {
+    setTimeout(() => {
+      nextTick(() => {
+        allWidgets.value = JSON.parse(JSON.stringify(initialWidgetState)).map((w: WidgetItem) => ({
+          ...w,
+          locked: false
+        }))
+      })
+    }, i * 50)
+  }
 }
 
 </script>

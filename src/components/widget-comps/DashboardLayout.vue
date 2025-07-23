@@ -387,6 +387,7 @@ watch(
   (visibilityList, oldVisibilityList) => {
     allWidgets.value!.forEach((w, i) => {
       if (visibilityList[i] && !oldVisibilityList?.[i]) {
+        if (w.locked === undefined) w.locked = false
         const spot = findFreeSpotFor(w.w, w.h)
         if (spot) {
           w.x = spot.x
