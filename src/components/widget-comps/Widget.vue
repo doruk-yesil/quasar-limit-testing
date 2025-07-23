@@ -17,7 +17,7 @@ const emit = defineEmits<{
 <template>
   <div class="widget-wrapper q-pa-md fit bg-white overflow-hidden rounded shadow-sm">
     <div class="widget-header flex justify-between items-center q-pb-sm">
-      <div v-if="props.title" class="widget-title text-h6">{{ props.title }}</div>
+      <div v-if="props.title" class="text-h6">{{ props.title }}</div>
     </div>
     <div class="settings-icon">
     <q-icon
@@ -68,7 +68,7 @@ const emit = defineEmits<{
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 999;
+  z-index: 11;
   margin: 5px 3px;
 }
 .content-inner {

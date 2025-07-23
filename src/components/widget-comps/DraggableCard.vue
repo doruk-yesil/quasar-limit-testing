@@ -46,6 +46,17 @@ const cardStyle = computed(() => {
   }
 })
 
+function onMouseDown(e: MouseEvent) {
+  const target = e.target as HTMLElement
+  if (target.closest('input, textarea, select')) {
+    return
+  }
+  if (props.editMode && !props.widget.locked) {
+    e.preventDefault()
+    emit('startDrag', e, props.widget)
+  }
+}
+
 </script>
 
 <template>
@@ -57,7 +68,7 @@ const cardStyle = computed(() => {
       'locked': editMode && widget.locked
     }"
     :style="cardStyle"
-    @mousedown.prevent="editMode && !widget.locked && emit('startDrag', $event, widget)"
+    @mousedown="onMouseDown"
   >
     <slot />
     <div

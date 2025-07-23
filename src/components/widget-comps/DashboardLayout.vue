@@ -261,7 +261,6 @@ function onMouseMove(event: MouseEvent) {
     
     const newX = Math.min(maxX, snappedX)
     const newY = Math.min(maxY, snappedY)
-    debugger
     const collided = getCollidingWidget(newX, newY, draggingWidget.w, draggingWidget.h, draggingWidget.id)
     if (collided) {
       if (collided.locked) {
