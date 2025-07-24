@@ -54,6 +54,6 @@ export const initialWidgetState: WidgetItem[] = [
   { id: '9', name: 'Son İşlemler', x: 2, y: 5, w: 4, h: 2, visible: true, size: 'custom', type: 'activity' },
   { id: '10', name: 'Toplam Gelir', x: 9, y: 3, w: 2, h: 2, visible: true, size: 'custom', type: 'total-revenue' },
   { id: '11', name: 'Doğum Günleri', x: 0, y: 5, w: 2, h: 2, visible: true, size: 'custom', type: 'birthday', minW:2, minH:2 },
-  { id: '12', name: 'Son Haberler', x: 0, y: 0, w: 4, h: 2, visible: true, size: 'custom', type: 'news', minW:2, minH:2 },
-  { id: '13', name: 'Kur Değişimleri', x: 4, y: 0, w: 2, h: 2, visible: true, size: 'custom', type: 'forex', minW:2, minH:2 }
+  { id: '12', name: 'Son Haberler', x: 0, y: 0, w: 4, h: 2, visible: true, size: 'custom', type: 'news', minW:4, minH:2 },
+  { id: '13', name: 'Kur Değişimleri', x: 4, y: 0, w: 2, h: 3, visible: true, size: 'custom', type: 'forex', minW:2, minH:3 }
 ]

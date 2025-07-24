@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from 'vue'
-import { QTable, QSelect, QIcon, QInput } from 'quasar'
+import { QTable, QSelect, QIcon, QInput, QTh, QTr } from 'quasar'
 import Widget from '../widget-comps/Widget.vue'
 
 const symbols = ['USD', 'EUR', 'GBP', 'TRY']
@@ -10,10 +10,20 @@ const from = ref('USD')
 const to = ref('TRY')
 
 const mockRates = {
-  USDEUR: 0.8477,
-  USDGBP: 0.7349,
-  USDTRY: 40.2510
+  'USD/EUR': 0.8477,
+  'USD/GBP': 0.7349,
+  'USD/TRY': 40.2510,
+  'USD/JPY': 146.30,
+  'USD/CHF': 0.8891,
+  'USD/CAD': 1.3225,
+  'USD/AUD': 1.5040,
+  'USD/NZD': 1.6032,
+  'USD/CNY': 7.1724,
+  'USD/SEK': 10.5711,
+  'USD/NOK': 10.3776,
+  'USD/DKK': 6.2965
 }
+
 const rates = ref<Record<string, number>>(mockRates)
 
 function updateConvertedFromAmount() {
@@ -22,8 +32,8 @@ function updateConvertedFromAmount() {
     return
   }
 
-  const key = `USD${to.value}`
-  const inverseKey = `USD${from.value}`
+  const key = `USD/${to.value}`
+  const inverseKey = `USD/${from.value}`
 
   if (from.value === 'USD' && rates.value[key]) {
     converted.value = (amount.value * rates.value[key]).toFixed(4)
@@ -45,8 +55,8 @@ function updateAmountFromConverted() {
   const parsed = parseFloat(converted.value)
   if (isNaN(parsed) || !isFinite(parsed)) return
 
-  const key = `USD${to.value}`
-  const inverseKey = `USD${from.value}`
+  const key = `USD/${to.value}`
+  const inverseKey = `USD/${from.value}`
 
   let newAmount = 0
 
@@ -71,10 +81,18 @@ function updateAmountFromConverted() {
 }
 
 watch([amount, from, to], () => {
+  if (!amount.value && amount.value !== 0) {
+    converted.value = '0.0000'
+    return
+  }
   updateConvertedFromAmount()
 })
 
 watch(converted, () => {
+  if (!converted.value && converted.value !== '0') {
+    amount.value = 0
+    return
+  }
   updateAmountFromConverted()
 })
 
@@ -105,21 +123,31 @@ const columns = [
       <q-icon name="arrow_forward" class="q-mx-sm" />
       <q-select v-model="to" :options="symbols" label="To" />
     </div>
-    <div class="converter q-mt-sm">
-      <q-input v-model="converted" label="Sonuç" type="number" />
+    <div class="converter q-my-sm">
+      <q-input v-model="converted" class="fit" label="Sonuç" type="number" />
     </div>
-    <hr class="q-my-sm" />
-    <div class="rates-table">
-      <q-table
-        :rows="tableRows"
-        :columns="columns"
-        row-key="pair"
-        dense
-        flat
-        bordered
-        hide-bottom
-      />
-    </div>
+    <q-table
+      class="rates-table"
+      flat bordered dense
+      :rows="tableRows"
+      :columns="columns"
+      row-key="name"
+      hide-bottom
+      :rows-per-page-options="[0]"
+    >
+      <template #header="props">
+        <q-tr :props="props" class="sticky-header">
+          <q-th
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+            class="custom-th"
+          >
+            {{ col.label }}
+          </q-th>
+        </q-tr>
+      </template>
+    </q-table>
   </Widget>
 </template>
 
@@ -132,5 +160,21 @@ const columns = [
 .unit {
   margin-left: 4px;
   font-weight: bold;
+}
+.rates-table {
+  height: 116px;
+  overflow-y: scroll;
+}
+</style>
+<style>
+.q-table__middle.scroll {
+  overflow-x: hidden !important;
+}
+.rates-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;
+  
 }
 </style>
