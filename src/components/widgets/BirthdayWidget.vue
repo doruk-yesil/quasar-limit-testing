@@ -63,40 +63,25 @@ const visibleBirthdays = computed(() => {
     <div class="row q-col-gutter-md">
       <div :class="sizeLevel === 'sm' ? 'col-12' : 'col-6'">
         <ul>
-          <li
-            v-for="(b, i) in visibleBirthdays"
-            :key="i"
-            class="text-body2 q-mb-xs"
-          >
+          <li v-for="(b, i) in visibleBirthdays" :key="i" class="text-body2 q-mb-xs">
             {{ b.name }} – {{ b.date }}
           </li>
         </ul>
-        <div
-          v-if="sizeLevel !== 'sm' && birthdays.length > visibleBirthdays.length"
-          class="text-caption q-mt-sm text-grey"
-        >
+        <div v-if="sizeLevel !== 'sm' && birthdays.length > visibleBirthdays.length"
+          class="text-caption q-mt-sm text-grey">
           +{{ birthdays.length - visibleBirthdays.length }} kişi daha
         </div>
-        <div
-          v-else-if="sizeLevel === 'sm'"
-          class="text-caption q-mt-sm text-grey"
-        >
+        <div v-else-if="sizeLevel === 'sm'" class="text-caption q-mt-sm text-grey">
           +{{ birthdays.length - 1 }} kişi daha
         </div>
-        <div
-          v-if="sizeLevel !== 'sm'"
-          class="text-caption q-mt-xs text-positive"
-        >
+        <div v-if="sizeLevel !== 'sm'" class="text-caption q-mt-xs text-positive">
           🎉 Kutlama zamanı yaklaşıyor!
         </div>
       </div>
       <div class="col-6" v-if="sizeLevel !== 'sm'">
         <div class="row q-col-gutter-sm q-gutter-y-sm">
-          <div
-            v-for="(b, i) in (sizeLevel === 'md' ? birthdays.slice(0, 4) : birthdays.slice(0, 14))"
-            :key="'mini-' + i"
-            class="col-6"
-          >
+          <div v-for="(b, i) in (sizeLevel === 'md' ? birthdays.slice(0, 4) : birthdays.slice(0, 14))"
+            :key="'mini-' + i" class="col-6">
             <div class="birthday-card q-pa-sm bg-grey-1 rounded text-center">
               <q-avatar size="40px" icon="cake" color="pink-4" text-color="white" class="q-mb-xs" />
               <div class="text-bold text-body2">{{ b.name }}</div>
@@ -112,6 +97,6 @@ const visibleBirthdays = computed(() => {
 
 <style scoped>
 .birthday-card {
-  box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
 }
 </style>

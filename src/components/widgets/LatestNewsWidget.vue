@@ -8,7 +8,7 @@ const newsList = [
   { title: 'Türkiye reveals 2025 financial strategy', time: '2h ago' },
   { title: 'US continiues on ambargo to the east', time: '3h ago' },
   { title: 'Russia rises the prices on gas exports', time: '7h ago' },
-  { title: 'Cyprus is silent after a big raise to home prices', time: '10h ago' },    
+  { title: 'Cyprus is silent after a big raise to home prices', time: '10h ago' },
 ]
 </script>
 
@@ -17,7 +17,7 @@ const newsList = [
     <ul>
       <template v-for="(item, index) in newsList" :key="index">
         <li>
-          <q-icon name="article" class="q-mr-sm"/>
+          <q-icon name="article" class="q-mr-sm" />
           <span class="overflow-hidden text-bold">{{ item.title }}</span>
           <span class="timestamp">{{ item.time }}</span>
         </li>
@@ -35,6 +35,7 @@ ul {
   margin: 0;
   overflow-y: auto;
 }
+
 li {
   margin-bottom: 8px;
   padding-right: 60px;
@@ -42,6 +43,7 @@ li {
   font-size: 14px;
   cursor: pointer;
 }
+
 .timestamp {
   margin: 0 0 0 auto;
   font-size: 12px;

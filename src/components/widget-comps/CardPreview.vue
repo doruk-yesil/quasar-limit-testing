@@ -8,15 +8,12 @@ defineProps<{
 </script>
 
 <template>
-  <div
-    class="card-preview"
-    :style="{
-      left: `${preview.x * (cellWidth + CELL_GUTTER)}px`,
-      top: `${preview.y * (CELL_HEIGHT + CELL_GUTTER)}px`,
-      width: `${preview.w * cellWidth + (preview.w - 1) * CELL_GUTTER}px`,
-      height: `${preview.h * CELL_HEIGHT + (preview.h - 1) * CELL_GUTTER}px`
-    }"
-  />
+  <div class="card-preview" :style="{
+    left: `${preview.x * (cellWidth + CELL_GUTTER)}px`,
+    top: `${preview.y * (CELL_HEIGHT + CELL_GUTTER)}px`,
+    width: `${preview.w * cellWidth + (preview.w - 1) * CELL_GUTTER}px`,
+    height: `${preview.h * CELL_HEIGHT + (preview.h - 1) * CELL_GUTTER}px`
+  }" />
 </template>
 
 <style scoped>

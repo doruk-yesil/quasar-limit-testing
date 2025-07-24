@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Bar } from 'vue-chartjs'
-import {
+/* import { Bar } from 'vue-chartjs'
+ */import {
   Chart as ChartJS,
   Title,
   Tooltip,
@@ -12,7 +12,7 @@ import {
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
-const chartData = {
+/* const chartData = {
   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
   datasets: [
     {
@@ -26,8 +26,8 @@ const chartData = {
       data: [350, 450, 300, 500, 450, 600]
     }
   ]
-}
-
+} */
+/* 
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -36,11 +36,12 @@ const chartOptions = {
       position: 'bottom'
     }
   }
-}
+} */
 </script>
 
 <template>
   <div style="height: 100%;">
-    <Bar :data="chartData" :options="chartOptions" />
+    <!--     <Bar :data="chartData" :options="chartOptions" />
+ -->
   </div>
 </template>

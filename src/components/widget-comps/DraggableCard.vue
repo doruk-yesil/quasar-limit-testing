@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { QCard } from 'quasar'
 import type { WidgetItem } from './widgetRegistry'
 
-const props=defineProps<{
+const props = defineProps<{
   widget: WidgetItem
   draggingWidget: WidgetItem | null
   resizingWidget: WidgetItem | null
@@ -60,22 +60,14 @@ function onMouseDown(e: MouseEvent) {
 </script>
 
 <template>
-  <q-card
-    class="widget"
-    :class="{
-      'with-transition': draggingWidget?.id !== widget.id,
-      'editable': editMode && !widget.locked,
-      'locked': editMode && widget.locked
-    }"
-    :style="cardStyle"
-    @mousedown="onMouseDown"
-  >
+  <q-card class="widget" :class="{
+    'with-transition': draggingWidget?.id !== widget.id,
+    'editable': editMode && !widget.locked,
+    'locked': editMode && widget.locked
+  }" :style="cardStyle" @mousedown="onMouseDown">
     <slot />
-    <div
-      v-if="editMode && !widget.locked"
-      class="resize-handle"
-      @mousedown.stop.prevent="emit('startResize', $event, widget)"
-    >
+    <div v-if="editMode && !widget.locked" class="resize-handle"
+      @mousedown.stop.prevent="emit('startResize', $event, widget)">
       <img src="../../assets/resize-handle-svgrepo-com.svg" />
     </div>
   </q-card>
@@ -92,18 +84,22 @@ function onMouseDown(e: MouseEvent) {
   display: flex;
   flex-direction: column;
 }
+
 .widget.with-transition {
   transition: left 0.25s ease, top 0.25s ease;
 }
+
 .widget.editable {
   cursor: grabbing;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
+
 .widget.locked {
   cursor: not-allowed;
   opacity: 0.95;
   background-color: #f4f4f4;
 }
+
 .resize-handle {
   position: absolute;
   bottom: 0;
@@ -114,6 +110,7 @@ function onMouseDown(e: MouseEvent) {
   border-bottom-right-radius: 4px;
   z-index: 10;
 }
+
 img {
   width: 100%;
   height: 100%;

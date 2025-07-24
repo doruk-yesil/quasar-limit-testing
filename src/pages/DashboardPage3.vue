@@ -1,32 +1,23 @@
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
+import {
+  QBanner,
+  QBtn,
+  QCard,
+  QCardSection,
+  QCheckbox,
+  QDialog,
+  QFab,
+  QFabAction
+} from 'quasar'
+import { nextTick, ref } from 'vue'
 import Header from '../components/Header.vue'
 import DashboardLayout from '../components/widget-comps/DashboardLayout.vue'
 import { initialWidgetState, type WidgetItem } from '../components/widget-comps/widgetRegistry'
-import {
-  QBtn,
-  QCard,
-  QToggle,
-  QDialog,
-  QItem,
-  QItemSection,
-  QList,
-  QCardSection,
-  QCheckbox,
-  QCardActions,
-  QBanner,
-  QSelect
-} from 'quasar'
 
-const showSettingsDialog = ref(false)
 const showWidgetDialog = ref(false)
 const editMode = ref(false)
 const containerMode = ref<'fixed' | 'auto'>('fixed')
 const allWidgets = ref<WidgetItem[]>(JSON.parse(JSON.stringify(initialWidgetState)))
-
-function openSettings() {
-  showSettingsDialog.value = true
-}
 
 function resetAllLayouts() {
   localStorage.removeItem('dashboard-layout')
@@ -42,7 +33,12 @@ function resetAllLayouts() {
     }, i * 50)
   }
 }
-
+function activateEditMode() {
+  editMode.value = true
+}
+function toggleContainerMode() {
+  containerMode.value = containerMode.value === 'fixed' ? 'auto' : 'fixed'
+}
 </script>
 
 <template>
@@ -53,66 +49,46 @@ function resetAllLayouts() {
       💼 Welcome to your Finance Dashboard —
       <span class="text-italic text-bold">You have 2 new notifications</span>
     </q-banner>
-    <DashboardLayout
-      v-model:all-widgets="allWidgets"
-      :edit-mode="editMode"
-      :container-mode="containerMode"
-    />
-    <q-btn
-      fab
-      color="primary"
-      icon="settings"
-      @click="openSettings"
-      class="settings-btn"
-    />
-    <q-dialog v-model="showSettingsDialog">
-      <q-card style="min-width: 300px">
-        <q-card-section class="row items-center justify-between">
-          <div class="text-h6">Ayarlar</div>
-          <q-btn flat round icon="close" v-close-popup />
-        </q-card-section>
-        <q-card-section>
-          <q-toggle v-model="editMode" label="Edit Mode" />
-          <q-select
-            v-model="containerMode"
-            :options="['fixed', 'auto']"
-            label="Dashboard Alanı"
-            filled
-            dense
-            class="q-mt-sm"
-          />
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat label="Layout’u Sıfırla" color="negative" @click="resetAllLayouts"/>
-          <q-btn flat label="Widget Listesi" @click="showWidgetDialog = true" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+    <DashboardLayout v-model:all-widgets="allWidgets" :edit-mode="editMode" :container-mode="containerMode" />
+    <div class="row q-gutter-x-sm" style="bottom: 20px; right: 20px; position: fixed;">
+      <div v-if="editMode" class="row q-gutter-x-sm">
+        <q-fab padding="sm" icon="tune" active-icon="tune" color="accent"
+          :label="containerMode === 'fixed' ? 'Grid-Length: Fixed' : 'Grid-Length: Auto'"
+          @click="toggleContainerMode" />
+        <q-fab padding="sm" icon="check" label="Kaydet" @click="editMode = false" color="positive" />
+      </div>
+      <q-fab padding="sm" vertical-actions-align="right" icon="settings" active-icon="close" direction="up"
+        color="primary">
+        <q-fab-action padding="xs" icon="edit" label="Gridi Düzenle" color="warning" @click="activateEditMode"
+          v-if="!editMode" />
+        <q-fab-action padding="xs" icon="widgets" label="Widget Listesi" color="secondary"
+          @click="showWidgetDialog = true" />
+        <q-fab-action padding="xs" icon="restart_alt" label="Layout’u Sıfırla" color="negative"
+          @click="resetAllLayouts" />
+      </q-fab>
+    </div>
     <q-dialog v-model="showWidgetDialog">
-      <q-card style="min-width: 300px">
+      <q-card style="min-width: 600px; max-width: 90vw;">
         <q-card-section class="row items-center justify-between">
           <div class="text-h6">Widget Listesi</div>
           <q-btn flat round icon="close" v-close-popup />
         </q-card-section>
         <q-card-section>
-          <q-list>
-            <q-item v-for="widget in allWidgets" :key="widget.id">
-              <q-item-section>
-                <q-checkbox v-model="widget.visible" :label="widget.name" />
-              </q-item-section>
-            </q-item>
-          </q-list>
+          <div class="row q-col-gutter-md">
+            <div v-for="widget in allWidgets" :key="widget.id" class="col-3 q-pb-sm">
+              <div class="row items-center">
+                <q-checkbox v-model="widget.visible" :label="widget.name" class="q-mb-none" />
+                <div class="text-caption text-grey-7 q-ml-sm"
+                  style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                  | {{ widget.description || 'Açıklama girilmedi' }}
+                </div>
+              </div>
+            </div>
+          </div>
         </q-card-section>
       </q-card>
     </q-dialog>
   </div>
 </template>
 
-<style scoped>
-.settings-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 9999;
-}
-</style>
+<style scoped></style>

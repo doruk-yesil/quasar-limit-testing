@@ -8,12 +8,7 @@ const dummyData = [60, 120, 90, 180, 75, 140, 100]
 <template>
   <Widget :title="widget.name">
     <div class="bar-chart-placeholder">
-      <div
-        v-for="(value, index) in dummyData"
-        :key="index"
-        class="bar"
-        :style="{ height: `${value}px` }"
-      />
+      <div v-for="(value, index) in dummyData" :key="index" class="bar" :style="{ height: `${value}px` }" />
     </div>
   </Widget>
 </template>
@@ -28,6 +23,7 @@ const dummyData = [60, 120, 90, 180, 75, 140, 100]
   border-radius: 8px;
   padding-top: 75px;
 }
+
 .bar {
   width: 25px;
   background-color: #09898d;

@@ -21,19 +21,9 @@ const segments = rawData.map((data, index) => {
   <Widget :title="widget.name">
     <div class="pie-chart">
       <svg viewBox="0 0 32 32" class="donut">
-        <circle
-          v-for="(segment, index) in segments"
-          :key="index"
-          class="donut-segment"
-          :stroke="segment.color"
-          stroke-width="8"
-          fill="transparent"
-          r="16"
-          cx="16"
-          cy="16"
-          :stroke-dasharray="`${segment.value} ${100 - segment.value}`"
-          :stroke-dashoffset="segment.offset"
-        />
+        <circle v-for="(segment, index) in segments" :key="index" class="donut-segment" :stroke="segment.color"
+          stroke-width="8" fill="transparent" r="16" cx="16" cy="16"
+          :stroke-dasharray="`${segment.value} ${100 - segment.value}`" :stroke-dashoffset="segment.offset" />
       </svg>
     </div>
     <div class="q-mt-sm text-caption text-center text-grey">
@@ -49,11 +39,13 @@ const segments = rawData.map((data, index) => {
   justify-content: center;
   align-items: center;
 }
+
 .donut {
   width: 150px;
   height: 150px;
   transform: rotate(-90deg);
 }
+
 .donut-segment {
   stroke-linecap: round;
 }

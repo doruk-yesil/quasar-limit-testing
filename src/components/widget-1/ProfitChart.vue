@@ -34,11 +34,8 @@ const chartOptions = {
 <template>
   <div style="position: relative; height: 200px; width: 100%;">
     <Doughnut :data="chartData" :options="chartOptions" />
-    <div
-      style="position: absolute; top: 50%; left: 75%; transform: translate(-50%, -50%); font-size: 1.2rem;"
-    >
+    <div style="position: absolute; top: 50%; left: 75%; transform: translate(-50%, -50%); font-size: 1.2rem;">
       <h1>76%</h1>
     </div>
   </div>
 </template>
-

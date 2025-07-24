@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, toRaw, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, toRaw, watch, nextTick } from 'vue'
 import DraggableCard from './DraggableCard.vue'
 import CardPreview from './CardPreview.vue'
 import WidgetRenderer from './WidgetRenderer.vue'
@@ -58,7 +58,7 @@ function updateContainerHeight() {
 }
 
 function getCollidingWidget(x: number, y: number, w: number, h: number, currentId: string): WidgetItem | null {
-  if (x < 0 || x + w > BASE_COLS || y < 0 || y + h > MAX_ROWS) {
+  if (x < 0 || x + w > BASE_COLS || y < 0 || (props.containerMode === 'fixed' && y + h > MAX_ROWS)) {
     return {} as WidgetItem
   }
   return allWidgets.value!.find(widget => {
@@ -159,7 +159,7 @@ function startDrag(event: MouseEvent, widget: WidgetItem) {
   const element = event.currentTarget as HTMLElement
   const rect = element.getBoundingClientRect()
   dragOffsetX = event.clientX - rect.left
-  dragOffsetY = event.clientY - rect.top 
+  dragOffsetY = event.clientY - rect.top
   isDragging.value = true
 }
 
@@ -258,7 +258,7 @@ function onMouseMove(event: MouseEvent) {
     const maxY = props.containerMode === 'fixed'
       ? Math.floor((window.innerHeight - CELL_GUTTER) / (CELL_HEIGHT + CELL_GUTTER)) - draggingWidget.h
       : 100 - draggingWidget.h
-    
+
     const newX = Math.min(maxX, snappedX)
     const newY = Math.min(maxY, snappedY)
     const collided = getCollidingWidget(newX, newY, draggingWidget.w, draggingWidget.h, draggingWidget.id)
@@ -312,7 +312,7 @@ function loadLayout() {
   if (raw) {
     try {
       const parsed = JSON.parse(raw) as WidgetItem[]
-            parsed.forEach(widget => {
+      parsed.forEach(widget => {
         if (widget.locked === undefined) {
           widget.locked = false
         }
@@ -346,11 +346,11 @@ function onSizeChange(size: 'sm' | 'md' | 'lg' | 'custom') {
       break
     case 'md':
       modalWidget.value.w = 4
-      modalWidget.value.h = 3
+      modalWidget.value.h = 4
       break
     case 'lg':
       modalWidget.value.w = 6
-      modalWidget.value.h = 4
+      modalWidget.value.h = 6
       break
   }
   pushDownCollisions(modalWidget.value)
@@ -412,6 +412,9 @@ watch(
 
     if (mode === 'auto') {
       container.style.height = 'auto'
+      nextTick(() => {
+        updateContainerHeight()
+      })
     } else {
       updateContainerHeight()
     }
@@ -439,77 +442,33 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="dashboard-container">
-    <DraggableCard
-      v-for="widget in allWidgets"
-      v-show="widget.visible"
-      :key="widget.id"
-      :widget="widget"
-      :draggingWidget="draggingWidget"
-      :resizingWidget="resizingWidget"
-      :draggingStyle="draggingStyle"
-      :resizingStyle="resizingStyle"
-      :cellWidth="cellWidth"
-      :CELL_HEIGHT="CELL_HEIGHT"
-      :CELL_GUTTER="CELL_GUTTER"
-      :editMode="editMode"
-      @startDrag="startDrag"
-      @startResize="startResize"
-    >
-      <WidgetRenderer 
-        :widget="widget"
-        :edit-mode="editMode"
-        @openSettings="openSettings"
-        @toggleLock="toggleWidgetLock"
-      />
+    <DraggableCard v-for="widget in allWidgets" v-show="widget.visible" :key="widget.id" :widget="widget"
+      :draggingWidget="draggingWidget" :resizingWidget="resizingWidget" :draggingStyle="draggingStyle"
+      :resizingStyle="resizingStyle" :cellWidth="cellWidth" :CELL_HEIGHT="CELL_HEIGHT" :CELL_GUTTER="CELL_GUTTER"
+      :editMode="editMode" @startDrag="startDrag" @startResize="startResize">
+      <WidgetRenderer :widget="widget" :edit-mode="editMode" @openSettings="openSettings"
+        @toggleLock="toggleWidgetLock" />
     </DraggableCard>
-
-    <CardPreview
-      v-if="widgetPreview"
-      :preview="widgetPreview"
-      :cellWidth="cellWidth"
-      :CELL_HEIGHT="CELL_HEIGHT"
-      :CELL_GUTTER="CELL_GUTTER"
-    />
-
+    <CardPreview v-if="widgetPreview" :preview="widgetPreview" :cellWidth="cellWidth" :CELL_HEIGHT="CELL_HEIGHT"
+      :CELL_GUTTER="CELL_GUTTER" />
     <q-dialog v-model="showSettingsModal">
       <q-card style="min-width: 300px">
         <q-card-section>
           <div class="text-h6">{{ modalWidget?.name }} Ayarları</div>
         </q-card-section>
-
         <q-card-section>
-          <q-select
-            v-model="selectedSize"
-            :options="[
-                { label: 'Seçiniz', value: 'custom' },
-                { label: 'Küçük (sm)', value: 'sm' },
-                { label: 'Orta (md)', value: 'md' },
-                { label: 'Büyük (lg)', value: 'lg' }
-            ]"
-            label="Boyut"
-            filled
-            dense
-            emit-value
-            map-options
-            @update:model-value="onSizeChange"
-          />
+          <q-select v-model="selectedSize" :options="[
+            { label: 'Seçiniz', value: 'custom' },
+            { label: 'Küçük (sm)', value: 'sm' },
+            { label: 'Orta (md)', value: 'md' },
+            { label: 'Büyük (lg)', value: 'lg' }
+          ]" label="Boyut" filled dense emit-value map-options @update:model-value="onSizeChange" />
         </q-card-section>
         <q-card-section>
-          <q-toggle
-            v-model="modalWidget!.visible"
-            label="Göster"
-            left-label
-            color="primary"
-            @update:model-value="onVisibilityToggle"
-          />
-          <q-toggle
-            v-model="modalWidget!.locked"
-            label="Kilitli"
-            left-label
-            color="deep-orange"
-          />
+          <q-toggle v-model="modalWidget!.visible" label="Göster" left-label color="primary"
+            @update:model-value="onVisibilityToggle" />
+          <q-toggle v-model="modalWidget!.locked" label="Kilitli" left-label color="deep-orange" />
         </q-card-section>
-
         <q-card-actions align="right">
           <q-btn flat label="Kapat" v-close-popup />
         </q-card-actions>

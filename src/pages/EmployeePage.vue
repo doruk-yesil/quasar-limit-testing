@@ -5,7 +5,7 @@ import Header from '../components/Header.vue';
 
 <template>
   <div class="q-pa-md">
-    <Header/>
+    <Header />
     <div class="text-center q-mb-md">
       <h3>Financial People</h3>
     </div>
@@ -18,5 +18,4 @@ import Header from '../components/Header.vue';
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -39,7 +39,8 @@ const rows = [
   padding: 0 75px;
   font-size: 15px;
 }
-.table-widget tbody tr + tr {
+
+.table-widget tbody tr+tr {
   border-top: 1px solid #e0e0e0;
 }
 </style>

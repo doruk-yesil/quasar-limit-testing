@@ -126,23 +126,11 @@ const columns = [
     <div class="converter q-my-sm">
       <q-input v-model="converted" class="fit" label="Sonuç" type="number" />
     </div>
-    <q-table
-      class="rates-table"
-      flat bordered dense
-      :rows="tableRows"
-      :columns="columns"
-      row-key="name"
-      hide-bottom
-      :rows-per-page-options="[0]"
-    >
+    <q-table class="rates-table" flat bordered dense :rows="tableRows" :columns="columns" row-key="name" hide-bottom
+      :rows-per-page-options="[0]">
       <template #header="props">
         <q-tr :props="props" class="sticky-header">
-          <q-th
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            class="custom-th"
-          >
+          <q-th v-for="col in props.cols" :key="col.name" :props="props" class="custom-th">
             {{ col.label }}
           </q-th>
         </q-tr>
@@ -157,10 +145,12 @@ const columns = [
   align-items: center;
   gap: 8px;
 }
+
 .unit {
   margin-left: 4px;
   font-weight: bold;
 }
+
 .rates-table {
   height: 116px;
   overflow-y: scroll;
@@ -170,11 +160,12 @@ const columns = [
 .q-table__middle.scroll {
   overflow-x: hidden !important;
 }
+
 .rates-table thead {
   position: sticky;
   top: 0;
   z-index: 1;
   background: white;
-  
+
 }
 </style>

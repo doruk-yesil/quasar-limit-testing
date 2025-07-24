@@ -78,24 +78,10 @@ function removeFilter(index: number) {
 
 <template>
   <div class="q-pa-sm" style="min-width: 240px;">
-    <q-select
-      v-model="selectedOperator"
-      :options="operatorOptions"
-      label="Operator"
-      dense
-      filled
-      class="q-mb-sm"
-    />
+    <q-select v-model="selectedOperator" :options="operatorOptions" label="Operator" dense filled class="q-mb-sm" />
 
     <div v-if="dataType === 'string' || dataType === 'number'">
-      <q-input
-        v-if="selectedOperator !== 'between'"
-        v-model="value1"
-        label="Value"
-        dense
-        filled
-        class="q-mb-sm"
-      />
+      <q-input v-if="selectedOperator !== 'between'" v-model="value1" label="Value" dense filled class="q-mb-sm" />
       <div v-else class="row q-col-gutter-sm q-mb-sm">
         <q-input v-model="value1" label="From" dense filled class="col" />
         <q-input v-model="value2" label="To" dense filled class="col" />
@@ -107,45 +93,23 @@ function removeFilter(index: number) {
     </div>
 
     <div v-else-if="dataType === 'boolean'" class="q-mb-sm">
-      <q-option-group
-        v-model="value1"
-        type="radio"
-        :options="[
-          { label: 'True', value: true },
-          { label: 'False', value: false }
-        ]"
-        dense
-        inline
-      />
+      <q-option-group v-model="value1" type="radio" :options="[
+        { label: 'True', value: true },
+        { label: 'False', value: false }
+      ]" dense inline />
     </div>
 
-    <q-btn
-      label="Add Filter"
-      icon="add"
-      color="primary"
-      size="sm"
-      @click="addFilter"
-      class="q-mb-sm"
-      unelevated
-    />
+    <q-btn label="Add Filter" icon="add" color="primary" size="sm" @click="addFilter" class="q-mb-sm" unelevated />
 
     <div v-if="localFilters.length" class="q-mb-sm">
       <template v-for="(filter, index) in localFilters" :key="index">
-        <div
-          v-if="filter?.operator"
-          class="q-mb-xs row items-center justify-between bg-grey-2 q-pa-xs"
-        >
+        <div v-if="filter?.operator" class="q-mb-xs row items-center justify-between bg-grey-2 q-pa-xs">
           <div class="text-caption">
             {{ filter.operator.replace(/_/g, ' ') }}
             {{ filter.value }}
             <span v-if="filter.operator === 'between' && filter.value2"> - {{ filter.value2 }}</span>
           </div>
-          <q-icon
-            name="close"
-            size="16px"
-            class="cursor-pointer"
-            @click="removeFilter(index)"
-          />
+          <q-icon name="close" size="16px" class="cursor-pointer" @click="removeFilter(index)" />
         </div>
       </template>
     </div>
@@ -156,5 +120,3 @@ function removeFilter(index: number) {
     </div>
   </div>
 </template>
-
-

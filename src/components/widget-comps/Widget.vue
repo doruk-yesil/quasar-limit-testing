@@ -20,23 +20,9 @@ const emit = defineEmits<{
       <div v-if="props.title" class="text-h6">{{ props.title }}</div>
     </div>
     <div class="settings-icon">
-    <q-icon
-      v-if="props.showLockIcon"
-      name="lock"
-      color="grey-7"
-      size="18px"
-      class="q-mr-xs cursor-pointer"
-      @mousedown.stop.prevent
-      @click="emit('toggleLock')"
-    />
-    <q-btn
-        dense
-        flat
-        round
-        icon="more_vert"
-        @mousedown.stop.prevent
-        @click="emit('settings')"
-      />
+      <q-icon v-if="props.showLockIcon" name="lock" color="grey-7" size="18px" class="q-mr-xs cursor-pointer"
+        @mousedown.stop.prevent @click="emit('toggleLock')" />
+      <q-btn dense flat round icon="more_vert" @mousedown.stop.prevent @click="emit('settings')" />
     </div>
     <div class="widget-content">
       <div class="content-inner">
@@ -50,6 +36,7 @@ const emit = defineEmits<{
 .widget-wrapper {
   position: relative;
 }
+
 .widget-header {
   position: sticky;
   top: 0;
@@ -59,11 +46,13 @@ const emit = defineEmits<{
   justify-content: space-between;
   align-items: center;
 }
+
 .widget-content {
   height: calc(100% - 48px);
   overflow-y: auto;
   overflow-x: hidden;
 }
+
 .settings-icon {
   position: absolute;
   top: 0;
@@ -71,6 +60,7 @@ const emit = defineEmits<{
   z-index: 11;
   margin: 5px 3px;
 }
+
 .content-inner {
   box-sizing: border-box;
 }

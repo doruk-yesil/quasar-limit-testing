@@ -17,22 +17,12 @@ const points = computed(() => pointList.value.map(p => p.join(',')).join(' '))
   <Widget :title="widget.name">
     <div class="line-chart">
       <svg viewBox="0 0 300 100" preserveAspectRatio="none">
-        <polyline
-          :points="points"
-          fill="none"
-          stroke="#09898d"
-          stroke-width="3"
-        />
-        <circle
-          v-for="(p, i) in pointList"
-          :key="i"
-          :cx="p[0]"
-          :cy="p[1]"
-          r="4"
-          fill="#09898d"
-        />
+        <polyline :points="points" fill="none" stroke="#09898d" stroke-width="3" />
+        <circle v-for="(p, i) in pointList" :key="i" :cx="p[0]" :cy="p[1]" r="4" fill="#09898d" />
       </svg>
-      <p class="q-my-lg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis pariatur atque fugit dolor tenetur repellat necessitatibus itaque. Eius at delectus dicta ea magni aliquam commodi animi, nobis, architecto, placeat eos?</p>
+      <p class="q-my-lg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis pariatur atque fugit dolor
+        tenetur repellat necessitatibus itaque. Eius at delectus dicta ea magni aliquam commodi animi, nobis,
+        architecto, placeat eos?</p>
     </div>
   </Widget>
 </template>
@@ -45,6 +35,7 @@ const points = computed(() => pointList.value.map(p => p.join(',')).join(' '))
   border-radius: 8px;
   padding: 10px;
 }
+
 svg {
   width: 100%;
   height: 100%;

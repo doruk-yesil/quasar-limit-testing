@@ -162,30 +162,14 @@ const exportCsv = () => {
 
 <template>
   <div class="q-pa-md" style="max-width: 100%; margin: auto;">
-    <q-table
-      :rows="rows"
-      :columns="columns"
-      row-key="id"
-      :loading="loading"
-      flat bordered
-      class="q-mt-md"
-      style="height: 600px"
-      :pagination="pagination"
-      :rows-per-page-options="[10, 20, 50, { label: 'All', value: 0 }]"
-      rows-per-page-label=""
-    >
+    <q-table :rows="rows" :columns="columns" row-key="id" :loading="loading" flat bordered class="q-mt-md"
+      style="height: 600px" :pagination="pagination" :rows-per-page-options="[10, 20, 50, { label: 'All', value: 0 }]"
+      rows-per-page-label="">
       <template #top-left>
         <div class="column q-gutter-sm">
           <div class="row items-center q-gutter-sm">
-            <q-input
-              v-model="filter"
-              debounce="300"
-              placeholder="Search..."
-              dense
-              filled
-              clearable
-              style="max-width: 250px;"
-            >
+            <q-input v-model="filter" debounce="300" placeholder="Search..." dense filled clearable
+              style="max-width: 250px;">
               <template #append>
                 <q-icon name="search" />
               </template>
@@ -194,15 +178,8 @@ const exportCsv = () => {
           <div v-if="Object.keys(filters).length" class="row items-center q-gutter-sm">
             <span class="text-bold text-caption">Applied Filters:</span>
             <template v-for="(filterList, field) in filters" :key="field">
-              <q-chip
-                v-for="(filter, index) in filterList"
-                :key="index"
-                removable
-                @remove="removeFilter(field, index)"
-                color="grey-2"
-                text-color="black"
-                class="q-px-sm text-caption items-center"
-              >
+              <q-chip v-for="(filter, index) in filterList" :key="index" removable @remove="removeFilter(field, index)"
+                color="grey-2" text-color="black" class="q-px-sm text-caption items-center">
                 <div class="row items-center no-wrap">
                   <span>
                     {{ getFilterLabel(field, filter) }}
@@ -210,66 +187,32 @@ const exportCsv = () => {
                 </div>
               </q-chip>
             </template>
-            <q-btn
-              flat
-              label="Clear All"
-              color="primary"
-              size="sm"
-              @click="clearAllFilters"
-            />
+            <q-btn flat label="Clear All" color="primary" size="sm" @click="clearAllFilters" />
           </div>
         </div>
       </template>
 
       <template #top-right>
         <div class="row items-center q-gutter-sm">
-          <q-btn
-            label="Export CSV"
-            icon="file_download"
-            unelevated
-            color="secondary"
-            @click="exportCsv"
-          />
+          <q-btn label="Export CSV" icon="file_download" unelevated color="secondary" @click="exportCsv" />
         </div>
       </template>
 
       <template #header="props">
         <q-tr :props="props" class="sticky-header-row">
           <q-th v-if="showRowIndex" class="text-left" style="width: 40px;">#</q-th>
-          <q-th
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            class="q-table--col-auto"
-            :style="col.name === 'actions' ? 'position: sticky; left: 0; z-index: 3; width: 1px; background: white;' : ''"
-          >
+          <q-th v-for="col in props.cols" :key="col.name" :props="props" class="q-table--col-auto"
+            :style="col.name === 'actions' ? 'position: sticky; left: 0; z-index: 3; width: 1px; background: white;' : ''">
             <template v-if="col.name !== 'actions'">
               <div class="row items-center no-wrap justify-between" style="min-height: 24px">
-                <div
-                  class="row items-center cursor-pointer"
-                  style="min-width: 90px;"
-                  @click="toggleSort(col.name)"
-                >
+                <div class="row items-center cursor-pointer" style="min-width: 90px;" @click="toggleSort(col.name)">
                   <span class="text-truncate">{{ col.label }}</span>
-                  <q-icon
-                    :name="getSortIcon(col.name)"
-                    size="16px"
-                    class="q-ml-xs"
-                  />
+                  <q-icon :name="getSortIcon(col.name)" size="16px" class="q-ml-xs" />
                 </div>
-                <q-icon
-                  name="filter_alt"
-                  size="16px"
-                  class="cursor-pointer q-ml-xs"
-                >
+                <q-icon name="filter_alt" size="16px" class="cursor-pointer q-ml-xs">
                   <q-menu anchor="bottom right" self="top right">
-                    <ColumnFilterMenu
-                      :field="col.name"
-                      :dataType="col.type"
-                      :modelValue="filters[col.name] || []"
-                      @apply="updateColumnFilter(col.name, $event)"
-                      @reset="updateColumnFilter(col.name, null)"
-                    />
+                    <ColumnFilterMenu :field="col.name" :dataType="col.type" :modelValue="filters[col.name] || []"
+                      @apply="updateColumnFilter(col.name, $event)" @reset="updateColumnFilter(col.name, null)" />
                   </q-menu>
                 </q-icon>
               </div>
@@ -279,24 +222,11 @@ const exportCsv = () => {
       </template>
 
       <template #body="props">
-        <q-tr
-          :props="props"
-          @mouseenter="hoveredRow = props.row.id"
-          @mouseleave="hoveredRow = null"
-        >
+        <q-tr :props="props" @mouseenter="hoveredRow = props.row.id" @mouseleave="hoveredRow = null">
           <q-td v-if="showRowIndex" class="text-left">{{ getRowIndex(props.rowIndex) }}</q-td>
-          <q-td
-            class="sticky-left-col"
-          >
-            <q-btn
-              icon="more_vert"
-              size="sm"
-              flat
-              round
-              dense
-              class="transition-all"
-              :class="{ 'visible': hoveredRow === props.row.id, 'invisible': hoveredRow !== props.row.id }"
-            >
+          <q-td class="sticky-left-col">
+            <q-btn icon="more_vert" size="sm" flat round dense class="transition-all"
+              :class="{ 'visible': hoveredRow === props.row.id, 'invisible': hoveredRow !== props.row.id }">
               <q-menu>
                 <q-list dense style="min-width: 150px;">
                   <q-item clickable v-close-popup>
@@ -310,20 +240,16 @@ const exportCsv = () => {
                     <q-item-section>Fix row to top</q-item-section>
                   </q-item>
                   <q-separator />
-                    <q-item clickable v-close-popup @click="showRowIndex = !showRowIndex">
-                      <q-item-section>
-                        <q-item-label>{{ showRowIndex ? 'Hide Index' : 'Show Index' }}</q-item-label>
-                      </q-item-section>
-                    </q-item>
+                  <q-item clickable v-close-popup @click="showRowIndex = !showRowIndex">
+                    <q-item-section>
+                      <q-item-label>{{ showRowIndex ? 'Hide Index' : 'Show Index' }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
                 </q-list>
               </q-menu>
             </q-btn>
           </q-td>
-          <q-td
-            v-for="col in props.cols.slice(1)"
-            :key="col.name"
-            :props="props"
-          >
+          <q-td v-for="col in props.cols.slice(1)" :key="col.name" :props="props">
             {{ props.row[col.name] }}
           </q-td>
         </q-tr>
@@ -332,27 +258,14 @@ const exportCsv = () => {
       <template #bottom>
         <div class="row justify-between items-center q-pa-sm full-width">
           <div class="col-auto flex justify-center">
-            <q-pagination
-              v-model="pagination.page"
-              :max="pagination.rowsPerPage === 0 ? 1 : Math.ceil(pagination.rowsNumber / pagination.rowsPerPage)"
-              input
-              direction-links
-              boundary-numbers
-              color="primary"
-              dense
-            />
+            <q-pagination v-model="pagination.page"
+              :max="pagination.rowsPerPage === 0 ? 1 : Math.ceil(pagination.rowsNumber / pagination.rowsPerPage)" input
+              direction-links boundary-numbers color="primary" dense />
           </div>
           <div class="col-auto row items-center q-gutter-sm">
             <span class="text-caption">Records per page:</span>
-            <q-select
-              v-model="pagination.rowsPerPage"
-              :options="[10, 20, 50, { label: 'All', value: 0 }]"
-              dense
-              outlined
-              emit-value
-              map-options
-              style="min-width: 80px;"
-            />
+            <q-select v-model="pagination.rowsPerPage" :options="[10, 20, 50, { label: 'All', value: 0 }]" dense
+              outlined emit-value map-options style="min-width: 80px;" />
           </div>
         </div>
       </template>
@@ -392,6 +305,7 @@ const exportCsv = () => {
   pointer-events: auto;
   transition: opacity 0.2s;
 }
+
 .q-table__middle::-webkit-scrollbar {
   height: 8px;
 }
@@ -408,5 +322,4 @@ const exportCsv = () => {
 .q-table__middle::-webkit-scrollbar-thumb:hover {
   background: #999;
 }
-
 </style>

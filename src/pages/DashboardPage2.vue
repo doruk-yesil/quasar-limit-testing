@@ -14,8 +14,8 @@ import {
   QCardActions,
   QBanner
 } from 'quasar'
-import WidgetRenderer from '../components/widget-comps/WidgetRenderer.vue'
-import type { WidgetItem } from '../components/widget-comps/widgetRegistry'
+/* import WidgetRenderer from '../components/widget-comps/WidgetRenderer.vue'
+ */import type { WidgetItem } from '../components/widget-comps/widgetRegistry'
 
 const BASE_COLS = 12
 const CELL_HEIGHT = 100
@@ -89,7 +89,7 @@ function getCollidingWidget(x: number, y: number, w: number, h: number, currentI
   return widgets.value.find(widget => {
     if (widget.id === currentId) return false
     return !(
-      x + w <= widget.x || 
+      x + w <= widget.x ||
       x >= widget.x + widget.w ||
       y + h <= widget.y ||
       y >= widget.y + widget.h
@@ -282,22 +282,18 @@ onBeforeUnmount(() => {
       💼 Welcome to your Finance Dashboard — <span class="text-italic text-bold">You have 2 new notifications</span>
     </q-banner>
     <div class="dashboard-container">
-      <q-card
-        v-for="widget in widgets"
-        :key="widget.id"
-        class="widget"
-        :class="{ 'with-transition': draggingWidget?.id !== widget.id, 'editable': editMode }"
-        :style="resizingWidget?.id === widget.id && resizingStyle
+      <q-card v-for="widget in widgets" :key="widget.id" class="widget"
+        :class="{ 'with-transition': draggingWidget?.id !== widget.id, 'editable': editMode }" :style="resizingWidget?.id === widget.id && resizingStyle
           ? {
-              left: `${resizingStyle.left}px`,
-              top: `${resizingStyle.top}px`,
-              width: `${resizingStyle.width}px`,
-              height: `${resizingStyle.height}px`,
-              zIndex: 9999,
-              opacity: 0.8
-            }
+            left: `${resizingStyle.left}px`,
+            top: `${resizingStyle.top}px`,
+            width: `${resizingStyle.width}px`,
+            height: `${resizingStyle.height}px`,
+            zIndex: 9999,
+            opacity: 0.8
+          }
           : draggingWidget?.id === widget.id && draggingStyle
-          ? {
+            ? {
               left: `${draggingStyle.left + 5}px`,
               top: `${draggingStyle.top + 5}px`,
               width: `${widget.w * cellWidth + (widget.w - 1) * CELL_GUTTER}px`,
@@ -305,72 +301,56 @@ onBeforeUnmount(() => {
               zIndex: 9999,
               opacity: 0.8
             }
-          : {
+            : {
               left: `${widget.x * (cellWidth + CELL_GUTTER) + 5}px`,
               top: `${widget.y * (CELL_HEIGHT + CELL_GUTTER) + 5}px`,
               width: `${widget.w * cellWidth + (widget.w - 1) * CELL_GUTTER}px`,
               height: `${widget.h * CELL_HEIGHT + (widget.h - 1) * CELL_GUTTER}px`
-            }"
-        @mousedown.prevent="editMode && startDrag($event, widget)"
-      >
-        <WidgetRenderer :widget="widget" />
-        <div
-          v-if="editMode"
-          class="resize-handle"
-          @mousedown.stop.prevent="startResize($event, widget)"
-        >
+            }" @mousedown.prevent="editMode && startDrag($event, widget)">
+        <!--         <WidgetRenderer :widget="widget" /> -->
+        <div v-if="editMode" class="resize-handle" @mousedown.stop.prevent="startResize($event, widget)">
           <img src="../assets/resize-handle-svgrepo-com.svg" />
         </div>
       </q-card>
-      <div
-        v-if="widgetPreview"
-        class="widget-preview"
-        :style="{
-          left: `${widgetPreview.x * (cellWidth + CELL_GUTTER)+5}px`,
-          top: `${widgetPreview.y * (CELL_HEIGHT + CELL_GUTTER)+5}px`,
-          width: `${widgetPreview.w * cellWidth + (widgetPreview.w - 1) * CELL_GUTTER}px`,
-          height: `${widgetPreview.h * CELL_HEIGHT + (widgetPreview.h - 1) * CELL_GUTTER}px`
-        }"
-      />
+      <div v-if="widgetPreview" class="widget-preview" :style="{
+        left: `${widgetPreview.x * (cellWidth + CELL_GUTTER) + 5}px`,
+        top: `${widgetPreview.y * (CELL_HEIGHT + CELL_GUTTER) + 5}px`,
+        width: `${widgetPreview.w * cellWidth + (widgetPreview.w - 1) * CELL_GUTTER}px`,
+        height: `${widgetPreview.h * CELL_HEIGHT + (widgetPreview.h - 1) * CELL_GUTTER}px`
+      }" />
     </div>
-    <q-btn
-      fab
-      color="primary"
-      icon="settings"
-      @click="openSettings"
-      class="settings-btn"
-    />
+    <q-btn fab color="primary" icon="settings" @click="openSettings" class="settings-btn" />
     <q-dialog v-model="showSettingsDialog">
-    <q-card style="min-width: 300px">
-      <q-card-section class="row items-center justify-between">
-        <div class="text-h6">Ayarlar</div>
-        <q-btn flat round icon="close" v-close-popup />
-      </q-card-section>
-      <q-card-section>
-        <q-toggle v-model="editMode" label="Edit Mode" />
-      </q-card-section>
-      <q-card-actions align="right">
-        <q-btn flat label="Widget Listesi" @click="showWidgetDialog = true" />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
-  <q-dialog v-model="showWidgetDialog">
-    <q-card style="min-width: 300px">
-      <q-card-section class="row items-center justify-between">
-        <div class="text-h6">Widget Listesi</div>
-        <q-btn flat round icon="close" v-close-popup />
-      </q-card-section>
-      <q-card-section>
-        <q-list>
-          <q-item v-for="widget in allWidgets" :key="widget.id">
-            <q-item-section>
-              <q-checkbox v-model="widget.visible" :label="widget.name" />
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
-    </q-card>
-  </q-dialog>
+      <q-card style="min-width: 300px">
+        <q-card-section class="row items-center justify-between">
+          <div class="text-h6">Ayarlar</div>
+          <q-btn flat round icon="close" v-close-popup />
+        </q-card-section>
+        <q-card-section>
+          <q-toggle v-model="editMode" label="Edit Mode" />
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Widget Listesi" @click="showWidgetDialog = true" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="showWidgetDialog">
+      <q-card style="min-width: 300px">
+        <q-card-section class="row items-center justify-between">
+          <div class="text-h6">Widget Listesi</div>
+          <q-btn flat round icon="close" v-close-popup />
+        </q-card-section>
+        <q-card-section>
+          <q-list>
+            <q-item v-for="widget in allWidgets" :key="widget.id">
+              <q-item-section>
+                <q-checkbox v-model="widget.visible" :label="widget.name" />
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -444,7 +424,7 @@ onBeforeUnmount(() => {
   z-index: 10;
 }
 
-img{
+img {
   max-width: 100%;
   max-height: auto;
 }

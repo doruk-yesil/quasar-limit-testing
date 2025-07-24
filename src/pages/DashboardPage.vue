@@ -79,22 +79,13 @@ const widgetContent: Record<string, string> = {
     <q-banner class="bg-primary text-white q-mt-md">
       💼 Welcome to your Finance Dashboard — <span class="text-italic text-bold">You have 2 new notifications</span>
     </q-banner>
-    <grid-layout
-      :layout="layout"
-      :col-num="12"
-      :row-height="50"
-      :is-draggable="isEditMode"
-      :is-resizable="isEditMode"
-      :vertical-compact="true"
-      :margin="[10, 10]"
-      style="min-height: 600px;"
-
-    >
+    <grid-layout :layout="layout" :col-num="12" :row-height="50" :is-draggable="isEditMode" :is-resizable="isEditMode"
+      :vertical-compact="true" :margin="[10, 10]" style="min-height: 600px;">
       <grid-item v-for="item in filteredLayout" :key="item.i" v-bind="item">
         <DashboardWidget :title="widgetTitles[item.i]">
           <RevenueChart v-if="item.i === '5'" />
           <ProfitChart v-else-if="item.i === '6'" />
-          <div v-else-if="item.i==='1'">
+          <div v-else-if="item.i === '1'">
             <div class="text-bold text-negative">71%</div>
             <q-linear-progress :value="0.71" color="negative" size="10px" class="q-mb-sm" />
             <div class="text-caption text-grey">Income Target</div>
@@ -103,7 +94,7 @@ const widgetContent: Record<string, string> = {
             <q-linear-progress :value="0.54" color="positive" size="10px" class="q-mb-sm" />
             <div class="text-caption text-grey">Expense Target</div>
           </div>
-          <div v-else-if="item.i==='2'">
+          <div v-else-if="item.i === '2'">
             <div class="text-caption text-grey-7">New Accounts</div>
             <div class="text-h5 text-positive row items-center">
               <q-icon name="trending_up" class="q-mr-xs" />
@@ -116,14 +107,14 @@ const widgetContent: Record<string, string> = {
               18%
             </div>
           </div>
-          <div v-else-if="item.i==='3'">
+          <div v-else-if="item.i === '3'">
             <div class="text-caption text-grey-7">Monthly Revenue</div>
             <div class="text-h5 text-primary">$46,230</div>
 
             <div class="text-caption text-grey-7 q-mt-md">Monthly Spending</div>
             <div class="text-h5 text-accent">$38,745</div>
           </div>
-          <div v-else-if="item.i==='4'">
+          <div v-else-if="item.i === '4'">
             <div class="text-caption text-grey-7">Total Spend Target</div>
             <div class="text-bold text-warning">32%</div>
             <q-linear-progress :value="0.32" color="warning" size="10px" class="q-mb-sm" />
@@ -139,13 +130,8 @@ const widgetContent: Record<string, string> = {
       </grid-item>
     </grid-layout>
 
-    <q-btn
-      round
-      color="primary"
-      icon="settings"
-      class="fixed-bottom-right q-mr-lg q-mb-lg z-max"
-      @click="showSettings = true"
-    />
+    <q-btn round color="primary" icon="settings" class="fixed-bottom-right q-mr-lg q-mb-lg z-max"
+      @click="showSettings = true" />
 
     <q-dialog v-model="showSettings">
       <q-card>
@@ -165,4 +151,3 @@ const widgetContent: Record<string, string> = {
     </q-dialog>
   </div>
 </template>
-
